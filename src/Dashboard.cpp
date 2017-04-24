@@ -1,0 +1,65 @@
+//
+//  Dashboard.cpp
+//  openGlTest
+//
+//  Created by Mauricio Bustos on 3/24/17.
+//
+//
+
+#include "Dashboard.hpp"
+
+Dashboard::Dashboard(RCamera *cam) {
+	mCam = cam;	
+}
+
+void Dashboard::displayMessage(string message, float x, float y) {
+	
+	gl::pushModelMatrix();
+	
+	vec3 eye = mCam->mEye;
+	
+	// Compute elevation angle
+	vec3 hTarget = vec3(eye.x, 0.0f, eye.z);
+	double eDotproduct = dot(eye, hTarget) / (length(eye) * length(hTarget));
+	double eRotation = acos(eDotproduct);
+
+	// Move to eye
+	gl::translate(vec3(eye.x, eye.y, eye.z) * 0.5f / (float) cos(eRotation));
+	
+	gl::rotate(M_PI, vec3(0.0f, 0.0f, 1.0f));
+
+	gl::rotate(eRotation, vec3(eye.z, 0.0f, eye.x));
+
+	// Compute rotation angle from start point which is Z axis
+	vec3 start = vec3(0.0f, 0.0f, -1.0f);
+	vec3 target = vec3(eye.x, 0.0f, eye.z);
+	double dotproduct = dot(start, target) / (length(start) * length(target));
+	double rotation = acos(dotproduct);
+	if (eye.x > 0.0) {
+		if (eye.z > 0.0) gl::rotate(rotation, mCam->mUp);
+		else gl::rotate(2 * M_PI + rotation, mCam->mUp);
+	} else {
+		if (eye.z > 0.0) gl::rotate(-rotation, mCam->mUp);
+		else gl::rotate(2 * M_PI - rotation, mCam->mUp);
+	}
+
+	TextLayout simple;
+	simple.setFont(mFont);
+	simple.setColor(Color(1, 0, 0.1f));
+	simple.addLine(message);
+	simple.addLine("Rot: " + to_string(eRotation));
+	simple.addLine("Dot: " + to_string(eDotproduct));
+	simple.addLine("EX: " + to_string(mCam->mEye.x));
+	simple.addLine("EY: " + to_string(mCam->mEye.y));
+	simple.addLine("EZ: " + to_string(mCam->mEye.z));
+	gl::Texture2dRef mSimpleTexture = gl::Texture2d::create(simple.render(true, false));
+	
+	gl::drawSolidRect(Rectf(50.0f, 200.0f, -50.0f, -200.0f));
+	
+	gl::draw(mSimpleTexture, vec2(x, y));
+	
+	//gl::drawStrokeCh drawString(message, vec2(0.0f, 0.0f), Color::white(), mFont);
+	
+	gl::popModelMatrix();
+	
+}
