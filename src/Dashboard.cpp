@@ -47,14 +47,14 @@ void Dashboard::displayMessage(string message, float x, float y) {
 	simple.setFont(mFont);
 	simple.setColor(Color(1, 0, 0.1f));
 	simple.addLine(message);
-	simple.addLine("Rot: " + to_string(eRotation));
-	simple.addLine("Dot: " + to_string(eDotproduct));
-	simple.addLine("EX: " + to_string(mCam->mEye.x));
-	simple.addLine("EY: " + to_string(mCam->mEye.y));
-	simple.addLine("EZ: " + to_string(mCam->mEye.z));
+	//simple.addLine("Rot: " + to_string(eRotation));
+	//simple.addLine("Dot: " + to_string(eDotproduct));
+	//simple.addLine("EX: " + to_string(mCam->mEye.x));
+	//simple.addLine("EY: " + to_string(mCam->mEye.y));
+	//simple.addLine("EZ: " + to_string(mCam->mEye.z));
 	gl::Texture2dRef mSimpleTexture = gl::Texture2d::create(simple.render(true, false));
 	
-	gl::drawSolidRect(Rectf(50.0f, 200.0f, -50.0f, -200.0f));
+	//gl::drawSolidRect(Rectf(50.0f, 200.0f, -50.0f, -200.0f));
 	
 	gl::draw(mSimpleTexture, vec2(x, y));
 	

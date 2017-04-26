@@ -40,4 +40,4 @@ private:
 	float cameraModeBase = 0;
 	
 };
-#endif /* Camera_hpp */
+#endif
