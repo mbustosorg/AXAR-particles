@@ -10,5 +10,26 @@
 #define Entity_hpp
 
 #include <stdio.h>
+#include "Particle.h"
+#include <string.h>
 
-#endif /* Entity_hpp */
+using namespace std;
+
+class Entity {
+
+public:
+	
+	Entity(string name, string industry);
+	~Entity();
+	
+	void updateParticle(Particle particle);
+	
+private:
+	
+	Particle mParticle;
+	string name;
+	string industry;
+	
+};
+
+#endif

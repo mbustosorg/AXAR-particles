@@ -18,6 +18,9 @@
 		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
 		2208D7B71EAD837000D408D8 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 2208D7B61EAD837000D408D8 /* CinderApp.icns */; };
 		2208D7BA1EAEC28200D408D8 /* Screen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2208D7B81EAEC28200D408D8 /* Screen.cpp */; };
+		2208D7BD1EB3F92000D408D8 /* ScreenManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2208D7BB1EB3F92000D408D8 /* ScreenManager.cpp */; };
+		2208D7C21EB3FCA300D408D8 /* Orbit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2208D7C01EB3FCA300D408D8 /* Orbit.cpp */; };
+		2208D7C61EB4072500D408D8 /* Geographic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2208D7C41EB4072500D408D8 /* Geographic.cpp */; };
 		222C0DD61E7A0AC900AE52B4 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 222C0DD41E7A0AC900AE52B4 /* Entity.cpp */; };
 		222C0DD91E7A10A600AE52B4 /* RCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 222C0DD71E7A10A600AE52B4 /* RCamera.cpp */; };
 		22799F1B1E85CF4D00D0F0D8 /* Dashboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22799F191E85CF4D00D0F0D8 /* Dashboard.cpp */; };
@@ -41,6 +44,15 @@
 		2208D7B61EAD837000D408D8 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		2208D7B81EAEC28200D408D8 /* Screen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Screen.cpp; path = ../src/Screen.cpp; sourceTree = "<group>"; };
 		2208D7B91EAEC28200D408D8 /* Screen.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Screen.hpp; path = ../src/Screen.hpp; sourceTree = "<group>"; };
+		2208D7BB1EB3F92000D408D8 /* ScreenManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScreenManager.cpp; path = ../src/ScreenManager.cpp; sourceTree = "<group>"; };
+		2208D7BC1EB3F92000D408D8 /* ScreenManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ScreenManager.hpp; path = ../src/ScreenManager.hpp; sourceTree = "<group>"; };
+		2208D7BE1EB3FABA00D408D8 /* Particle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Particle.h; path = ../src/Particle.h; sourceTree = "<group>"; };
+		2208D7BF1EB3FB4300D408D8 /* SystemConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SystemConfig.h; path = ../src/SystemConfig.h; sourceTree = "<group>"; };
+		2208D7C01EB3FCA300D408D8 /* Orbit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Orbit.cpp; path = ../src/Orbit.cpp; sourceTree = "<group>"; };
+		2208D7C11EB3FCA300D408D8 /* Orbit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Orbit.hpp; path = ../src/Orbit.hpp; sourceTree = "<group>"; };
+		2208D7C31EB4055800D408D8 /* AXAR_ParticleApp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AXAR_ParticleApp.hpp; path = ../src/AXAR_ParticleApp.hpp; sourceTree = "<group>"; };
+		2208D7C41EB4072500D408D8 /* Geographic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geographic.cpp; path = ../src/Geographic.cpp; sourceTree = "<group>"; };
+		2208D7C51EB4072500D408D8 /* Geographic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Geographic.hpp; path = ../src/Geographic.hpp; sourceTree = "<group>"; };
 		222C0DD41E7A0AC900AE52B4 /* Entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Entity.cpp; path = ../src/Entity.cpp; sourceTree = "<group>"; };
 		222C0DD51E7A0AC900AE52B4 /* Entity.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Entity.hpp; path = ../src/Entity.hpp; sourceTree = "<group>"; };
 		222C0DD71E7A10A600AE52B4 /* RCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RCamera.cpp; path = ../src/RCamera.cpp; sourceTree = "<group>"; };
@@ -92,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				FD1B46B0B7044B879621EDC9 /* AXAR_ParticleApp.cpp */,
+				2208D7C31EB4055800D408D8 /* AXAR_ParticleApp.hpp */,
 				22799F191E85CF4D00D0F0D8 /* Dashboard.cpp */,
 				22799F1A1E85CF4D00D0F0D8 /* Dashboard.hpp */,
 				222C0DD41E7A0AC900AE52B4 /* Entity.cpp */,
@@ -100,6 +113,14 @@
 				222C0DD81E7A10A600AE52B4 /* RCamera.hpp */,
 				2208D7B81EAEC28200D408D8 /* Screen.cpp */,
 				2208D7B91EAEC28200D408D8 /* Screen.hpp */,
+				2208D7BB1EB3F92000D408D8 /* ScreenManager.cpp */,
+				2208D7BC1EB3F92000D408D8 /* ScreenManager.hpp */,
+				2208D7BE1EB3FABA00D408D8 /* Particle.h */,
+				2208D7BF1EB3FB4300D408D8 /* SystemConfig.h */,
+				2208D7C01EB3FCA300D408D8 /* Orbit.cpp */,
+				2208D7C11EB3FCA300D408D8 /* Orbit.hpp */,
+				2208D7C41EB4072500D408D8 /* Geographic.cpp */,
+				2208D7C51EB4072500D408D8 /* Geographic.hpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -247,11 +268,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2208D7C61EB4072500D408D8 /* Geographic.cpp in Sources */,
 				2208D7BA1EAEC28200D408D8 /* Screen.cpp in Sources */,
+				2208D7C21EB3FCA300D408D8 /* Orbit.cpp in Sources */,
 				222C0DD61E7A0AC900AE52B4 /* Entity.cpp in Sources */,
 				222C0DD91E7A10A600AE52B4 /* RCamera.cpp in Sources */,
 				22799F1B1E85CF4D00D0F0D8 /* Dashboard.cpp in Sources */,
 				9199253203194540AAAD0EB1 /* AXAR_ParticleApp.cpp in Sources */,
+				2208D7BD1EB3F92000D408D8 /* ScreenManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
