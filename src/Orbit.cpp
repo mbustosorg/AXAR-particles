@@ -1,10 +1,21 @@
-//
-//  Orbit.cpp
-//  AXAR_ParticleApp
-//
-//  Created by Mauricio Bustos on 4/28/17.
-//
-//
+/*
+ 
+ Copyright (C) 2017 Mauricio Bustos (m@bustos.org)
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+*/
 
 #include "Orbit.hpp"
 #include "cinder/Rand.h"
@@ -54,9 +65,7 @@ void Orbit::updateHeadParticle(int index, int total, Particle* current,
 	
 	current->pos = (center + vec4(pX, pY, pZ, 1.0)) * rotate(-rotZ, vec3(rX, rY, 0.0f));
 	current->rotation = rotate(rotSpeed, vec3(vec4(rY, -rX, 0.0f, 1.0) * rotate(-rotZ, vec3(rX, rY, 0.0f))));
-	current->home = current->pos;
-	current->ppos = current->home;
-	current->damping = rotSpeed;
+	current->ppos = current->pos;
 	current->color = Color(CM_HSV,
 						   lmap<float>(index, 0.0f, total, 1.0f, 0.0f),
 						   1.0f, 1.0f);
@@ -123,11 +132,9 @@ void Orbit::setup() {
 			auto &p = particles.at(i + j * 2);
 			
 			p.pos = (center + vec4(x, y, z, 1.0)) * rotate(-rotZ, vec3(x, y, 0));
-			p.home = p.pos;
-			p.ppos = p.home;
-			p.damping = rotSpeed;
+			p.ppos = p.pos;
 			p.color = Color(CM_HSV,
-							lmap<float>(i, 0.0f, particles.size(), 0.0f, 1.0f),
+							lmap<float>(particleId, 0.0f, NUM_PARTICLES, 0.0f, 1.0f),
 							1.0f, 1.0);
 			//lmap<float>(j, 0.0f, TRAIL_LENGTH, 1.0f, 0.0f));
 			p.index = i;
@@ -141,13 +148,10 @@ void Orbit::setup() {
 			y = SPHERE_RADIUS * sin(theta) * sin(phi);  // Green
 			z = SPHERE_RADIUS * cos(phi);  // Blue
 			
-			pNext.pos = (center + vec4(x, y, z, 1.0));
-			pNext.pos = pNext.pos * rotate(-rotZ, vec3(x, y, 0));
-			pNext.home = p.pos;
-			pNext.ppos = p.home;
-			pNext.damping = rotSpeed;
+			pNext.pos = (center + vec4(x, y, z, 1.0)) * rotate(-rotZ, vec3(x, y, 0));
+			pNext.ppos = p.pos;
 			pNext.color = Color(CM_HSV,
-								lmap<float>(i, 0.0f, particles.size(), 0.0f, 1.0f),
+								lmap<float>(particleId, 0.0f, NUM_PARTICLES, 0.0f, 1.0f),
 								1.0f, 1.0f);
 			//lmap<float>(j, 0.0f, TRAIL_LENGTH, 1.0f, 0.0f));
 			pNext.index = i;
@@ -162,28 +166,26 @@ void Orbit::setup() {
 	mParticleRenderProg = gl::getStockShader(gl::ShaderDef().color());
 	mParticleUpdateProg = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("orbitUpdate.vs"))
 											   .feedbackFormat(GL_INTERLEAVED_ATTRIBS)
-											   .feedbackVaryings({ "position", "pposition", "home", "color", "damping", "index", "translation", "rotation"})
+											   .feedbackVaryings({"position", "pposition", "color", "index", "translation", "rotation", "transition"})
 											   .attribLocation("iPosition", 0)
 											   .attribLocation("iColor", 1)
 											   .attribLocation("iPPosition", 2)
-											   .attribLocation("iHome", 3)
-											   .attribLocation("iDamping", 4)
-											   .attribLocation("iIndex", 5)
-											   .attribLocation("iTranslation", 6)
-											   .attribLocation("iRotation", 10)
+											   .attribLocation("iIndex", 3)
+											   .attribLocation("iTranslation", 4)
+											   .attribLocation("iRotation", 8)
+											   .attribLocation("iTransition", 12)
 											   );
 	mParticleHeadRenderProg = gl::getStockShader(gl::ShaderDef().color());
 	mParticleHeadUpdateProg = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("orbitUpdate.vs"))
 												   .feedbackFormat(GL_INTERLEAVED_ATTRIBS)
-												   .feedbackVaryings({ "position", "pposition", "home", "color", "damping", "index", "translation", "rotation"})
+												   .feedbackVaryings({"position", "pposition", "color", "index", "translation", "rotation", "transition"})
 												   .attribLocation("iPosition", 0)
 												   .attribLocation("iColor", 1)
 												   .attribLocation("iPPosition", 2)
-												   .attribLocation("iHome", 3)
-												   .attribLocation("iDamping", 4)
-												   .attribLocation("iIndex", 5)
-												   .attribLocation("iTranslation", 6)
-												   .attribLocation("iRotation", 10)
+												   .attribLocation("iIndex", 3)
+												   .attribLocation("iTranslation", 4)
+												   .attribLocation("iRotation", 8)
+												   .attribLocation("iTransition", 12)
 												   );
 	
 	setupBuffers(mAttributes, mParticleBuffer, particles);

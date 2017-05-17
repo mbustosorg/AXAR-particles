@@ -17,33 +17,20 @@
  
 */
 
-#ifndef Entity_hpp
-#define Entity_hpp
+#ifndef FinancialData_hpp
+#define FinancialData_hpp
 
 #include <stdio.h>
-#include "Particle.h"
 #include <string.h>
 
 using namespace std;
 
-class Entity {
+class FinancialData {
 
 public:
+	FinancialData();
 	
-	Entity(string name, string industry);
-	~Entity();
-	
-	void updateParticle(Particle particle);
-	vec3 sphericalLocation();
-	
-private:
-	
-	Particle mParticle;
-	string name;
-	string industry;
-	
-	float mLatitude;
-	float mLongitude;
+	void loadQuotes(string ticker);
 	
 };
 

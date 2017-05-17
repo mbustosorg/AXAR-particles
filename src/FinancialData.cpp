@@ -17,34 +17,25 @@
  
 */
 
-#ifndef Entity_hpp
-#define Entity_hpp
+#include "FinancialData.hpp"
 
-#include <stdio.h>
-#include "Particle.h"
-#include <string.h>
+//using namespace Poco::Net;
 
-using namespace std;
+FinancialData::FinancialData() {
+	
+}
 
-class Entity {
-
-public:
-	
-	Entity(string name, string industry);
-	~Entity();
-	
-	void updateParticle(Particle particle);
-	vec3 sphericalLocation();
-	
-private:
-	
-	Particle mParticle;
-	string name;
-	string industry;
-	
-	float mLatitude;
-	float mLongitude;
-	
-};
-
-#endif
+void FinancialData::loadQuotes(string ticker) {
+/*
+	HTTPClientSession s("www.somehost.com");
+	//s.setProxy("localhost", srv.port());
+	HTTPRequest request(HTTPRequest::HTTP_GET, "/large");
+	HTMLForm form;
+	form.add(“entry1”, “value1”);
+	form.prepareSubmit(request);
+	s.sendRequest(request);
+	HTTPResponse response;
+	std::istream& rs = s.receiveResponse(response);
+	StreamCopier::copyStream(rs, std::cout);
+ */
+}

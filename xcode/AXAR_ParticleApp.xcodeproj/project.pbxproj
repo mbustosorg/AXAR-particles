@@ -24,6 +24,7 @@
 		222C0DD61E7A0AC900AE52B4 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 222C0DD41E7A0AC900AE52B4 /* Entity.cpp */; };
 		222C0DD91E7A10A600AE52B4 /* RCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 222C0DD71E7A10A600AE52B4 /* RCamera.cpp */; };
 		22799F1B1E85CF4D00D0F0D8 /* Dashboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22799F191E85CF4D00D0F0D8 /* Dashboard.cpp */; };
+		22B96E1C1ECBA47600C0EAB7 /* FinancialData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B96E1A1ECBA47600C0EAB7 /* FinancialData.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -59,6 +60,8 @@
 		222C0DD81E7A10A600AE52B4 /* RCamera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RCamera.hpp; path = ../src/RCamera.hpp; sourceTree = "<group>"; };
 		22799F191E85CF4D00D0F0D8 /* Dashboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Dashboard.cpp; path = ../src/Dashboard.cpp; sourceTree = "<group>"; };
 		22799F1A1E85CF4D00D0F0D8 /* Dashboard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Dashboard.hpp; path = ../src/Dashboard.hpp; sourceTree = "<group>"; };
+		22B96E1A1ECBA47600C0EAB7 /* FinancialData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FinancialData.cpp; path = ../src/FinancialData.cpp; sourceTree = "<group>"; };
+		22B96E1B1ECBA47600C0EAB7 /* FinancialData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FinancialData.hpp; path = ../src/FinancialData.hpp; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		3C825CD08A4344CBA7122662 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -121,6 +124,8 @@
 				2208D7C11EB3FCA300D408D8 /* Orbit.hpp */,
 				2208D7C41EB4072500D408D8 /* Geographic.cpp */,
 				2208D7C51EB4072500D408D8 /* Geographic.hpp */,
+				22B96E1A1ECBA47600C0EAB7 /* FinancialData.cpp */,
+				22B96E1B1ECBA47600C0EAB7 /* FinancialData.hpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -272,6 +277,7 @@
 				2208D7BA1EAEC28200D408D8 /* Screen.cpp in Sources */,
 				2208D7C21EB3FCA300D408D8 /* Orbit.cpp in Sources */,
 				222C0DD61E7A0AC900AE52B4 /* Entity.cpp in Sources */,
+				22B96E1C1ECBA47600C0EAB7 /* FinancialData.cpp in Sources */,
 				222C0DD91E7A10A600AE52B4 /* RCamera.cpp in Sources */,
 				22799F1B1E85CF4D00D0F0D8 /* Dashboard.cpp in Sources */,
 				9199253203194540AAAD0EB1 /* AXAR_ParticleApp.cpp in Sources */,
