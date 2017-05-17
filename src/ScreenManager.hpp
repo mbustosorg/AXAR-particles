@@ -40,6 +40,10 @@ private:
 	RCamera* mCam;
 	list<Entity>* mEntities;
 	
+	list<Screen*> screens;
+	list<Screen*>::iterator currentScreen;
+	double timeStamp;
+	
 	Orbit orbit;
 	Geographic geo;
 	

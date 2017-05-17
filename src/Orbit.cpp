@@ -45,6 +45,7 @@
  */
 
 Orbit::Orbit() {
+	screenTime = 2.0f;
 }
 
 void Orbit::updateHeadParticle(int index, int total, Particle* current,

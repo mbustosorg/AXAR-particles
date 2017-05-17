@@ -21,7 +21,7 @@
 #include "cinder/Easing.h"
 
 Geographic::Geographic() {
-	
+	screenTime = 2.0f;
 }
 
 void Geographic::setEntities(list<Entity> *entities) {
@@ -55,7 +55,7 @@ void Geographic::draw()
 	const float rotationOffset = 0.1f;
 	const float totalTime = delay + rotationTime + mEntities->size() * rotationOffset;
 	
-	float time = fmod(getElapsedFrames() / 30.0f, 1000.f);//totalTime);
+	float time = fmod(getElapsedFrames() / 60.0f, 1000.f);//totalTime);
 	
 	list<gl::BatchRef>::iterator shapes = mShapes.begin();
 	int index = 0;

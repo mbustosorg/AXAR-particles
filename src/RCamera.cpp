@@ -32,6 +32,7 @@ void RCamera::trigger() {
 
 void RCamera::update() {
 	cameraTick++;
+	cameraTick++;
 	cameraTick = cameraTick % 720;
 	float x = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
 	//float y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);

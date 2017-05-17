@@ -43,6 +43,8 @@ public:
 	virtual void draw();
 	virtual void setCamera(RCamera* camera);
 
+	float screenTime = 2.0; // Number of seconds to play this screen
+
 protected:
 
 	RCamera* mCam;

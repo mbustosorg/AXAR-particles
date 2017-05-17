@@ -26,22 +26,31 @@ ScreenManager::ScreenManager() {
 		mEntities->push_back(Entity("test", "test"));
 	}
 	geo.setEntities(mEntities);
-	//orbit.setup();
-	geo.setup();
+	
+	screens.push_back(&geo);
+	screens.push_back(&orbit);
+	
+	std::for_each(screens.begin(), screens.end(), [](Screen *n){ n->setup(); });
+	currentScreen = screens.begin();
+	timeStamp = getElapsedSeconds();
 }
 
 void ScreenManager::setCamera(RCamera *camera) {
 	mCam = camera;
-	orbit.setCamera(mCam);
-	geo.setCamera(mCam);
+	std::for_each(screens.begin(), screens.end(), [this](Screen *n){ n->setCamera(mCam); });
 }
 
 void ScreenManager::update() {
-	//orbit.update();
-	geo.update();
+	if (getElapsedSeconds() - timeStamp > (*currentScreen)->screenTime) {
+		++currentScreen;
+		if (currentScreen == screens.end()) {
+			currentScreen = screens.begin();
+		}
+		timeStamp = getElapsedSeconds();
+	}
+	(*currentScreen)->update();
 }
 
 void ScreenManager::draw() {
-	//orbit.draw();
-	geo.draw();
+	(*currentScreen)->draw();
 }
