@@ -21,10 +21,10 @@
 #include "cinder/Easing.h"
 
 Geographic::Geographic() {
-	screenTime = 2.0f;
+	screenTime = 20.0f;
 }
 
-void Geographic::setEntities(list<Entity> *entities) {
+void Geographic::setEntities(list<Entity*> entities) {
 	mEntities = entities;
 }
 
@@ -32,7 +32,7 @@ void Geographic::setup() {
 	auto lambert = gl::ShaderDef().lambert().color();
 	gl::GlslProgRef	shader = gl::getStockShader( lambert );
 	
-	for (list<Entity>::iterator i = mEntities->begin(); i != mEntities->end(); ++i) {
+	for (list<Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		auto sphere = geom::Sphere().subdivisions(60).radius(20.0f);
 		mShapes.push_back(gl::Batch::create(sphere, shader));
 	}
@@ -50,16 +50,16 @@ void Geographic::draw()
 	
 	gl::setMatrices(mCam->mCam);
 	
-	const float delay = 0.25f;
-	const float rotationTime = 20.5f;
+	const float delay = 0.05f;
+	const float rotationTime = 1.5f;
 	const float rotationOffset = 0.1f;
-	const float totalTime = delay + rotationTime + mEntities->size() * rotationOffset;
+	const float totalTime = delay + rotationTime + mEntities.size() * rotationOffset;
 	
 	float time = fmod(getElapsedFrames() / 60.0f, 1000.f);//totalTime);
 	
 	list<gl::BatchRef>::iterator shapes = mShapes.begin();
 	int index = 0;
-	for (list<Entity>::iterator i = mEntities->begin(); i != mEntities->end(); ++i) {
+	for (list<Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		float rotation = 0;
 		float startTime = index * rotationOffset;
 		float endTime = startTime + rotationTime;
@@ -71,9 +71,9 @@ void Geographic::draw()
 		//float angle = easeOutBounce(rotation);
 		float angle = easeOutBack(rotation);
 		gl::ScopedModelMatrix scpModelMatrix;
-		gl::translate((*i).sphericalLocation() * angle);
-		gl::color(index / float(mEntities->size()), 1 - index / float(mEntities->size()), 1 - index / float(mEntities->size()));
-		gl::color(Color(CM_HSV, lmap<float>(index, 0.0f, mEntities->size(), 1.0f, 0.0f), 1.0f, 1.0f));
+		gl::translate((*i)->sphericalLocation * angle);
+		gl::color(index / float(mEntities.size()), 1 - index / float(mEntities.size()), 1 - index / float(mEntities.size()));
+		gl::color(Color(CM_HSV, lmap<float>(index, 0.0f, mEntities.size(), 1.0f, 0.0f), 1.0f, 1.0f));
 		(*shapes)->draw();
 		++shapes;
 		++index;

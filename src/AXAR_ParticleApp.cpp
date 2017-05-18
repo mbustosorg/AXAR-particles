@@ -18,6 +18,7 @@
 */
 
 #include "AXAR_ParticleApp.hpp"
+#include "FinancialData.hpp"
 
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"

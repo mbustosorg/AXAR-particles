@@ -20,6 +20,8 @@
 #ifndef FinancialData_hpp
 #define FinancialData_hpp
 
+#include "Entity.hpp"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -29,8 +31,13 @@ class FinancialData {
 
 public:
 	FinancialData();
+	FinancialData(string benchmark);
 	
-	void loadQuotes(string ticker);
+	void loadQuotes();
+	list<Entity*> entities;
+	
+private:
+	string mBenchmark;
 	
 };
 

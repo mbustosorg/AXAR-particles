@@ -30,11 +30,11 @@ class Entity {
 
 public:
 	
-	Entity(string name, string industry);
+	Entity(string name, string industry, double latitude, double longitude);
 	~Entity();
 	
 	void updateParticle(Particle particle);
-	vec3 sphericalLocation();
+	vec3 sphericalLocation;
 	
 private:
 	
@@ -42,8 +42,8 @@ private:
 	string name;
 	string industry;
 	
-	float mLatitude;
-	float mLongitude;
+	double mLatitude;
+	double mLongitude;
 	
 };
 

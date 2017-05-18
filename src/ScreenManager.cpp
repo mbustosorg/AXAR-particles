@@ -18,13 +18,13 @@
 */
 
 #include "ScreenManager.hpp"
+#include "FinancialData.hpp"
 
 ScreenManager::ScreenManager() {
+
+	FinancialData yahoo("sap500");
 	
-	mEntities = new list<Entity>;
-	for (int i = 0; i < NUM_PARTICLES; i++) {
-		mEntities->push_back(Entity("test", "test"));
-	}
+	mEntities = yahoo.entities;
 	geo.setEntities(mEntities);
 	
 	screens.push_back(&geo);

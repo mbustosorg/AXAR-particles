@@ -21,9 +21,16 @@
 #include "SystemConfig.h"
 #include "cinder/Rand.h"
 
-Entity::Entity(string name, string industry) {
-	mLatitude = Rand::randFloat(-180.0f, 180.0f);
-	mLongitude = Rand::randFloat(-180.0f, 180.0f);
+Entity::Entity(string name, string industry, double latitude, double longitude) {
+	mLatitude = latitude;
+	mLongitude = longitude;
+	float randLatitude = Rand::randFloat(mLatitude - 0.5, mLatitude + 0.5) * M_PI / 180.0;
+	float randLongitude = Rand::randFloat(mLongitude - 0.5, mLongitude + 0.5) * M_PI / 180.0;
+	float x = -SPHERE_RADIUS * cos(randLatitude) * cos(randLongitude);
+	float y = SPHERE_RADIUS * sin(randLatitude);
+	float z = SPHERE_RADIUS * cos(randLatitude) * sin(randLongitude);
+	sphericalLocation = vec3(x, y, z);
+
 }
 
 Entity::~Entity() {
@@ -32,13 +39,4 @@ Entity::~Entity() {
 
 void Entity::updateParticle(Particle particle) {
 	mParticle = particle;
-}
-
-vec3 Entity::sphericalLocation() {
-	float latitude = Rand::randFloat(mLatitude - 0.01, mLatitude + 0.01) * M_PI / 180.0;
-	float longitude = Rand::randFloat(mLongitude - 0.01, mLongitude + 0.01) * M_PI / 180.0;
-	float x = -SPHERE_RADIUS * cos(latitude) * cos(longitude);
-	float y = -SPHERE_RADIUS * sin(latitude);
-	float z = SPHERE_RADIUS * cos(latitude) * sin(longitude);
-	return vec3(x, y, z);
 }

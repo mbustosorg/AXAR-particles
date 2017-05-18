@@ -38,7 +38,7 @@ public:
 private:
 	
 	RCamera* mCam;
-	list<Entity>* mEntities;
+	list<Entity*> mEntities;
 	
 	list<Screen*> screens;
 	list<Screen*>::iterator currentScreen;
