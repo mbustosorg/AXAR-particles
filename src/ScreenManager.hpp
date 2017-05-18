@@ -38,7 +38,7 @@ public:
 private:
 	
 	RCamera* mCam;
-	list<Entity*> mEntities;
+	unordered_map<string, Entity*> mEntities;
 	
 	list<Screen*> screens;
 	list<Screen*>::iterator currentScreen;

@@ -30,20 +30,31 @@ class Entity {
 
 public:
 	
-	Entity(string name, string industry, double latitude, double longitude);
+	Entity(string symbol, string name, string sector, string industry, string headquarters, double latitude, double longitude);
 	~Entity();
 	
+	void updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio);
 	void updateParticle(Particle particle);
 	vec3 sphericalLocation;
 	
-private:
-	
 	Particle mParticle;
-	string name;
-	string industry;
+	string mExchange;
+	string mName;
+	string mIndustry;
+	string mSymbol;
+	string mSector;
+	string mHeadquarters;
+
+	Color mColor;
+	
+private:
 	
 	double mLatitude;
 	double mLongitude;
+	string mLastTradeDate;
+	double mLastTrade;
+	double mDivYield;
+	double mPeRatio;
 	
 };
 

@@ -21,7 +21,12 @@
 #include "SystemConfig.h"
 #include "cinder/Rand.h"
 
-Entity::Entity(string name, string industry, double latitude, double longitude) {
+Entity::Entity(string symbol, string name, string sector, string industry, string headquarters, double latitude, double longitude) {
+	mSymbol = symbol;
+	mName = name;
+	mSector = sector;
+	mIndustry = industry;
+	mHeadquarters = headquarters;
 	mLatitude = latitude;
 	mLongitude = longitude;
 	float randLatitude = Rand::randFloat(mLatitude - 0.5, mLatitude + 0.5) * M_PI / 180.0;
@@ -31,10 +36,18 @@ Entity::Entity(string name, string industry, double latitude, double longitude) 
 	float z = SPHERE_RADIUS * cos(randLatitude) * sin(randLongitude);
 	sphericalLocation = vec3(x, y, z);
 
+	mColor = Colors[SectorIndices[mSector]];
 }
 
 Entity::~Entity() {
 	
+}
+
+void Entity::updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio) {
+	mLastTradeDate = lastTradeDate;
+	mLastTrade = lastTrade;
+	mDivYield = divYield;
+	mPeRatio = peRatio;
 }
 
 void Entity::updateParticle(Particle particle) {

@@ -24,7 +24,8 @@ ScreenManager::ScreenManager() {
 
 	FinancialData yahoo("sap500");
 	
-	mEntities = yahoo.entities;
+	mEntities = yahoo.mEntities;
+	yahoo.loadQuotes();
 	geo.setEntities(mEntities);
 	
 	screens.push_back(&geo);

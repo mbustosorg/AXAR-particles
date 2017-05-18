@@ -30,6 +30,7 @@
 #include "Poco/Exception.h"
 #include "Poco/StringTokenizer.h"
 #include "Poco/String.h"
+#define CSV_IO_NO_THREAD
 #include "fast-cpp-csv-parser-master/csv.h"
 
 using namespace Poco::Net;
@@ -38,7 +39,6 @@ using Poco::StringTokenizer;
 using Poco::cat;
 
 FinancialData::FinancialData() {
-	
 }
 
 FinancialData::FinancialData(string benchmark) {
@@ -56,15 +56,33 @@ FinancialData::FinancialData(string benchmark) {
 	double latitude;
 	double longitude;
 	while(in.read_row(exchange, symbol, name, sector, industry, headquarters, latitude, longitude)){
-		entities.push_back(new Entity(name, industry, latitude, longitude));
+		mEntities.insert({symbol, new Entity(symbol, name, sector, industry, headquarters, latitude, longitude)});
 	}
 }
 
 void FinancialData::loadQuotes() {
+	string quotes = "";
+	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+		if (quotes.length() == 0) {
+			quotes = quotes + i->first;
+		} else {
+			quotes = quotes + "+" + i->first;
+		}
+	}
 	HTTPClientSession s("download.finance.yahoo.com");
-	HTTPRequest request(HTTPRequest::HTTP_GET, "/d/quotes.csv?s=XOM+BBDb.TO+JNJ+MSFT&f=snd1l1yr");
+	quotes = "/d/quotes.csv?s=" + quotes + "&f=snd1l1yr";
+	HTTPRequest request(HTTPRequest::HTTP_GET, quotes);
 	s.sendRequest(request);
 	HTTPResponse response;
 	std::istream& rs = s.receiveResponse(response);
-	StreamCopier::copyStream(rs, std::cout);
+	io::CSVReader<6, io::trim_chars<' '>, io::double_quote_escape<',', '"'>> in("yahoo", rs);
+	std::string symbol;
+	std::string name;
+	std::string date;
+	double lastTrade;
+	double divYield;
+	double peRatio;
+	while(in.read_row(symbol, name, date, lastTrade, divYield, peRatio)){
+		mEntities[symbol]->updateMarketData(date, lastTrade, divYield, peRatio);
+	}
 }

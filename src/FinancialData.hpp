@@ -34,7 +34,7 @@ public:
 	FinancialData(string benchmark);
 	
 	void loadQuotes();
-	list<Entity*> entities;
+	unordered_map<string, Entity*> mEntities;
 	
 private:
 	string mBenchmark;

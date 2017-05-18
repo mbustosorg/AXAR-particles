@@ -32,7 +32,7 @@ class Geographic : public Screen {
 public:
 	Geographic();
 	
-	void setEntities(list<Entity*> entities);
+	void setEntities(unordered_map<string, Entity*> entities);
 	void setup();
 	void update();
 	void draw();
@@ -45,7 +45,7 @@ private:
 							float radius, float radiusOffset,
 							float rotZ, float rotSpeed);
 	
-	list<Entity*> mEntities;
+	unordered_map<string, Entity*> mEntities;
 	int sphereCount = 1;
 	list<gl::BatchRef> mShapes;
 };

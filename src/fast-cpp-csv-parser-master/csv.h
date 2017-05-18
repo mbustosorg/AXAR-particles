@@ -1008,6 +1008,10 @@ namespace io{
                 template<class T>
                 void parse_float(const char*col, T&x){
                         bool is_neg = false;
+                        if (*col == 'N') {
+                            x = std::numeric_limits<double>::quiet_NaN();
+                            return;
+                        }
                         if(*col == '-'){
                                 is_neg = true;
                                 ++col;

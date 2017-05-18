@@ -24,7 +24,7 @@ Geographic::Geographic() {
 	screenTime = 20.0f;
 }
 
-void Geographic::setEntities(list<Entity*> entities) {
+void Geographic::setEntities(unordered_map<string, Entity*> entities) {
 	mEntities = entities;
 }
 
@@ -32,7 +32,7 @@ void Geographic::setup() {
 	auto lambert = gl::ShaderDef().lambert().color();
 	gl::GlslProgRef	shader = gl::getStockShader( lambert );
 	
-	for (list<Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		auto sphere = geom::Sphere().subdivisions(60).radius(20.0f);
 		mShapes.push_back(gl::Batch::create(sphere, shader));
 	}
@@ -59,7 +59,7 @@ void Geographic::draw()
 	
 	list<gl::BatchRef>::iterator shapes = mShapes.begin();
 	int index = 0;
-	for (list<Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		float rotation = 0;
 		float startTime = index * rotationOffset;
 		float endTime = startTime + rotationTime;
@@ -71,9 +71,10 @@ void Geographic::draw()
 		//float angle = easeOutBounce(rotation);
 		float angle = easeOutBack(rotation);
 		gl::ScopedModelMatrix scpModelMatrix;
-		gl::translate((*i)->sphericalLocation * angle);
-		gl::color(index / float(mEntities.size()), 1 - index / float(mEntities.size()), 1 - index / float(mEntities.size()));
-		gl::color(Color(CM_HSV, lmap<float>(index, 0.0f, mEntities.size(), 1.0f, 0.0f), 1.0f, 1.0f));
+		gl::translate(i->second->sphericalLocation * angle);
+		gl::color(i->second->mColor);
+		//gl::color(index / float(mEntities.size()), 1 - index / float(mEntities.size()), 1 - index / float(mEntities.size()));
+		//gl::color(Color(CM_HSV, lmap<float>(index, 0.0f, mEntities.size(), 1.0f, 0.0f), 1.0f, 1.0f));
 		(*shapes)->draw();
 		++shapes;
 		++index;
