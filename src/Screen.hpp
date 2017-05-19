@@ -25,6 +25,7 @@
 #include "Particle.h"
 #include "SystemConfig.h"
 #include "RCamera.hpp"
+#include "Entity.hpp"
 
 using namespace ci;
 using namespace ci::app;
@@ -42,6 +43,7 @@ public:
 	virtual void update();
 	virtual void draw();
 	virtual void setCamera(RCamera* camera);
+	virtual void setEntities(unordered_map<string, Entity*> entities);
 
 	float screenTime = 2.0; // Number of seconds to play this screen
 
@@ -51,6 +53,7 @@ protected:
 	
 	vector<Particle> particles;
 	vector<Particle> particleHeads;
+	unordered_map<string, Entity*> mEntities;
 	
 	gl::GlslProgRef mParticleRenderProg;
 	gl::GlslProgRef mParticleUpdateProg;
@@ -71,16 +74,22 @@ protected:
 	std::uint32_t	mSourceIndex		= 0;
 	std::uint32_t	mDestinationIndex	= 1;
 	
-	Particle tempData[PARTICLE_VECTOR_LENGTH];
-	Particle tempHeadData[PARTICLE_HEAD_VECTOR_LENGTH];
+	//Particle* tempData;
+	//Particle* tempHeadData;
 
 	void setupBuffers(gl::VaoRef* vaos, gl::VboRef* vbos, vector<Particle> particles);
+	
+	unsigned long Num_Particles = 0;
+	unsigned long Num_Lines = 0;
+	unsigned long Num_Triangles = 0;
+	unsigned long Particle_Vector_Length = 0;
+	unsigned long Particle_Head_Vector_Length = 0;
 
 private:
 	
 	void performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffer, gl::VaoRef mAttributes, int drawType, int count);
 	void render(gl::GlslProgRef mRenderProg, gl::VaoRef mAttributes, int drawType, int count);
-	void updateHeadParticle(int index, int total, Particle* current,
+	void updateHeadParticle(int index, unsigned long total, Particle* current,
 							float theta, float theta_offset,
 							float phi, float phi_offset,
 							float radius, float radius_offset,

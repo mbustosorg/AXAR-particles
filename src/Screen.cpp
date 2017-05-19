@@ -35,6 +35,15 @@ void Screen::setCamera(RCamera *camera) {
 	mCam = camera;
 }
 
+void Screen::setEntities(unordered_map<string, Entity*> entities) {
+	mEntities = entities;
+	Num_Particles = mEntities.size();
+	Num_Lines = mEntities.size() * TRAIL_LENGTH;
+	Num_Triangles = mEntities.size() * 4 * 2;
+	Particle_Vector_Length = Num_Lines * 2;
+	Particle_Head_Vector_Length = Num_Triangles * 3 * 2;
+}
+
 void Screen::render(gl::GlslProgRef mRenderProg, gl::VaoRef mAttributes, int drawType, int count) {
 	gl::ScopedGlslProg render(mRenderProg);
 	gl::ScopedVao vao(mAttributes);
@@ -112,8 +121,8 @@ void Screen::performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffe
 }
 
 void Screen::update() {
-	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, NUM_LINES * 2);
-	performProgramUpdate(mParticleHeadUpdateProg, mParticleHeadBuffer[mDestinationIndex], mAttributesHead[mSourceIndex], GL_TRIANGLES, NUM_TRIANGLES * 3);
+	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, Num_Lines * 2);
+	performProgramUpdate(mParticleHeadUpdateProg, mParticleHeadBuffer[mDestinationIndex], mAttributesHead[mSourceIndex], GL_TRIANGLES, Num_Triangles * 3);
 	
 	// Swap source and destination for next loop
 	std::swap(mSourceIndex, mDestinationIndex);
@@ -126,8 +135,8 @@ void Screen::draw() {
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
 	
-	render(mParticleRenderProg, mAttributes[mSourceIndex], GL_LINES, NUM_LINES * 2);
-	render(mParticleHeadRenderProg, mAttributesHead[mSourceIndex], GL_TRIANGLES, NUM_TRIANGLES * 3);
+	render(mParticleRenderProg, mAttributes[mSourceIndex], GL_LINES, Num_Lines * 2);
+	render(mParticleHeadRenderProg, mAttributesHead[mSourceIndex], GL_TRIANGLES, Num_Triangles * 3);
 	
 }
 

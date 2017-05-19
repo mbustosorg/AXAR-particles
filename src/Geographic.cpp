@@ -21,11 +21,7 @@
 #include "cinder/Easing.h"
 
 Geographic::Geographic() {
-	screenTime = 20.0f;
-}
-
-void Geographic::setEntities(unordered_map<string, Entity*> entities) {
-	mEntities = entities;
+	screenTime = 2.0f;
 }
 
 void Geographic::setup() {

@@ -46,11 +46,11 @@ public:
 	string mHeadquarters;
 
 	Color mColor;
+	double mLatitude;
+	double mLongitude;
 	
 private:
 	
-	double mLatitude;
-	double mLongitude;
 	string mLastTradeDate;
 	double mLastTrade;
 	double mDivYield;

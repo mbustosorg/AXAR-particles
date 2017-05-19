@@ -25,14 +25,11 @@
 #include "Entity.hpp"
 #include <list>
 
-#define SPHERE_COUNT (1)
-
 class Geographic : public Screen {
 	
 public:
 	Geographic();
 	
-	void setEntities(unordered_map<string, Entity*> entities);
 	void setup();
 	void update();
 	void draw();
@@ -45,7 +42,6 @@ private:
 							float radius, float radiusOffset,
 							float rotZ, float rotSpeed);
 	
-	unordered_map<string, Entity*> mEntities;
 	int sphereCount = 1;
 	list<gl::BatchRef> mShapes;
 };

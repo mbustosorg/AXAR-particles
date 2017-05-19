@@ -26,12 +26,11 @@ ScreenManager::ScreenManager() {
 	
 	mEntities = yahoo.mEntities;
 	yahoo.loadQuotes();
-	geo.setEntities(mEntities);
 	
 	screens.push_back(&geo);
 	screens.push_back(&orbit);
 	
-	std::for_each(screens.begin(), screens.end(), [](Screen *n){ n->setup(); });
+	std::for_each(screens.begin(), screens.end(), [this](Screen *n){ n->setEntities(mEntities); n->setup(); });
 	currentScreen = screens.begin();
 	timeStamp = getElapsedSeconds();
 }

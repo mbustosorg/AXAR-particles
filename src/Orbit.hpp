@@ -32,7 +32,7 @@ public:
 
 private:
 	
-	void updateHeadParticle(int index, int total, Particle* current,
+	void updateHeadParticle(Entity* entity, int index, unsigned long total, Particle* current,
 							float theta, float thetaOffset,
 							float phi, float phiOffset,
 							float radius, float radiusOffset,
