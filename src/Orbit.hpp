@@ -32,10 +32,8 @@ public:
 
 private:
 	
-	void updateHeadParticle(Entity* entity, int index, unsigned long total, Particle* current,
-							float theta, float thetaOffset,
-							float phi, float phiOffset,
-							float radius, float radiusOffset,
+	void updateHeadParticle(Entity* entity, int index, Particle* current,
+							vec3 offsetVector, vec3 rotationAxis,
 							float rotZ, float rotSpeed);
 	
 };
