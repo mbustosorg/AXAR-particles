@@ -28,7 +28,6 @@
 #include "Entity.hpp"
 
 using namespace ci;
-using namespace ci::app;
 using namespace std;
 
 class Screen {

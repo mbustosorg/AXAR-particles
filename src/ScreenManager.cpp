@@ -19,6 +19,9 @@
 
 #include "ScreenManager.hpp"
 #include "FinancialData.hpp"
+#include "cinder/app/AppBAse.h"
+
+using namespace ci::app;
 
 ScreenManager::ScreenManager() {
 

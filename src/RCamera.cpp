@@ -19,6 +19,9 @@
 
 #include "RCamera.hpp"
 #include "cinder/Easing.h"
+#include "cinder/app/AppBase.h"
+
+using namespace ci::app;
 
 RCamera::RCamera() {
 	
@@ -33,11 +36,11 @@ void RCamera::trigger() {
 void RCamera::update() {
 	cameraTick--;
 	cameraTick = cameraTick % 720;
-	float x = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
+	double x = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
 	//float y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
-	float z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
+	double z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
 	mEye.x = x;
-	float difference = cameraMode * 100.0 - (cameraMode - 1) * 100.0;
+	double difference = cameraMode * 100.0 - (cameraMode - 1) * 100.0;
 	if ((getElapsedSeconds() - cameraModeBase) / 10.0f < 1.0f) {
 		mEye.y = easeInOutCubic((getElapsedSeconds() - cameraModeBase) / 10.0f) * 2000.0;
 	}

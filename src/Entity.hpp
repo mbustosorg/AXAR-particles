@@ -33,7 +33,7 @@ public:
 	Entity(string symbol, string name, string sector, string industry, string headquarters, double latitude, double longitude);
 	~Entity();
 	
-	void updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio);
+	void updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio, double capitalization);
 	void updateParticle(Particle particle);
 	vec3 sphericalLocation;
 	
@@ -48,6 +48,7 @@ public:
 	Color mColor;
 	double mLatitude;
 	double mLongitude;
+	double mCapitalization;
 	
 private:
 	

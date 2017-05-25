@@ -48,7 +48,7 @@ public:
 private:
 	
 	int cameraMode = 0;
-	float cameraModeBase = 0;
+	double cameraModeBase = 0;
 	
 };
 #endif

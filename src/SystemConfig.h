@@ -31,7 +31,7 @@ const float HEAD_ARC_WIDTH = 0.005f;
 const float ROTATION_SPEED = 0.01f;
 
 static Color colorFromHex(int r, int g, int b) {
-	return Color(CM_RGB, r / 255.0, g / 255.0, b / 255.0);
+	return Color(CM_RGB, r / 255.0f, g / 255.0f, b / 255.0f);
 }
 
 static Color Colors[] = {

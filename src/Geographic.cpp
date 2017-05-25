@@ -19,9 +19,12 @@
 
 #include "Geographic.hpp"
 #include "cinder/Easing.h"
+#include "cinder/app/AppBAse.h"
+
+using namespace ci::app;
 
 Geographic::Geographic() {
-	screenTime = 2.0f;
+	screenTime = 20.0f;
 }
 
 void Geographic::setup() {
@@ -29,6 +32,7 @@ void Geographic::setup() {
 	gl::GlslProgRef	shader = gl::getStockShader( lambert );
 	
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+		auto entity = i->second;
 		auto sphere = geom::Sphere().subdivisions(60).radius(20.0f);
 		mShapes.push_back(gl::Batch::create(sphere, shader));
 	}

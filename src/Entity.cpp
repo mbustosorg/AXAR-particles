@@ -43,11 +43,12 @@ Entity::~Entity() {
 	
 }
 
-void Entity::updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio) {
+void Entity::updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio, double capitalization) {
 	mLastTradeDate = lastTradeDate;
 	mLastTrade = lastTrade;
 	mDivYield = divYield;
-	mPeRatio = peRatio;
+	mPeRatio = peRatio;	
+	mCapitalization = capitalization;
 }
 
 void Entity::updateParticle(Particle particle) {

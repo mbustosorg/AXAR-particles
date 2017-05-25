@@ -19,10 +19,13 @@
 
 #include "FinancialData.hpp"
 
-#include "Poco/Net/HTTPClientSession.h"
+#include "Poco/Net/HTTPSClientSession.h"
 #include "Poco/Net/HTTPRequest.h"
 #include "Poco/Net/HTTPResponse.h"
-#include <Poco/Net/HTTPCredentials.h>
+#include "Poco/Net/HTTPCredentials.h"
+#include "Poco/Net/KeyConsoleHandler.h"
+#include "Poco/Net/ConsoleCertificateHandler.h"
+#include "Poco/Net/SSLManager.h"
 #include "Poco/StreamCopier.h"
 #include "Poco/NullStream.h"
 #include "Poco/Path.h"
@@ -50,7 +53,7 @@ FinancialData::FinancialData(string benchmark) {
 	std::string exchange;
 	std::string symbol;
 	std::string name;
-	std::string sector;
+	std::string sector;//
 	std::string industry;
 	std::string headquarters;
 	double latitude;
@@ -61,28 +64,36 @@ FinancialData::FinancialData(string benchmark) {
 }
 
 void FinancialData::loadQuotes() {
+	
+	bool isServer = false;
+	bool isHandleErrorsOnServer = false;
+	Poco::SharedPtr<PrivateKeyPassphraseHandler> pConsoleHandler = new KeyConsoleHandler(isServer);
+	Poco::SharedPtr<InvalidCertificateHandler> pInvalidCertHandler = new ConsoleCertificateHandler(isHandleErrorsOnServer);
+	Context::Ptr pContext = new Context(Context::CLIENT_USE, "", "", "rootcert.pem", Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+	SSLManager::instance().initializeClient(pConsoleHandler, pInvalidCertHandler, pContext);
+
 	string quotes = "";
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		if (quotes.length() == 0) {
 			quotes = quotes + i->first;
 		} else {
-			quotes = quotes + "+" + i->first;
+			quotes = quotes + "," + i->first;
 		}
 	}
-	HTTPClientSession s("download.finance.yahoo.com");
-	quotes = "/d/quotes.csv?s=" + quotes + "&f=snd1l1yr";
-	HTTPRequest request(HTTPRequest::HTTP_GET, quotes);
-	s.sendRequest(request);
+	Poco::URI uri("https://www.quandl.com/api/v3/datatables/WIKI/PRICES.csv?date=20160912&ticker=" + quotes + "&qopts.columns=date,close,ticker&api_key=oBZVP5YSmEmsFrHaXJ9s");
+	
+	Poco::Net::HTTPSClientSession session(uri.getHost(), uri.getPort());
+	Poco::Net::HTTPRequest req(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath() + "?" + uri.getRawQuery(), Poco::Net::HTTPMessage::HTTP_1_1);
+	session.sendRequest(req);
 	HTTPResponse response;
-	std::istream& rs = s.receiveResponse(response);
-	io::CSVReader<6, io::trim_chars<' '>, io::double_quote_escape<',', '"'>> in("yahoo", rs);
-	std::string symbol;
-	std::string name;
+	std::istream& rs = session.receiveResponse(response);
+	io::CSVReader<3, io::trim_chars<' '>, io::double_quote_escape<',', '"'>> in("quandl", rs);
+	in.read_header(io::ignore_extra_column, "date", "close", "ticker");
+	std::string ticker;
 	std::string date;
 	double lastTrade;
-	double divYield;
-	double peRatio;
-	while(in.read_row(symbol, name, date, lastTrade, divYield, peRatio)){
-		mEntities[symbol]->updateMarketData(date, lastTrade, divYield, peRatio);
+	while(in.read_row(date, lastTrade, ticker)){
+		printf("%s, %s, %6.2f\n", date.c_str(), ticker.c_str(), lastTrade);
+		//mEntities[symbol]->updateMarketData(date, lastTrade, divYield, peRatio, capitalization);
 	}
 }

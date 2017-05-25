@@ -23,6 +23,9 @@
 #include "RCamera.hpp"
 #include "Dashboard.hpp"
 #include "ScreenManager.hpp"
+#include "cinder/app/App.h"
+
+using namespace cinder::app;
 
 class AXAR_ParticleApp : public App {
 public:
