@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <string>
+#include "cinder/app/App.h"
 #include "cinder/Camera.h"
 
 using namespace ci;

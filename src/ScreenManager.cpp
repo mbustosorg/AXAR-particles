@@ -25,10 +25,10 @@ using namespace ci::app;
 
 ScreenManager::ScreenManager() {
 
-	FinancialData yahoo("sap500");
+	FinancialData marketData("sap500");
 	
-	mEntities = yahoo.mEntities;
-	yahoo.loadQuotes();
+	mEntities = marketData.mEntities;
+	marketData.loadQuotes();
 	
 	screens.push_back(&geo);
 	screens.push_back(&orbit);

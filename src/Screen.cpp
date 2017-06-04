@@ -77,15 +77,11 @@ void Screen::setupBuffers(gl::VaoRef* vaos, gl::VboRef* vbos, vector<Particle> p
 		gl::enableVertexAttribArray(9);
 		gl::enableVertexAttribArray(10);
 		gl::enableVertexAttribArray(11);
-		gl::enableVertexAttribArray(12);
-		gl::enableVertexAttribArray(13);
-		gl::enableVertexAttribArray(14);
-		gl::enableVertexAttribArray(15);
 		
 		gl::vertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, pos));
 		gl::vertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, color));
-		gl::vertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, ppos));
-		gl::vertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, index));
+		gl::vertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, index));
+		gl::vertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, delay));
 		
 		gl::vertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, translation));
 		gl::vertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, translation) + 4 * sizeof(GLfloat)));
@@ -96,13 +92,7 @@ void Screen::setupBuffers(gl::VaoRef* vaos, gl::VboRef* vbos, vector<Particle> p
 		gl::vertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, rotation) + 4 * sizeof(GLfloat)));
 		gl::vertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, rotation) + 8 * sizeof(GLfloat)));
 		gl::vertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, rotation) + 12 * sizeof(GLfloat)));
-		
-		gl::vertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, transition));
-		gl::vertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, transition) + 4 * sizeof(GLfloat)));
-		gl::vertexAttribPointer(14, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, transition) + 8 * sizeof(GLfloat)));
-		gl::vertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, transition) + 12 * sizeof(GLfloat)));
 	}
-	
 }
 
 void Screen::performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffer, gl::VaoRef mAttributes, int drawType, int count) {
@@ -116,13 +106,13 @@ void Screen::performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffe
 	gl::bindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mBuffer);
 	gl::beginTransformFeedback(drawType);
 	// Draw source into destination, performing our vertex transformations.
-	gl::drawArrays(drawType, 0, count);
+	gl::drawArrays(drawType, 0, (int)count);
 	gl::endTransformFeedback();
 }
 
 void Screen::update() {
-	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, Num_Lines * 2);
-	performProgramUpdate(mParticleHeadUpdateProg, mParticleHeadBuffer[mDestinationIndex], mAttributesHead[mSourceIndex], GL_TRIANGLES, Num_Triangles * 3);
+	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
+	performProgramUpdate(mParticleHeadUpdateProg, mParticleHeadBuffer[mDestinationIndex], mAttributesHead[mSourceIndex], GL_TRIANGLES, (int)Num_Triangles * 3);
 	
 	// Swap source and destination for next loop
 	std::swap(mSourceIndex, mDestinationIndex);
@@ -130,13 +120,23 @@ void Screen::update() {
 
 void Screen::draw() {
 	
+	Particle tempData[particles.size()];
+	mParticleBuffer[mDestinationIndex]->bind();
+	size_t bufferSize = mParticleBuffer[mDestinationIndex]->getSize();
+	mParticleBuffer[mDestinationIndex]->getBufferSubData(0, bufferSize, &tempData);
+	for (int i = 0; i < particles.size(); i++) {
+	 particles[i] = tempData[i];
+	}
+	particles.at(0).pos.x = particles.at(0).pos.x + 1000.0;
+	mParticleBuffer[mDestinationIndex]->bind();
+	
 	gl::clear(Color(0, 0, 0));
 	
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
 	
-	render(mParticleRenderProg, mAttributes[mSourceIndex], GL_LINES, Num_Lines * 2);
-	render(mParticleHeadRenderProg, mAttributesHead[mSourceIndex], GL_TRIANGLES, Num_Triangles * 3);
+	render(mParticleRenderProg, mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
+	render(mParticleHeadRenderProg, mAttributesHead[mSourceIndex], GL_TRIANGLES, (int)Num_Triangles * 3);
 	
 }
 

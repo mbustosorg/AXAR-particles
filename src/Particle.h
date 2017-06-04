@@ -27,12 +27,11 @@ using namespace cinder;
 struct Particle
 {
 	vec4	pos;
-	vec4	ppos;
 	ColorA  color;
 	float	index;
+	float   delay;
 	mat4	translation;
 	mat4	rotation;
-	mat4    transition;
 };
 
 #endif

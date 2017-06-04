@@ -24,7 +24,7 @@
 using namespace ci::app;
 
 Geographic::Geographic() {
-	screenTime = 20.0f;
+	screenTime = 5.0f;
 }
 
 void Geographic::setup() {

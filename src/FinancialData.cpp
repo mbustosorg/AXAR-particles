@@ -58,7 +58,8 @@ FinancialData::FinancialData(string benchmark) {
 	std::string headquarters;
 	double latitude;
 	double longitude;
-	while(in.read_row(exchange, symbol, name, sector, industry, headquarters, latitude, longitude)){
+	int entityLimit = 10000;
+	while(in.read_row(exchange, symbol, name, sector, industry, headquarters, latitude, longitude) && mEntities.size() < entityLimit){
 		mEntities.insert({symbol, new Entity(symbol, name, sector, industry, headquarters, latitude, longitude)});
 	}
 }
