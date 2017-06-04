@@ -21,7 +21,7 @@
 #define SystemConfig_h
 
 //const int NUM_PARTICLES = 1001;
-const int TRAIL_LENGTH = 15;
+const int TRAIL_LENGTH = 20;
 const int SPHERE_RADIUS = 2500;
 const float SECTION_ARC_LENGTH = 0.02f;
 

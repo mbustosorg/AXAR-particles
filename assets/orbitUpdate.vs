@@ -18,7 +18,6 @@ void main()
 {
     delay = iDelay - 1.0f;
     if (delay < 0.0f) {
-        delay = iDelay;
         position = iTranslation * iRotation * iPosition;
     } else {
         position = iPosition;

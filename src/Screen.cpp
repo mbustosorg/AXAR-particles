@@ -119,7 +119,7 @@ void Screen::update() {
 }
 
 void Screen::draw() {
-	
+	/*
 	Particle tempData[particles.size()];
 	mParticleBuffer[mDestinationIndex]->bind();
 	size_t bufferSize = mParticleBuffer[mDestinationIndex]->getSize();
@@ -129,7 +129,7 @@ void Screen::draw() {
 	}
 	particles.at(0).pos.x = particles.at(0).pos.x + 1000.0;
 	mParticleBuffer[mDestinationIndex]->bind();
-	
+	*/
 	gl::clear(Color(0, 0, 0));
 	
 	gl::enableDepthRead();
