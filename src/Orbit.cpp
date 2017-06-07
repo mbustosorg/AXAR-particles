@@ -21,16 +21,13 @@
 #include "cinder/Rand.h"
 
 Orbit::Orbit() {
-	screenTime = 30.0f;
+	screenTime = 1.0f;
 }
 
 void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
 							   vec3 offsetVector, vec3 rotationAxis,
 							   float rotZ, float rotSpeed) {
-	
-	vec4 center = vec4();
-	
-	current->pos = center + vec4(entity->sphericalLocation + offsetVector, 1.0);
+	current->pos = vec4(entity->sphericalLocation(1.0) + offsetVector, 1.0);
 	current->color = entity->mColor;
 	current->index = index;
 	current->translation = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f));
@@ -45,12 +42,10 @@ void Orbit::setup() {
 	const float Head_Length = 10.0f;
 	const float Head_Width = 10.0f;
 	
-	vec4 center = vec4();
-	
 	int particleId = 0;
 	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
 		
-		vec3 sphericalLocation = entity->second->sphericalLocation;
+		vec3 sphericalLocation = entity->second->sphericalLocation(1.0);
 		
 		for (int i = particleId * (TRAIL_LENGTH * 2); i < (particleId + 1) * (TRAIL_LENGTH * 2); i = i + TRAIL_LENGTH * 2)	{
 			
@@ -93,8 +88,8 @@ void Orbit::setup() {
 			
 			for (int j = 0; j < TRAIL_LENGTH; j++) {
 				auto &p = particles.at(i + j * 2);
-				p.pos = (center + vec4(sphericalLocation, 1.0));
-				//p.pos = (center + vec4(sphericalLocation, 1.0)) * rotate(-j * SECTION_ARC_LENGTH, rotationAxis);
+				p.pos = vec4(sphericalLocation, 1.0);
+				p.sphericalPosition = vec4(sphericalLocation, 1.0);
 				p.color = entity->second->mColor;
 				p.index = i;
 				p.delay = (float) j;
@@ -102,8 +97,8 @@ void Orbit::setup() {
 				p.rotation = rotate(rotSpeed, rotationAxis);
 				
 				auto &pNext = particles.at(i + j * 2 + 1);
-				pNext.pos = (center + vec4(sphericalLocation, 1.0));
-				//pNext.pos = (center + vec4(sphericalLocation, 1.0)) * rotate(-(j + 1) * SECTION_ARC_LENGTH, rotationAxis);
+				pNext.pos = vec4(sphericalLocation, 1.0);
+				pNext.sphericalPosition = vec4(sphericalLocation, 1.0);
 				pNext.color = entity->second->mColor;
 				pNext.index = i;
 				pNext.delay = (float) j + 1.0f;
@@ -113,35 +108,6 @@ void Orbit::setup() {
 		}
 		particleId++;
 	}
-	
-	// Load our update program.
-	// Match up our attribute locations with the description we gave.
-	
-	mParticleRenderProg = gl::getStockShader(gl::ShaderDef().color());
-	mParticleUpdateProg = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("orbitUpdate.vs"))
-											   .feedbackFormat(GL_INTERLEAVED_ATTRIBS)
-											   .feedbackVaryings({"position", "color", "index", "delay", "translation", "rotation"})
-											   .attribLocation("iPosition", 0)
-											   .attribLocation("iColor", 1)
-											   .attribLocation("iIndex", 2)
-											   .attribLocation("iDelay", 3)
-											   .attribLocation("iTranslation", 4)
-											   .attribLocation("iRotation", 8)
-											   );
-	mParticleHeadRenderProg = gl::getStockShader(gl::ShaderDef().color());
-	mParticleHeadUpdateProg = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("orbitUpdate.vs"))
-												   .feedbackFormat(GL_INTERLEAVED_ATTRIBS)
-												   .feedbackVaryings({"position", "color", "index", "delay", "translation", "rotation"})
-												   .attribLocation("iPosition", 0)
-												   .attribLocation("iColor", 1)
-												   .attribLocation("iIndex", 2)
-												   .attribLocation("iDelay", 3)
-												   .attribLocation("iTranslation", 4)
-												   .attribLocation("iRotation", 8)
-												   );
-	
-	setupBuffers(mAttributes, mParticleBuffer, particles);
-	setupBuffers(mAttributesHead, mParticleHeadBuffer, particleHeads);
-	
+	loadUpdateProgram("orbitUpdate.vs");
 }
 

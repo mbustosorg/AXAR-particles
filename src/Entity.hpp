@@ -35,7 +35,7 @@ public:
 	
 	void updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio, double capitalization);
 	void updateParticle(Particle particle);
-	vec3 sphericalLocation;
+	vec3 sphericalLocation(double factor);
 	
 	Particle mParticle;
 	string mExchange;

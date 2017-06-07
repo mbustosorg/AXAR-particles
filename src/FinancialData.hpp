@@ -35,6 +35,7 @@ public:
 	
 	void loadQuotes();
 	unordered_map<string, Entity*> mEntities;
+	unordered_map<int, double> mSectorWeights;
 	
 private:
 	string mBenchmark;

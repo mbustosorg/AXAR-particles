@@ -26,12 +26,14 @@ using namespace ci::app;
 ScreenManager::ScreenManager() {
 
 	FinancialData marketData("sap500");
+	industryOrbit.setSectorWeights(&marketData.mSectorWeights);
 	
 	mEntities = marketData.mEntities;
 	marketData.loadQuotes();
 	
 	screens.push_back(&geo);
 	screens.push_back(&orbit);
+	screens.push_back(&industryOrbit);
 	
 	std::for_each(screens.begin(), screens.end(), [this](Screen *n){ n->setEntities(mEntities); n->setup(); });
 	currentScreen = screens.begin();

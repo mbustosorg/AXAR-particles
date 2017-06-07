@@ -15,39 +15,30 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
-*/
+ */
 
-#ifndef ScreenManager_hpp
-#define ScreenManager_hpp
+
+#ifndef IndustryOrbit_hpp
+#define IndustryOrbit_hpp
 
 #include <stdio.h>
-#include <list>
-#include "Orbit.hpp"
-#include "Geographic.hpp"
-#include "IndustryOrbit.hpp"
+#include "Screen.hpp"
 
-class ScreenManager {
+class IndustryOrbit : public Screen {
 	
 public:
+	IndustryOrbit();
 	
-	ScreenManager();
-	
-	void update();
-	void draw();
-	void setCamera(RCamera* camera);
+	void setup();
+	void setSectorWeights(unordered_map<int, double> *sectorWeights);
 	
 private:
 	
-	RCamera* mCam;
-	unordered_map<string, Entity*> mEntities;
+	void updateHeadParticle(Entity* entity, int index, Particle* current,
+							vec3 offsetVector, vec3 rotationAxis,
+							float rotZ, float rotSpeed, vec4 center);
 	
-	list<Screen*> screens;
-	list<Screen*>::iterator currentScreen;
-	double timeStamp;
-	
-	Orbit orbit;
-	Geographic geo;
-	IndustryOrbit industryOrbit;
+	unordered_map<int, double> *mSectorWeights;
 	
 };
 

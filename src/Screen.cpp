@@ -77,22 +77,56 @@ void Screen::setupBuffers(gl::VaoRef* vaos, gl::VboRef* vbos, vector<Particle> p
 		gl::enableVertexAttribArray(9);
 		gl::enableVertexAttribArray(10);
 		gl::enableVertexAttribArray(11);
+		gl::enableVertexAttribArray(12);
 		
 		gl::vertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, pos));
 		gl::vertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, color));
-		gl::vertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, index));
-		gl::vertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, delay));
+		gl::vertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, sphericalPosition));
+		gl::vertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, index));
+		gl::vertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, delay));
 		
-		gl::vertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, translation));
-		gl::vertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, translation) + 4 * sizeof(GLfloat)));
-		gl::vertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, translation) + 8 * sizeof(GLfloat)));
-		gl::vertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, translation) + 12 * sizeof(GLfloat)));
+		gl::vertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, translation));
+		gl::vertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, translation) + 4 * sizeof(GLfloat)));
+		gl::vertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, translation) + 8 * sizeof(GLfloat)));
+		gl::vertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, translation) + 12 * sizeof(GLfloat)));
 		
-		gl::vertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, rotation));
-		gl::vertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, rotation) + 4 * sizeof(GLfloat)));
-		gl::vertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, rotation) + 8 * sizeof(GLfloat)));
-		gl::vertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, rotation) + 12 * sizeof(GLfloat)));
+		gl::vertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)offsetof(Particle, rotation));
+		gl::vertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, rotation) + 4 * sizeof(GLfloat)));
+		gl::vertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, rotation) + 8 * sizeof(GLfloat)));
+		gl::vertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)(offsetof(Particle, rotation) + 12 * sizeof(GLfloat)));
 	}
+}
+
+void Screen::loadUpdateProgram(string programName) {
+	mParticleRenderProg = gl::getStockShader(gl::ShaderDef().color());
+	mParticleUpdateProg = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset(programName))
+											   .feedbackFormat(GL_INTERLEAVED_ATTRIBS)
+											   .feedbackVaryings({"position", "color", "sphericalPosition", "index", "delay", "translation", "rotation"})
+											   .attribLocation("iPosition", 0)
+											   .attribLocation("iColor", 1)
+											   .attribLocation("iSphericalPosition", 2)
+											   .attribLocation("iIndex", 3)
+											   .attribLocation("iDelay", 4)
+											   .attribLocation("iTranslation", 5)
+											   .attribLocation("iRotation", 9)
+											   );
+	mParticleHeadRenderProg = gl::getStockShader(gl::ShaderDef().color());
+	mParticleHeadUpdateProg = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset(programName))
+												   .feedbackFormat(GL_INTERLEAVED_ATTRIBS)
+												   .feedbackVaryings({"position", "color", "sphericalPosition", "index", "delay", "translation", "rotation"})
+												   .attribLocation("iPosition", 0)
+												   .attribLocation("iColor", 1)
+												   .attribLocation("iSphericalPosition", 2)
+												   .attribLocation("iIndex", 3)
+												   .attribLocation("iDelay", 4)
+												   .attribLocation("iTranslation", 5)
+												   .attribLocation("iRotation", 9)
+												   );
+	
+	
+	setupBuffers(mAttributes, mParticleBuffer, particles);
+	setupBuffers(mAttributesHead, mParticleHeadBuffer, particleHeads);
+	
 }
 
 void Screen::performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffer, gl::VaoRef mAttributes, int drawType, int count) {

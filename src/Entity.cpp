@@ -29,18 +29,21 @@ Entity::Entity(string symbol, string name, string sector, string industry, strin
 	mHeadquarters = headquarters;
 	mLatitude = latitude;
 	mLongitude = longitude;
-	float randLatitude = Rand::randFloat(mLatitude - 0.5, mLatitude + 0.5) * M_PI / 180.0;
-	float randLongitude = Rand::randFloat(mLongitude - 0.5, mLongitude + 0.5) * M_PI / 180.0;
-	float x = -SPHERE_RADIUS * cos(randLatitude) * cos(randLongitude);
-	float y = SPHERE_RADIUS * sin(randLatitude);
-	float z = SPHERE_RADIUS * cos(randLatitude) * sin(randLongitude);
-	sphericalLocation = vec3(x, y, z);
 
 	mColor = Colors[SectorIndices[mSector]];
 }
 
 Entity::~Entity() {
 	
+}
+
+vec3 Entity::sphericalLocation(double factor) {
+	float randLatitude = Rand::randFloat(mLatitude - 0.5, mLatitude + 0.5) * M_PI / 180.0;
+	float randLongitude = Rand::randFloat(mLongitude - 0.5, mLongitude + 0.5) * M_PI / 180.0;
+	float x = -SPHERE_RADIUS * factor * cos(randLatitude) * cos(randLongitude);
+	float y = SPHERE_RADIUS * factor * sin(randLatitude);
+	float z = SPHERE_RADIUS * factor * cos(randLatitude) * sin(randLongitude);
+	return vec3(x, y, z);
 }
 
 void Entity::updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio, double capitalization) {

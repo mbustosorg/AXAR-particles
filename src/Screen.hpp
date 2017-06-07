@@ -47,6 +47,8 @@ public:
 	float screenTime = 2.0; // Number of seconds to play this screen
 
 protected:
+	
+	void loadUpdateProgram(string programName);
 
 	RCamera* mCam;
 	
