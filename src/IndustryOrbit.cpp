@@ -33,7 +33,7 @@ void IndustryOrbit::updateHeadParticle(Entity* entity, int index, Particle* curr
 							   vec3 offsetVector, vec3 rotationAxis,
 							   float rotZ, float rotSpeed, vec4 center) {
 	
-	current->pos = center + vec4(entity->sphericalLocation(1.0) + offsetVector, 1.0);
+	current->pos = center + vec4(entity->mSphericalLocation + offsetVector, 1.0);
 	current->color = entity->mColor;
 	current->index = index;
 	current->translation = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f));
@@ -52,19 +52,17 @@ void IndustryOrbit::setup() {
 	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
 		
 		Entity* currentEntity = entity->second;
-		//vec4 center = vec4(2.0 * SPHERE_RADIUS * cos(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size()),
-		//				   2.0 * SPHERE_RADIUS * SectorWeights.at(currentEntity->mSector) * sin(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size()), 0.0, 1.0);
 		
 		vec3 center = vec3(0.75 * SPHERE_RADIUS * cos(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0),
 						   0.75 * SPHERE_RADIUS * sin(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0), 0.0);
 		
-		vec3 sphericalLocation = entity->second->sphericalLocation(mSectorWeights->at(SectorIndices.at(currentEntity->mSector))) * vec3(0.75, 0.75, 0.75);
+		vec3 sphericalLocation = (entity->second->mSphericalLocation * (float)mSectorWeights->at(SectorIndices.at(currentEntity->mSector))) * vec3(0.75, 0.75, 0.75);
 		
 		for (int i = particleId * (TRAIL_LENGTH * 2); i < (particleId + 1) * (TRAIL_LENGTH * 2); i = i + TRAIL_LENGTH * 2)	{
 			
 			float rotSpeed = -Rand::randFloat(ROTATION_SPEED - 0.008f, ROTATION_SPEED + 0.008f);
 			float rotZ = Rand::randFloat(-1.5f, 1.5f);
-			vec3 flatSphericalLocation = vec3(entity->second->sphericalLocation(1.0).z, 0.0, -entity->second->sphericalLocation(1.0).x);
+			vec3 flatSphericalLocation = vec3(entity->second->mSphericalLocation.z, 0.0, -entity->second->mSphericalLocation.x);
 			vec3 rotationAxis = vec3(vec4(flatSphericalLocation, 1.0) * rotate(-rotZ, sphericalLocation));
 /*
 			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24    )), vec3(Head_Length, 0.0f, 00.0f), rotationAxis, rotZ, rotSpeed, center);
@@ -121,6 +119,6 @@ void IndustryOrbit::setup() {
 		}
 		particleId++;
 	}
-	loadUpdateProgram("orbitUpdate.vs");
+	loadUpdateProgram("industryOrbit.vs");
 }
 

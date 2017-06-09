@@ -92,7 +92,7 @@ void FinancialData::loadQuotes() {
 			quotes = quotes + "," + i->first;
 		}
 	}
-	Poco::URI uri("https://www.quandl.com/api/v3/datatables/WIKI/PRICES.csv?date=20160912&ticker=" + quotes + "&qopts.columns=date,close,ticker&api_key=oBZVP5YSmEmsFrHaXJ9s");
+	Poco::URI uri("https://www.quandl.com/api/v3/datatables/WIKI/PRICES.csv?date=20170607&ticker=" + quotes + "&qopts.columns=date,close,ticker&api_key=oBZVP5YSmEmsFrHaXJ9s");
 	
 	Poco::Net::HTTPSClientSession session(uri.getHost(), uri.getPort());
 	Poco::Net::HTTPRequest req(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath() + "?" + uri.getRawQuery(), Poco::Net::HTTPMessage::HTTP_1_1);

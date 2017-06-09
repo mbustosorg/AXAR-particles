@@ -1,6 +1,7 @@
 #version 150 core
 
-uniform   float timestamp;
+uniform   vec3 startPositions[1000 * 20]; // Number of entities * TRAIL_LENGTH
+uniform   float transitionFactor;
 
 in vec4   iPosition;
 in vec4   iSphericalPosition;

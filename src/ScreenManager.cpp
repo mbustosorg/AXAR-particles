@@ -46,11 +46,15 @@ void ScreenManager::setCamera(RCamera *camera) {
 }
 
 void ScreenManager::update() {
+	
 	if (getElapsedSeconds() - timeStamp > (*currentScreen)->screenTime) {
+		vector<Particle>* currentPositions = (*currentScreen)->currentPositions();
 		++currentScreen;
 		if (currentScreen == screens.end()) {
 			currentScreen = screens.begin();
 		}
+		(*currentScreen)->setPositions(*currentPositions);
+		free(currentPositions);
 		timeStamp = getElapsedSeconds();
 	}
 	(*currentScreen)->update();

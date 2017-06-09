@@ -44,6 +44,11 @@ void Screen::setEntities(unordered_map<string, Entity*> entities) {
 	Particle_Head_Vector_Length = Num_Triangles * 3 * 2;
 }
 
+void Screen::setPositions(vector<Particle> positions) {
+	particles.assign(Num_Lines * 2, Particle());
+	
+}
+
 void Screen::render(gl::GlslProgRef mRenderProg, gl::VaoRef mAttributes, int drawType, int count) {
 	gl::ScopedGlslProg render(mRenderProg);
 	gl::ScopedVao vao(mAttributes);
@@ -152,18 +157,31 @@ void Screen::update() {
 	std::swap(mSourceIndex, mDestinationIndex);
 }
 
-void Screen::draw() {
-	/*
-	Particle tempData[particles.size()];
-	mParticleBuffer[mDestinationIndex]->bind();
-	size_t bufferSize = mParticleBuffer[mDestinationIndex]->getSize();
-	mParticleBuffer[mDestinationIndex]->getBufferSubData(0, bufferSize, &tempData);
-	for (int i = 0; i < particles.size(); i++) {
-	 particles[i] = tempData[i];
+vector<Particle>* Screen::currentPositions() {
+	
+	vector<Particle> *tempData = new vector<Particle>();
+	tempData->assign(Num_Lines * 2, Particle());
+	if (mParticleBuffer[mDestinationIndex]) {
+		mParticleBuffer[mDestinationIndex]->bind();
+		size_t bufferSize = mParticleBuffer[mDestinationIndex]->getSize();
+		mParticleBuffer[mDestinationIndex]->getBufferSubData(0, bufferSize, tempData->data());
+		for (int i = 0; i < particles.size(); i++) {
+			Particle currentParticle = particles.at(i);
+			Particle currentTarget = tempData->at(i);
+			currentTarget.pos = currentParticle.pos;
+			currentTarget.sphericalPosition = currentParticle.sphericalPosition;
+			currentTarget.color = currentParticle.color;
+			currentTarget.index = currentParticle.index;
+			currentTarget.delay = currentParticle.delay;
+			currentTarget.translation = currentParticle.translation;
+			currentTarget.rotation = currentParticle.rotation;
+		}
 	}
-	particles.at(0).pos.x = particles.at(0).pos.x + 1000.0;
-	mParticleBuffer[mDestinationIndex]->bind();
-	*/
+	
+	return tempData;
+}
+
+void Screen::draw() {
 	gl::clear(Color(0, 0, 0));
 	
 	gl::enableDepthRead();

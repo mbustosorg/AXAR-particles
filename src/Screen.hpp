@@ -43,6 +43,9 @@ public:
 	virtual void draw();
 	virtual void setCamera(RCamera* camera);
 	virtual void setEntities(unordered_map<string, Entity*> entities);
+	virtual void setPositions(vector<Particle> positions);
+
+	vector<Particle>* currentPositions();
 
 	float screenTime = 2.0; // Number of seconds to play this screen
 

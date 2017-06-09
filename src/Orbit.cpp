@@ -21,13 +21,13 @@
 #include "cinder/Rand.h"
 
 Orbit::Orbit() {
-	screenTime = 1.0f;
+	screenTime = 10.0f;
 }
 
 void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
 							   vec3 offsetVector, vec3 rotationAxis,
 							   float rotZ, float rotSpeed) {
-	current->pos = vec4(entity->sphericalLocation(1.0) + offsetVector, 1.0);
+	current->pos = vec4(entity->mSphericalLocation + offsetVector, 1.0);
 	current->color = entity->mColor;
 	current->index = index;
 	current->translation = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f));
@@ -45,7 +45,7 @@ void Orbit::setup() {
 	int particleId = 0;
 	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
 		
-		vec3 sphericalLocation = entity->second->sphericalLocation(1.0);
+		vec3 sphericalLocation = entity->second->mSphericalLocation;
 		
 		for (int i = particleId * (TRAIL_LENGTH * 2); i < (particleId + 1) * (TRAIL_LENGTH * 2); i = i + TRAIL_LENGTH * 2)	{
 			

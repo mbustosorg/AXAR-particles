@@ -24,7 +24,7 @@
 using namespace ci::app;
 
 Geographic::Geographic() {
-	screenTime = 1.0f;
+	screenTime = 10.0f;
 }
 
 void Geographic::setup() {
@@ -71,7 +71,7 @@ void Geographic::draw()
 		//float angle = easeOutBounce(rotation);
 		float angle = easeOutBack(rotation);
 		gl::ScopedModelMatrix scpModelMatrix;
-		gl::translate(i->second->sphericalLocation(1.0) * angle);
+		gl::translate(i->second->mSphericalLocation * angle);
 		gl::color(i->second->mColor);
 		//gl::color(index / float(mEntities.size()), 1 - index / float(mEntities.size()), 1 - index / float(mEntities.size()));
 		//gl::color(Color(CM_HSV, lmap<float>(index, 0.0f, mEntities.size(), 1.0f, 0.0f), 1.0f, 1.0f));
