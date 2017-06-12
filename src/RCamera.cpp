@@ -40,7 +40,6 @@ void RCamera::update() {
 	//float y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
 	double z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
 	mEye.x = x;
-	double difference = cameraMode * 100.0 - (cameraMode - 1) * 100.0;
 	if ((getElapsedSeconds() - cameraModeBase) / 10.0f < 1.0f) {
 		mEye.y = easeInOutCubic((getElapsedSeconds() - cameraModeBase) / 10.0f) * 2000.0;
 	}

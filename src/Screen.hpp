@@ -36,16 +36,18 @@ public:
 	
 	Screen();
 	~Screen();
-	//Screen(Screen *nextScreen);
 	
+	virtual void setOrder(Screen *prevScreen, Screen *nextScreen);
 	virtual void setup();
 	virtual void update();
+	virtual void restart();
 	virtual void draw();
 	virtual void setCamera(RCamera* camera);
 	virtual void setEntities(unordered_map<string, Entity*> entities);
-	virtual void setPositions(vector<Particle> positions);
 
 	vector<Particle>* currentPositions();
+	Screen* mPrevScreen;
+	Screen* mNextScreen;
 
 	float screenTime = 2.0; // Number of seconds to play this screen
 
@@ -55,8 +57,8 @@ protected:
 
 	RCamera* mCam;
 	
-	vector<Particle> particles;
-	vector<Particle> particleHeads;
+	vector<Particle> mParticles;
+	vector<Particle> mParticleHeads;
 	unordered_map<string, Entity*> mEntities;
 	
 	gl::GlslProgRef mParticleRenderProg;
@@ -81,7 +83,7 @@ protected:
 	//Particle* tempData;
 	//Particle* tempHeadData;
 
-	void setupBuffers(gl::VaoRef* vaos, gl::VboRef* vbos, vector<Particle> particles);
+	void setupBuffers(gl::VaoRef* vaos, gl::VboRef* vbos, vector<Particle> *particles);
 	
 	unsigned long Num_Particles = 0;
 	unsigned long Num_Lines = 0;

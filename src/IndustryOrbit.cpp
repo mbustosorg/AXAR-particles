@@ -22,7 +22,7 @@
 #include "cinder/Rand.h"
 
 IndustryOrbit::IndustryOrbit() {
-	screenTime = 30.0f;
+	screenTime = 2.0f;
 }
 
 void IndustryOrbit::setSectorWeights(unordered_map<int, double> *sectorWeights) {
@@ -40,13 +40,64 @@ void IndustryOrbit::updateHeadParticle(Entity* entity, int index, Particle* curr
 	current->rotation = rotate(rotSpeed, rotationAxis);
 }
 
+void IndustryOrbit::restart() {
+	
+	vector<Particle> *tempVector = mPrevScreen->currentPositions();
+	mParticles.swap(*tempVector);
+	vector<Particle>().swap(*tempVector);
+	delete(tempVector);
+	
+	int particleId = 0;
+	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
+		
+		Entity* currentEntity = entity->second;
+		
+		vec3 center = vec3(0.75 * SPHERE_RADIUS * cos(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0),
+						   0.75 * SPHERE_RADIUS * sin(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0), 0.0);
+		
+		vec3 sphericalLocation = (currentEntity->mSphericalLocation * (float)mSectorWeights->at(SectorIndices.at(currentEntity->mSector))) * vec3(0.75, 0.75, 0.75);
+		
+		for (int i = particleId * (TRAIL_LENGTH * 2); i < (particleId + 1) * (TRAIL_LENGTH * 2); i = i + TRAIL_LENGTH * 2)	{
+			
+			float rotSpeed = -Rand::randFloat(ROTATION_SPEED - 0.008f, ROTATION_SPEED + 0.008f);
+			float rotZ = Rand::randFloat(-1.5f, 1.5f);
+			vec3 flatSphericalLocation = vec3(entity->second->mSphericalLocation.z, 0.0, -entity->second->mSphericalLocation.x);
+			vec3 rotationAxis = vec3(vec4(flatSphericalLocation, 1.0) * rotate(-rotZ, sphericalLocation));
+			
+			for (int j = 0; j < TRAIL_LENGTH; j++) {
+				auto &p = mParticles.at(i + j * 2);
+				//p.pos = vec4(sphericalLocation, 1.0);
+				//p.sphericalPosition = vec4(sphericalLocation, 1.0);
+				p.color = entity->second->mColor;
+				p.index = i;
+				p.delay = (float) j;
+				p.translation = translate(mat4(1.0f), center);
+				p.rotation = rotate(rotSpeed, rotationAxis);
+				
+				auto &pNext = mParticles.at(i + j * 2 + 1);
+				//pNext.pos = vec4(sphericalLocation, 1.0);
+				//pNext.sphericalPosition = vec4(sphericalLocation, 1.0);
+				pNext.color = entity->second->mColor;
+				pNext.index = i;
+				pNext.delay = (float) j + 1.0f;
+				pNext.translation = translate(mat4(1.0f), center);
+				pNext.rotation = rotate(rotSpeed, rotationAxis);
+			}
+		}
+		particleId++;
+	}
+	
+	setupBuffers(mAttributes, mParticleBuffer, &mParticles);
+	setupBuffers(mAttributesHead, mParticleHeadBuffer, &mParticleHeads);
+
+}
+
 void IndustryOrbit::setup() {
 	
-	particles.assign(Num_Lines * 2, Particle());
+	mParticles.assign(Num_Lines * 2, Particle());
+	mParticleHeads.assign(Num_Triangles * 3, Particle());
+/*
 	particleHeads.assign(Num_Triangles * 3, Particle());
-	
-	const float Head_Length = 10.0f;
-	const float Head_Width = 10.0f;
 	
 	int particleId = 0;
 	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
@@ -64,39 +115,7 @@ void IndustryOrbit::setup() {
 			float rotZ = Rand::randFloat(-1.5f, 1.5f);
 			vec3 flatSphericalLocation = vec3(entity->second->mSphericalLocation.z, 0.0, -entity->second->mSphericalLocation.x);
 			vec3 rotationAxis = vec3(vec4(flatSphericalLocation, 1.0) * rotate(-rotZ, sphericalLocation));
-/*
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24    )), vec3(Head_Length, 0.0f, 00.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 1)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 2)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed, center);
-			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 3)), vec3(Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 4)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 5)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed, center);
-			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 6)), vec3(Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 7)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 8)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed, center);
-			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 9)), vec3(Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 10)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 11)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed, center);
-			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 12)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 13)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 14)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed, center);
-			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 15)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 16)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 17)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed, center);
-			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 18)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 19)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 20)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed, center);
-			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 21)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 22)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed, center);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 23)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed, center);
-			*/
+
 			for (int j = 0; j < TRAIL_LENGTH; j++) {
 				auto &p = particles.at(i + j * 2);
 				p.pos = vec4(sphericalLocation, 1.0);
@@ -119,6 +138,7 @@ void IndustryOrbit::setup() {
 		}
 		particleId++;
 	}
+ */
 	loadUpdateProgram("industryOrbit.vs");
 }
 

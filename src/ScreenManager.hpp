@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <list>
+#include "FinancialData.hpp"
 #include "Orbit.hpp"
 #include "Geographic.hpp"
 #include "IndustryOrbit.hpp"
@@ -41,9 +42,10 @@ private:
 	RCamera* mCam;
 	unordered_map<string, Entity*> mEntities;
 	
-	list<Screen*> screens;
-	list<Screen*>::iterator currentScreen;
+	Screen* currentScreen;
 	double timeStamp;
+	
+	FinancialData* marketData;
 	
 	Orbit orbit;
 	Geographic geo;

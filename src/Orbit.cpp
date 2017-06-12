@@ -21,7 +21,7 @@
 #include "cinder/Rand.h"
 
 Orbit::Orbit() {
-	screenTime = 10.0f;
+	screenTime = 1.0f;
 }
 
 void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
@@ -36,8 +36,8 @@ void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
 
 void Orbit::setup() {
 	
-	particles.assign(Num_Lines * 2, Particle());
-	particleHeads.assign(Num_Triangles * 3, Particle());
+	mParticles.assign(Num_Lines * 2, Particle());
+	mParticleHeads.assign(Num_Triangles * 3, Particle());
 	
 	const float Head_Length = 10.0f;
 	const float Head_Width = 10.0f;
@@ -54,40 +54,40 @@ void Orbit::setup() {
 			vec3 flatSphericalLocation = vec3(sphericalLocation.z, 0.0, -sphericalLocation.x);
 			vec3 rotationAxis = vec3(vec4(flatSphericalLocation, 1.0) * rotate(-rotZ, sphericalLocation));
 			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24    )), vec3(Head_Length, 0.0f, 00.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 1)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 2)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24    )), vec3(Head_Length, 0.0f, 00.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 1)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 2)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed);
 			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 3)), vec3(Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 4)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 5)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 3)), vec3(Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 4)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 5)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed);
 			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 6)), vec3(Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 7)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 8)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 6)), vec3(Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 7)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 8)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed);
 			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 9)), vec3(Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 10)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 11)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 9)), vec3(Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 10)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 11)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed);
 			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 12)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 13)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 14)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 12)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 13)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 14)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed);
 			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 15)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 16)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 17)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 15)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 16)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 17)), vec3(0.0f, 0.0f, Head_Width), rotationAxis, rotZ, rotSpeed);
 			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 18)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 19)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 20)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 18)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 19)), vec3(0.0f, Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 20)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed);
 			
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 21)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 22)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
-			updateHeadParticle(entity->second, particleId, &(particleHeads.at(particleId * 24 + 23)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 21)), vec3(-Head_Length, 0.0f, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 22)), vec3(0.0f, -Head_Width, 0.0f), rotationAxis, rotZ, rotSpeed);
+			updateHeadParticle(entity->second, particleId, &(mParticleHeads.at(particleId * 24 + 23)), vec3(0.0f, 0.0f, -Head_Width), rotationAxis, rotZ, rotSpeed);
 			
 			for (int j = 0; j < TRAIL_LENGTH; j++) {
-				auto &p = particles.at(i + j * 2);
+				auto &p = mParticles.at(i + j * 2);
 				p.pos = vec4(sphericalLocation, 1.0);
 				p.sphericalPosition = vec4(sphericalLocation, 1.0);
 				p.color = entity->second->mColor;
@@ -96,7 +96,7 @@ void Orbit::setup() {
 				p.translation = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f));
 				p.rotation = rotate(rotSpeed, rotationAxis);
 				
-				auto &pNext = particles.at(i + j * 2 + 1);
+				auto &pNext = mParticles.at(i + j * 2 + 1);
 				pNext.pos = vec4(sphericalLocation, 1.0);
 				pNext.sphericalPosition = vec4(sphericalLocation, 1.0);
 				pNext.color = entity->second->mColor;

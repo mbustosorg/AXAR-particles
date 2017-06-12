@@ -18,48 +18,51 @@
 */
 
 #include "ScreenManager.hpp"
-#include "FinancialData.hpp"
 #include "cinder/app/AppBAse.h"
 
 using namespace ci::app;
 
 ScreenManager::ScreenManager() {
+	
+	marketData = new FinancialData("sap500");
 
-	FinancialData marketData("sap500");
-	industryOrbit.setSectorWeights(&marketData.mSectorWeights);
+	industryOrbit.setSectorWeights(&(marketData->mSectorWeights));
 	
-	mEntities = marketData.mEntities;
-	marketData.loadQuotes();
+	mEntities = marketData->mEntities;
+	marketData->loadQuotes();
 	
-	screens.push_back(&geo);
-	screens.push_back(&orbit);
-	screens.push_back(&industryOrbit);
-	
-	std::for_each(screens.begin(), screens.end(), [this](Screen *n){ n->setEntities(mEntities); n->setup(); });
-	currentScreen = screens.begin();
+	geo.setOrder(&industryOrbit, &orbit);
+	orbit.setOrder(&geo, &industryOrbit);
+	industryOrbit.setOrder(&orbit, &geo);
+
+	currentScreen = &geo;
+	currentScreen->setEntities(mEntities);
+	currentScreen->setup();
+	for (Screen* currentIter = currentScreen->mNextScreen; currentIter != currentScreen; currentIter = currentIter->mNextScreen) {
+		currentIter->setEntities(mEntities);
+		currentIter->setup();
+	}
 	timeStamp = getElapsedSeconds();
 }
 
 void ScreenManager::setCamera(RCamera *camera) {
 	mCam = camera;
-	std::for_each(screens.begin(), screens.end(), [this](Screen *n){ n->setCamera(mCam); });
+	currentScreen->setCamera(mCam);
+	for (Screen* currentIter = currentScreen->mNextScreen; currentIter != currentScreen; currentIter = currentIter->mNextScreen) {
+		currentIter->setCamera(mCam);
+	}
 }
 
 void ScreenManager::update() {
 	
-	if (getElapsedSeconds() - timeStamp > (*currentScreen)->screenTime) {
-		vector<Particle>* currentPositions = (*currentScreen)->currentPositions();
-		++currentScreen;
-		if (currentScreen == screens.end()) {
-			currentScreen = screens.begin();
-		}
-		(*currentScreen)->setPositions(*currentPositions);
-		free(currentPositions);
+	if (getElapsedSeconds() - timeStamp > currentScreen->screenTime) {
+		currentScreen = currentScreen->mNextScreen;
+		currentScreen->restart();
 		timeStamp = getElapsedSeconds();
 	}
-	(*currentScreen)->update();
+	currentScreen->update();
 }
 
 void ScreenManager::draw() {
-	(*currentScreen)->draw();
+	currentScreen->draw();
 }

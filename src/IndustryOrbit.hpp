@@ -30,6 +30,7 @@ public:
 	IndustryOrbit();
 	
 	void setup();
+	void restart();
 	void setSectorWeights(unordered_map<int, double> *sectorWeights);
 	
 private:

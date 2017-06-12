@@ -27,6 +27,11 @@ Screen::~Screen() {
 	
 }
 
+void Screen::setOrder(Screen* prevScreen, Screen* nextScreen) {
+	mPrevScreen = prevScreen;
+	mNextScreen = nextScreen;
+}
+
 void Screen::setup() {
 	
 }
@@ -44,11 +49,6 @@ void Screen::setEntities(unordered_map<string, Entity*> entities) {
 	Particle_Head_Vector_Length = Num_Triangles * 3 * 2;
 }
 
-void Screen::setPositions(vector<Particle> positions) {
-	particles.assign(Num_Lines * 2, Particle());
-	
-}
-
 void Screen::render(gl::GlslProgRef mRenderProg, gl::VaoRef mAttributes, int drawType, int count) {
 	gl::ScopedGlslProg render(mRenderProg);
 	gl::ScopedVao vao(mAttributes);
@@ -56,12 +56,12 @@ void Screen::render(gl::GlslProgRef mRenderProg, gl::VaoRef mAttributes, int dra
 	gl::drawArrays(drawType, 0, count);
 }
 
-void Screen::setupBuffers(gl::VaoRef* vaos, gl::VboRef* vbos, vector<Particle> particleData) {
+void Screen::setupBuffers(gl::VaoRef* vaos, gl::VboRef* vbos, vector<Particle> *particleData) {
 	
 	// Create particle buffers on GPU and copy data into the first buffer.
 	// Mark as static since we only write from the CPU once.
-	vbos[mSourceIndex] = gl::Vbo::create(GL_ARRAY_BUFFER, particleData.size() * sizeof(Particle), particleData.data(), GL_DYNAMIC_DRAW);
-	vbos[mDestinationIndex] = gl::Vbo::create(GL_ARRAY_BUFFER, particleData.size() * sizeof(Particle), nullptr, GL_DYNAMIC_DRAW);
+	vbos[mSourceIndex] = gl::Vbo::create(GL_ARRAY_BUFFER, particleData->size() * sizeof(Particle), particleData->data(), GL_DYNAMIC_DRAW);
+	vbos[mDestinationIndex] = gl::Vbo::create(GL_ARRAY_BUFFER, particleData->size() * sizeof(Particle), nullptr, GL_DYNAMIC_DRAW);
 	
 	for(int i = 0; i < 2; ++i)
 	{	// Describe the particle layout for OpenGL.
@@ -127,11 +127,8 @@ void Screen::loadUpdateProgram(string programName) {
 												   .attribLocation("iTranslation", 5)
 												   .attribLocation("iRotation", 9)
 												   );
-	
-	
-	setupBuffers(mAttributes, mParticleBuffer, particles);
-	setupBuffers(mAttributesHead, mParticleHeadBuffer, particleHeads);
-	
+	setupBuffers(mAttributes, mParticleBuffer, &mParticles);
+	setupBuffers(mAttributesHead, mParticleHeadBuffer, &mParticleHeads);
 }
 
 void Screen::performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffer, gl::VaoRef mAttributes, int drawType, int count) {
@@ -161,12 +158,13 @@ vector<Particle>* Screen::currentPositions() {
 	
 	vector<Particle> *tempData = new vector<Particle>();
 	tempData->assign(Num_Lines * 2, Particle());
+	
 	if (mParticleBuffer[mDestinationIndex]) {
 		mParticleBuffer[mDestinationIndex]->bind();
 		size_t bufferSize = mParticleBuffer[mDestinationIndex]->getSize();
 		mParticleBuffer[mDestinationIndex]->getBufferSubData(0, bufferSize, tempData->data());
-		for (int i = 0; i < particles.size(); i++) {
-			Particle currentParticle = particles.at(i);
+		for (int i = 0; i < mParticles.size(); i++) {
+			Particle currentParticle = mParticles.at(i);
 			Particle currentTarget = tempData->at(i);
 			currentTarget.pos = currentParticle.pos;
 			currentTarget.sphericalPosition = currentParticle.sphericalPosition;
@@ -179,6 +177,10 @@ vector<Particle>* Screen::currentPositions() {
 	}
 	
 	return tempData;
+}
+
+void Screen::restart() {
+	
 }
 
 void Screen::draw() {

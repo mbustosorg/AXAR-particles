@@ -24,7 +24,7 @@
 using namespace ci::app;
 
 Geographic::Geographic() {
-	screenTime = 10.0f;
+	screenTime = 1.0f;
 }
 
 void Geographic::setup() {
@@ -32,7 +32,6 @@ void Geographic::setup() {
 	gl::GlslProgRef	shader = gl::getStockShader( lambert );
 	
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
-		auto entity = i->second;
 		auto sphere = geom::Sphere().subdivisions(60).radius(20.0f);
 		mShapes.push_back(gl::Batch::create(sphere, shader));
 	}
@@ -50,10 +49,8 @@ void Geographic::draw()
 	
 	gl::setMatrices(mCam->mCam);
 	
-	const float delay = 0.05f;
 	const float rotationTime = 1.5f;
 	const float rotationOffset = 0.1f;
-	const float totalTime = delay + rotationTime + mEntities.size() * rotationOffset;
 	
 	float time = fmod(getElapsedFrames() / 60.0f, 1000.f);//totalTime);
 	
@@ -62,7 +59,6 @@ void Geographic::draw()
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		float rotation = 0;
 		float startTime = index * rotationOffset;
-		float endTime = startTime + rotationTime;
 		if (time > startTime) rotation = (time - startTime) / rotationTime;
 		if (rotation > 1.0) rotation = 1.0;
 		//if (time > startTime && time < endTime) rotation = (time - startTime) / rotationTime;
