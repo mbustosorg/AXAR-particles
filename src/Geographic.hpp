@@ -31,6 +31,7 @@ public:
 	Geographic();
 	
 	void setup();
+	void restart();
 	void update();
 	void draw();
 	
@@ -43,6 +44,7 @@ private:
 							float rotZ, float rotSpeed);
 	
 	int sphereCount = 1;
+	float restartTime = 0.0f;
 	list<gl::BatchRef> mShapes;
 };
 

@@ -30,13 +30,12 @@ class Entity {
 
 public:
 	
-	Entity(string symbol, string name, string sector, string industry, string headquarters, double latitude, double longitude);
+	Entity(string symbol, string name, string sector, string industry, string headquarters, double latitude, double longitude, int index);
 	~Entity();
 	
 	void updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio, double capitalization);
-	void updateParticle(Particle particle);
 	
-	Particle mParticle;
+	int mParticleIndex;
 	string mExchange;
 	string mName;
 	string mIndustry;

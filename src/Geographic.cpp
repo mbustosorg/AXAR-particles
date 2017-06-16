@@ -24,17 +24,35 @@
 using namespace ci::app;
 
 Geographic::Geographic() {
-	screenTime = 1.0f;
+	screenTime = 25.0f;
 }
 
 void Geographic::setup() {
 	auto lambert = gl::ShaderDef().lambert().color();
-	gl::GlslProgRef	shader = gl::getStockShader( lambert );
+	gl::GlslProgRef	shader = gl::getStockShader (lambert);
+
+	mParticles.assign(Num_Lines * 2, Particle());
+	mParticleHeads.assign(Num_Triangles * 3, Particle());
 	
+	int index = 0;
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+		i->second->mParticleIndex = index;
 		auto sphere = geom::Sphere().subdivisions(60).radius(20.0f);
 		mShapes.push_back(gl::Batch::create(sphere, shader));
+		index++;
 	}
+
+	restartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
+	loadUpdateProgram("industryOrbit.vs");
+}
+
+void Geographic::restart() {
+	vector<Particle> *tempVector = mPrevScreen->currentPositions();
+	mParticles.swap(*tempVector);
+	vector<Particle>().swap(*tempVector);
+	delete(tempVector);
+	
+	restartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 }
 
 void Geographic::update() {
@@ -52,27 +70,28 @@ void Geographic::draw()
 	const float rotationTime = 1.5f;
 	const float rotationOffset = 0.1f;
 	
-	float time = fmod(getElapsedFrames() / 60.0f, 1000.f);//totalTime);
+	float currentTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 	
 	list<gl::BatchRef>::iterator shapes = mShapes.begin();
-	int index = 0;
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+		
+		Entity* entity = i->second;
+		auto &p = mParticles.at(entity->mParticleIndex * TRAIL_LENGTH * 2);
+		
 		float rotation = 0;
-		float startTime = index * rotationOffset;
-		if (time > startTime) rotation = (time - startTime) / rotationTime;
+		float startTime = entity->mParticleIndex * rotationOffset;
+		if (currentTime > (startTime + restartTime)) rotation = (currentTime - (startTime + restartTime)) / rotationTime;
 		if (rotation > 1.0) rotation = 1.0;
-		//if (time > startTime && time < endTime) rotation = (time - startTime) / rotationTime;
 
-		//float angle = easeInOutQuint(rotation);
-		//float angle = easeOutBounce(rotation);
 		float angle = easeOutBack(rotation);
 		gl::ScopedModelMatrix scpModelMatrix;
-		gl::translate(i->second->mSphericalLocation * angle);
-		gl::color(i->second->mColor);
-		//gl::color(index / float(mEntities.size()), 1 - index / float(mEntities.size()), 1 - index / float(mEntities.size()));
-		//gl::color(Color(CM_HSV, lmap<float>(index, 0.0f, mEntities.size(), 1.0f, 0.0f), 1.0f, 1.0f));
+		vec3 translation = entity->mSphericalLocation - vec3(p.pos);
+		gl::translate(vec3(p.pos) + translation * angle);
+		gl::color(entity->mColor);
+
 		(*shapes)->draw();
 		++shapes;
-		++index;
 	}
+	
+	//Screen::draw();
 }

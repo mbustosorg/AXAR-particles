@@ -61,14 +61,16 @@ FinancialData::FinancialData(string benchmark) {
 	double longitude;
 	int entityLimit = 10000;
 	mSectorWeights.clear();
+	int index = 0;
 	while(in.read_row(exchange, symbol, name, sector, industry, headquarters, latitude, longitude) && mEntities.size() < entityLimit){
-		mEntities.insert({symbol, new Entity(symbol, name, sector, industry, headquarters, latitude, longitude)});
+		mEntities.insert({symbol, new Entity(symbol, name, sector, industry, headquarters, latitude, longitude, index)});
 		auto sectorIndex = mSectorWeights.find (SectorIndices.at(sector));
 		if (sectorIndex != mSectorWeights.end()) {
 			sectorIndex->second = mSectorWeights.at(SectorIndices.at(sector)) + 1.0;
 		} else {
 			mSectorWeights.insert({SectorIndices.at(sector), 1.0});
 		}
+		index++;
 	}
 	for (unordered_map<int,double>::iterator i = mSectorWeights.begin(); i != mSectorWeights.end(); ++i) {
 		i->second = i->second / (float)mEntities.size();

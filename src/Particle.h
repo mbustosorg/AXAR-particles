@@ -28,6 +28,7 @@ struct Particle
 {
 	vec4	pos;
 	ColorA  color;
+	vec4	startPosition;
 	vec4	sphericalPosition;
 	float	index;
 	float   delay;

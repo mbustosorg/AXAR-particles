@@ -21,7 +21,7 @@
 #include "cinder/Rand.h"
 
 Orbit::Orbit() {
-	screenTime = 1.0f;
+	screenTime = 25.0f;
 }
 
 void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
@@ -42,9 +42,9 @@ void Orbit::setup() {
 	const float Head_Length = 10.0f;
 	const float Head_Width = 10.0f;
 	
-	int particleId = 0;
 	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
 		
+		int particleId = entity->second->mParticleIndex;
 		vec3 sphericalLocation = entity->second->mSphericalLocation;
 		
 		for (int i = particleId * (TRAIL_LENGTH * 2); i < (particleId + 1) * (TRAIL_LENGTH * 2); i = i + TRAIL_LENGTH * 2)	{

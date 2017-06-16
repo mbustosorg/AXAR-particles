@@ -31,6 +31,7 @@ public:
 	
 	void setup();
 	void restart();
+	void update();
 	void setSectorWeights(unordered_map<int, double> *sectorWeights);
 	
 private:
@@ -40,6 +41,7 @@ private:
 							float rotZ, float rotSpeed, vec4 center);
 	
 	unordered_map<int, double> *mSectorWeights;
+	float mTransitionFactor = 0.0;
 	
 };
 

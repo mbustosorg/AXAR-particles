@@ -22,7 +22,7 @@
 #include "cinder/Rand.h"
 
 IndustryOrbit::IndustryOrbit() {
-	screenTime = 2.0f;
+	screenTime = 25.0f;
 }
 
 void IndustryOrbit::setSectorWeights(unordered_map<int, double> *sectorWeights) {
@@ -47,10 +47,12 @@ void IndustryOrbit::restart() {
 	vector<Particle>().swap(*tempVector);
 	delete(tempVector);
 	
-	int particleId = 0;
+	mTransitionFactor = 0.0f;
+	
 	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
 		
 		Entity* currentEntity = entity->second;
+		int particleId = currentEntity->mParticleIndex;
 		
 		vec3 center = vec3(0.75 * SPHERE_RADIUS * cos(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0),
 						   0.75 * SPHERE_RADIUS * sin(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0), 0.0);
@@ -67,21 +69,24 @@ void IndustryOrbit::restart() {
 			for (int j = 0; j < TRAIL_LENGTH; j++) {
 				auto &p = mParticles.at(i + j * 2);
 				//p.pos = vec4(sphericalLocation, 1.0);
-				//p.sphericalPosition = vec4(sphericalLocation, 1.0);
+				p.startPosition = p.pos;
+				p.sphericalPosition = vec4(sphericalLocation, 1.0);
 				p.color = entity->second->mColor;
-				p.index = i;
-				p.delay = (float) j;
+				p.index = i + j * 2;
+				p.delay = (float) (i / 32 + j * 2);
 				p.translation = translate(mat4(1.0f), center);
 				p.rotation = rotate(rotSpeed, rotationAxis);
-				
+
 				auto &pNext = mParticles.at(i + j * 2 + 1);
 				//pNext.pos = vec4(sphericalLocation, 1.0);
-				//pNext.sphericalPosition = vec4(sphericalLocation, 1.0);
+				pNext.startPosition = pNext.pos;
+				pNext.sphericalPosition = vec4(sphericalLocation, 1.0);
 				pNext.color = entity->second->mColor;
-				pNext.index = i;
-				pNext.delay = (float) j + 1.0f;
+				pNext.index = i + j * 2 + 1;
+				pNext.delay = (float) (i / 32 + j * 2 + 2.0f) ;
 				pNext.translation = translate(mat4(1.0f), center);
 				pNext.rotation = rotate(rotSpeed, rotationAxis);
+
 			}
 		}
 		particleId++;
@@ -92,53 +97,16 @@ void IndustryOrbit::restart() {
 
 }
 
+void IndustryOrbit::update() {
+	mTransitionFactor += 1.0f;
+	mParticleUpdateProg.get()->uniform("transitionFactor", mTransitionFactor);
+	Screen::update();
+}
+
 void IndustryOrbit::setup() {
-	
+
 	mParticles.assign(Num_Lines * 2, Particle());
 	mParticleHeads.assign(Num_Triangles * 3, Particle());
-/*
-	particleHeads.assign(Num_Triangles * 3, Particle());
-	
-	int particleId = 0;
-	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
-		
-		Entity* currentEntity = entity->second;
-		
-		vec3 center = vec3(0.75 * SPHERE_RADIUS * cos(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0),
-						   0.75 * SPHERE_RADIUS * sin(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0), 0.0);
-		
-		vec3 sphericalLocation = (entity->second->mSphericalLocation * (float)mSectorWeights->at(SectorIndices.at(currentEntity->mSector))) * vec3(0.75, 0.75, 0.75);
-		
-		for (int i = particleId * (TRAIL_LENGTH * 2); i < (particleId + 1) * (TRAIL_LENGTH * 2); i = i + TRAIL_LENGTH * 2)	{
-			
-			float rotSpeed = -Rand::randFloat(ROTATION_SPEED - 0.008f, ROTATION_SPEED + 0.008f);
-			float rotZ = Rand::randFloat(-1.5f, 1.5f);
-			vec3 flatSphericalLocation = vec3(entity->second->mSphericalLocation.z, 0.0, -entity->second->mSphericalLocation.x);
-			vec3 rotationAxis = vec3(vec4(flatSphericalLocation, 1.0) * rotate(-rotZ, sphericalLocation));
-
-			for (int j = 0; j < TRAIL_LENGTH; j++) {
-				auto &p = particles.at(i + j * 2);
-				p.pos = vec4(sphericalLocation, 1.0);
-				p.sphericalPosition = vec4(sphericalLocation, 1.0);
-				p.color = entity->second->mColor;
-				p.index = i;
-				p.delay = (float) j;
-				p.translation = translate(mat4(1.0f), center);
-				p.rotation = rotate(rotSpeed, rotationAxis);
-				
-				auto &pNext = particles.at(i + j * 2 + 1);
-				pNext.pos = vec4(sphericalLocation, 1.0);
-				pNext.sphericalPosition = vec4(sphericalLocation, 1.0);
-				pNext.color = entity->second->mColor;
-				pNext.index = i;
-				pNext.delay = (float) j + 1.0f;
-				pNext.translation = translate(mat4(1.0f), center);
-				pNext.rotation = rotate(rotSpeed, rotationAxis);
-			}
-		}
-		particleId++;
-	}
- */
 	loadUpdateProgram("industryOrbit.vs");
 }
 
