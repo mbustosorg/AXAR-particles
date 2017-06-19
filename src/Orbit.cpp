@@ -34,6 +34,10 @@ void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
 	current->rotation = rotate(rotSpeed, rotationAxis);
 }
 
+void Orbit::restart() {
+	setup();
+}
+
 void Orbit::setup() {
 	
 	mParticles.assign(Num_Lines * 2, Particle());

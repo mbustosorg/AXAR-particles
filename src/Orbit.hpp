@@ -29,6 +29,7 @@ public:
 	Orbit();
 	
 	void setup();
+	void restart();
 
 private:
 	
