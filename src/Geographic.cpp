@@ -29,7 +29,7 @@ Geographic::Geographic() {
 
 void Geographic::setup() {
 	auto lambert = gl::ShaderDef().lambert().color();
-	gl::GlslProgRef	shader = gl::getStockShader (lambert);
+	gl::GlslProgRef	shader = gl::getStockShader(lambert);
 
 	mParticles.assign(Num_Lines * 2, Particle());
 	mParticleHeads.assign(Num_Triangles * 3, Particle());

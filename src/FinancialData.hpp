@@ -22,23 +22,35 @@
 
 #include "Entity.hpp"
 
+#include "Poco/Dynamic/Var.h"
+
 #include <stdio.h>
 #include <string.h>
 
 using namespace std;
 
+const string FileRoot = "/Users/mauricio/Documents/development/git/AXAR_ParticleApp/data/index/";
+const string GooglePlacesApiKey = "AIzaSyAQmnVmMmF696OWAjlQwH3yytSbNWhkK4U";
+
 class FinancialData {
 
 public:
 	FinancialData();
-	FinancialData(string benchmark);
+	FinancialData(string benchmark, string date);
 	
-	void loadQuotes();
+	void updateLatLon(Entity *entity);
+	
 	unordered_map<string, Entity*> mEntities;
 	unordered_map<int, double> mSectorWeights;
 	
 private:
+	
+	void writeJson();
+	Poco::Dynamic::Var retrieveQuery(string query);
+	string processedFile();
+	string unprocessedFile();
 	string mBenchmark;
+	string mDate;
 	
 };
 

@@ -24,12 +24,11 @@ using namespace ci::app;
 
 ScreenManager::ScreenManager() {
 	
-	marketData = new FinancialData("sap500");
+	marketData = new FinancialData("sap500", "20161230");
 
 	industryOrbit.setSectorWeights(&(marketData->mSectorWeights));
 	
 	mEntities = marketData->mEntities;
-	marketData->loadQuotes();
 	
 	geo.setOrder(&industryOrbit, &orbit);
 	orbit.setOrder(&geo, &industryOrbit);

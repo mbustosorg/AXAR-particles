@@ -326,6 +326,7 @@
 					/usr/local/lib/libPocoNetSSL.dylib,
 					/usr/local/lib/libPocoXML.dylib,
 					/usr/local/lib/libPocoCrypto.dylib,
+					/usr/local/lib/libPocoJSON.dylib,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.libcinder.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = AXAR_ParticleApp;

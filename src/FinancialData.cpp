@@ -34,6 +34,9 @@
 #include "Poco/Exception.h"
 #include "Poco/StringTokenizer.h"
 #include "Poco/String.h"
+#include "Poco/FileStream.h"
+#include "Poco/File.h"
+#include "Poco/JSON/Parser.h"
 #define CSV_IO_NO_THREAD
 #include "fast-cpp-csv-parser-master/csv.h"
 
@@ -45,39 +48,103 @@ using Poco::cat;
 FinancialData::FinancialData() {
 }
 
-FinancialData::FinancialData(string benchmark) {
+FinancialData::FinancialData(string benchmark, string date) {
 	mBenchmark = benchmark;
-	string file = "/Users/mauricio/Documents/development/git/AXAR_ParticleApp/data/index/";
-	file = file + benchmark + ".csv";
-	io::CSVReader<8, io::trim_chars<' '>, io::double_quote_escape<',', '"'>> in(file);
-	in.read_header(io::ignore_extra_column, "Exchange", "Symbol", "Name", "Sector", "Industry", "Headquarters", "Latitude", "Longitude");
-	std::string exchange;
-	std::string symbol;
-	std::string name;
-	std::string sector;//
-	std::string industry;
-	std::string headquarters;
-	double latitude;
-	double longitude;
-	int entityLimit = 10000;
-	mSectorWeights.clear();
-	int index = 0;
-	while(in.read_row(exchange, symbol, name, sector, industry, headquarters, latitude, longitude) && mEntities.size() < entityLimit){
-		mEntities.insert({symbol, new Entity(symbol, name, sector, industry, headquarters, latitude, longitude, index)});
-		auto sectorIndex = mSectorWeights.find (SectorIndices.at(sector));
-		if (sectorIndex != mSectorWeights.end()) {
-			sectorIndex->second = mSectorWeights.at(SectorIndices.at(sector)) + 1.0;
+	mDate = date;
+	
+	Poco::JSON::Parser parser;
+	
+	Poco::File json(processedFile());
+	Poco::Dynamic::Var result;
+	
+	if (json.exists()) {
+		Poco::FileInputStream x(processedFile());
+		result = parser.parse(x);
+	} else {
+		Poco::FileInputStream x(unprocessedFile());
+		result = parser.parse(x);
+	}
+	
+	double totalCap = 0.0;
+	Poco::JSON::Array::Ptr children = result.extract<Poco::JSON::Array::Ptr>();
+	for (int i = 0; i < children->size(); i++) {
+		Poco::JSON::Object::Ptr object = children->getObject(i);
+		string name = object->getValue<string>("NAME");
+		string headquarters = object->getValue<string>("HQ_COUNTRY");
+		string sector = object->getValue<string>("SECTOR");
+		string similarsGroup = object->getValue<string>("SIMILARS_GROUP");
+		
+		Entity *entity = new Entity(name, name, sector, similarsGroup, headquarters, i);
+
+		entity->mCompanyXrf = object->getValue<string>("COMPANY_XRF");
+		entity->mCompanyZone = object->getValue<string>("COMPANY_ZONE");
+		entity->mListingXrf = object->getValue<string>("LISTING_XRF");
+		entity->mListingZone = object->getValue<string>("LISTING_ZONE");
+		
+		entity->mUsdCapitalization = object->getValue<double>("USD_CAP");
+		entity->mShares = object->getValue<double>("SHARES");
+		
+		if (object->has("LATITUDE") && object->has("LONGITUDE")) {
+			entity->updateLatitudeLongitude(object->getValue<double>("LATITUDE"), object->getValue<double>("LONGITUDE"));
 		} else {
-			mSectorWeights.insert({SectorIndices.at(sector), 1.0});
+			updateLatLon(entity);
 		}
-		index++;
+		
+		auto sectorIndex = mSectorWeights.find (SectorIndices.at(sector));
+		totalCap += entity->mUsdCapitalization;
+		if (sectorIndex != mSectorWeights.end()) {
+			sectorIndex->second = mSectorWeights.at(SectorIndices.at(sector)) + entity->mUsdCapitalization;
+		} else {
+			mSectorWeights.insert({SectorIndices.at(sector), entity->mUsdCapitalization});
+		}
+		mEntities.insert({name, entity});
 	}
+	
 	for (unordered_map<int,double>::iterator i = mSectorWeights.begin(); i != mSectorWeights.end(); ++i) {
-		i->second = i->second / (float)mEntities.size();
+		i->second = i->second / totalCap;
 	}
+	writeJson();
 }
 
-void FinancialData::loadQuotes() {
+string FinancialData::processedFile() {
+	return FileRoot + mBenchmark + "_" + mDate + "_processed.json";
+}
+
+string FinancialData::unprocessedFile() {
+	return FileRoot + mBenchmark + "_" + mDate + ".json";
+}
+
+void FinancialData::writeJson() {
+	
+	Poco::JSON::Array::Ptr entityArray = new Poco::JSON::Array();
+	
+	int index = 0;
+	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
+		Poco::JSON::Object::Ptr entityObject = new Poco::JSON::Object();
+		
+		entityObject->set("NAME", entity->second->mName);
+		entityObject->set("SECTOR", entity->second->mSector);
+
+		entityObject->set("SIMILARS_GROUP", entity->second->mSimilarsGroup);
+		entityObject->set("COMPANY_XRF", entity->second->mCompanyXrf);
+		entityObject->set("COMPANY_ZONE", entity->second->mCompanyZone);
+		entityObject->set("LISTING_XRF", entity->second->mListingXrf);
+		entityObject->set("LISTING_ZONE", entity->second->mListingZone);
+		entityObject->set("USD_CAP", entity->second->mUsdCapitalization);
+		entityObject->set("SHARES", entity->second->mShares);
+		entityObject->set("HQ_COUNTRY", entity->second->mHeadquarterCountry);
+		entityObject->set("LATITUDE", entity->second->mLatitude);
+		entityObject->set("LONGITUDE", entity->second->mLongitude);
+		
+		entityArray->set(index, entityObject);
+		
+		index++;
+	}
+	Poco::FileOutputStream json(processedFile());
+	entityArray->stringify(json);
+}
+
+Poco::Dynamic::Var FinancialData::retrieveQuery(string query) {
 	
 	bool isServer = false;
 	bool isHandleErrorsOnServer = false;
@@ -85,29 +152,44 @@ void FinancialData::loadQuotes() {
 	Poco::SharedPtr<InvalidCertificateHandler> pInvalidCertHandler = new ConsoleCertificateHandler(isHandleErrorsOnServer);
 	Context::Ptr pContext = new Context(Context::CLIENT_USE, "", "", "rootcert.pem", Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 	SSLManager::instance().initializeClient(pConsoleHandler, pInvalidCertHandler, pContext);
-
-	string quotes = "";
-	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
-		if (quotes.length() == 0) {
-			quotes = quotes + i->first;
-		} else {
-			quotes = quotes + "," + i->first;
-		}
-	}
-	Poco::URI uri("https://www.quandl.com/api/v3/datatables/WIKI/PRICES.csv?date=20170607&ticker=" + quotes + "&qopts.columns=date,close,ticker&api_key=oBZVP5YSmEmsFrHaXJ9s");
+	
+	Poco::URI uri("https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + query + "&key=" + GooglePlacesApiKey);
 	
 	Poco::Net::HTTPSClientSession session(uri.getHost(), uri.getPort());
 	Poco::Net::HTTPRequest req(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath() + "?" + uri.getRawQuery(), Poco::Net::HTTPMessage::HTTP_1_1);
 	session.sendRequest(req);
 	HTTPResponse response;
 	std::istream& rs = session.receiveResponse(response);
-	io::CSVReader<3, io::trim_chars<' '>, io::double_quote_escape<',', '"'>> in("quandl", rs);
-	in.read_header(io::ignore_extra_column, "date", "close", "ticker");
-	std::string ticker;
-	std::string date;
-	double lastTrade;
-	while(in.read_row(date, lastTrade, ticker)){
-		printf("%s, %s, %6.2f\n", date.c_str(), ticker.c_str(), lastTrade);
-		//mEntities[symbol]->updateMarketData(date, lastTrade, divYield, peRatio, capitalization);
+	
+	Poco::JSON::Parser parser;
+	std::istream& json(rs);
+	return parser.parse(json);
+}
+
+void FinancialData::updateLatLon(Entity *entity) {
+	
+	try {
+		
+		string query = entity->mName;
+		replace(query.begin(), query.end(), ' ', '+' );
+		query += "+headquarters";
+		
+		Poco::Dynamic::Var result = retrieveQuery(query);
+		Poco::JSON::Object::Ptr object = result.extract<Poco::JSON::Object::Ptr>();
+		
+		if (object->getValue<std::string>("status") == "ZERO_RESULTS") {
+			result = retrieveQuery(entity->mHeadquarterCountry);
+			object = result.extract<Poco::JSON::Object::Ptr>();
+		}
+		
+		//std::string name = object->getObject("results")->getObject("geometry")->getObject("location")->getValue<std::string>("lat");
+		std::string lat = object->getArray("results")->getObject(0)->getObject("geometry")->getObject("location")->getValue<std::string>("lat");
+		std::string lon = object->getArray("results")->getObject(0)->getObject("geometry")->getObject("location")->getValue<std::string>("lng");
+		//Poco::JSON::Array::Ptr children = name->getArray("");
+		
+		entity->updateLatitudeLongitude(std::stod(lat), std::stod(lon));
+
+	} catch (...) {
+		cout << entity->mName << endl;
 	}
 }

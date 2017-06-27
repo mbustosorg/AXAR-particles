@@ -30,25 +30,33 @@ class Entity {
 
 public:
 	
-	Entity(string symbol, string name, string sector, string industry, string headquarters, double latitude, double longitude, int index);
+	Entity(string symbol, string name, string sector, string similarsGroup, string headquarterCountry, int index);
 	~Entity();
 	
 	void updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio, double capitalization);
+	void updateLatitudeLongitude(double latitude, double longitude);
 	
 	int mParticleIndex;
-	string mExchange;
 	string mName;
-	string mIndustry;
+	string mSimilarsGroup;
 	string mSymbol;
 	string mSector;
-	string mHeadquarters;
-
+	string mHeadquarterCountry;
+	string mCompanyXrf;
+	string mCompanyZone;
+	string mListingXrf;
+	string mListingZone;
+	string mExchange;
+	string mTicker;
+	string mSedol;
+	
 	Color mColor;
 	double mLatitude;
 	double mLongitude;
 	double mRandLatitude;
 	double mRandLongitude;
-	double mCapitalization;
+	double mUsdCapitalization;
+	double mShares;
 	vec3 mSphericalLocation;
 	
 private:
