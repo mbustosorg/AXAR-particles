@@ -24,6 +24,7 @@
 #include "Dashboard.hpp"
 #include "ScreenManager.hpp"
 #include "cinder/app/App.h"
+#include "spdlog/spdlog.h"
 
 using namespace cinder::app;
 
@@ -40,7 +41,9 @@ public:
 	
 	RCamera			mCamera;
 	Dashboard		*mDashboard = new Dashboard(&mCamera);
-	ScreenManager   screenManager;
+	ScreenManager   *mScreenManager;
+	
+	std::shared_ptr<spdlog::logger> console;
 	
 };
 

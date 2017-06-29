@@ -25,10 +25,21 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Camera.h"
 
+namespace spd = spdlog;
 using namespace ci;
 using namespace std;
 
 void AXAR_ParticleApp::setup() {
+	
+	std::vector<spdlog::sink_ptr> sinks;
+	sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_st>());
+	sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_st>("logfile.txt", 23, 59));
+	auto combined_logger = std::make_shared<spdlog::logger>("particleApp", begin(sinks), end(sinks));
+	//register it if you need to access it globally
+	spdlog::register_logger(combined_logger);
+	
+	spd::set_pattern("[%T%z][%L] %v");
+	
 	// Listen to mouse events so we can send data as uniforms.
 	getWindow()->getSignalMouseDown().connect([this](MouseEvent event)
 											  {
@@ -47,12 +58,13 @@ void AXAR_ParticleApp::setup() {
 												mMouseDown = false;
 											});
 	mCamera.update();
-	screenManager.setCamera(&mCamera);
+	mScreenManager = new ScreenManager();
+	mScreenManager->setCamera(&mCamera);
 }
 
 void AXAR_ParticleApp::update()
 {
-	screenManager.update();
+	mScreenManager->update();
 	// Update mouse force.
 	if(mMouseDown) {
 		mMouseForce = 150.0f;
@@ -63,7 +75,7 @@ void AXAR_ParticleApp::update()
 void AXAR_ParticleApp::draw()
 {
 	
-	screenManager.draw();
+	mScreenManager->draw();
 	gl::setMatricesWindowPersp(getWindowSize(), 60.0f, 1.0f, 100.0f);
 	gl::setMatrices(mCamera.mCam);
 

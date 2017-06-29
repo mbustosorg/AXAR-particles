@@ -37,9 +37,9 @@
 #include "Poco/FileStream.h"
 #include "Poco/File.h"
 #include "Poco/JSON/Parser.h"
-#define CSV_IO_NO_THREAD
-#include "fast-cpp-csv-parser-master/csv.h"
+#include "spdlog/spdlog.h"
 
+namespace spd = spdlog;
 using namespace Poco::Net;
 using Poco::StreamCopier;
 using Poco::StringTokenizer;
@@ -49,6 +49,7 @@ FinancialData::FinancialData() {
 }
 
 FinancialData::FinancialData(string benchmark, string date) {
+	
 	mBenchmark = benchmark;
 	mDate = date;
 	
@@ -99,6 +100,12 @@ FinancialData::FinancialData(string benchmark, string date) {
 		}
 		mEntities.insert({name, entity});
 	}
+	
+	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+		auto entity = i->second;
+		entity->mWeight = entity->mUsdCapitalization / totalCap;
+	}
+
 	
 	for (unordered_map<int,double>::iterator i = mSectorWeights.begin(); i != mSectorWeights.end(); ++i) {
 		i->second = i->second / totalCap;
@@ -168,6 +175,7 @@ Poco::Dynamic::Var FinancialData::retrieveQuery(string query) {
 
 void FinancialData::updateLatLon(Entity *entity) {
 	
+	
 	try {
 		
 		string query = entity->mName;
@@ -180,16 +188,17 @@ void FinancialData::updateLatLon(Entity *entity) {
 		if (object->getValue<std::string>("status") == "ZERO_RESULTS") {
 			result = retrieveQuery(entity->mHeadquarterCountry);
 			object = result.extract<Poco::JSON::Object::Ptr>();
+			spd::get("particleApp")->warn("{}\tUsed Country {}", entity->mName.substr(0, 15), entity->mHeadquarterCountry);
+		} else {
+			spd::get("particleApp")->info("{}\tFound Headquarters - {}", entity->mName.substr(0, 15), object->getArray("results")->getObject(0)->getValue<std::string>("formatted_address"));
 		}
-		
-		//std::string name = object->getObject("results")->getObject("geometry")->getObject("location")->getValue<std::string>("lat");
+	
 		std::string lat = object->getArray("results")->getObject(0)->getObject("geometry")->getObject("location")->getValue<std::string>("lat");
 		std::string lon = object->getArray("results")->getObject(0)->getObject("geometry")->getObject("location")->getValue<std::string>("lng");
-		//Poco::JSON::Array::Ptr children = name->getArray("");
 		
 		entity->updateLatitudeLongitude(std::stod(lat), std::stod(lon));
 
 	} catch (...) {
-		cout << entity->mName << endl;
+		spd::get("particleApp")->error(" *** {}", entity->mName.substr(0, 15));
 	}
 }

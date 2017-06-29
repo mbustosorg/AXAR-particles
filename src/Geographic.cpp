@@ -24,7 +24,7 @@
 using namespace ci::app;
 
 Geographic::Geographic() {
-	screenTime = 25.0f;
+	screenTime = 35.0f;
 }
 
 void Geographic::setup() {
@@ -36,12 +36,17 @@ void Geographic::setup() {
 	
 	int index = 0;
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
-		i->second->mParticleIndex = index;
-		auto sphere = geom::Sphere().subdivisions(60).radius(20.0f);
-		mShapes.push_back(gl::Batch::create(sphere, shader));
+		auto entity = i->second;
+		maxWeight = max(maxWeight, entity->mWeight);
+		entity->mParticleIndex = index;
 		index++;
 	}
-
+	
+	for (int i = 0; i < RadiusSteps; i++) {
+		auto sphere = geom::Sphere().subdivisions(60).radius(MinRadius + float(i));
+		mShapes[i] = gl::Batch::create(sphere, shader);
+	}
+	
 	restartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 	loadUpdateProgram("industryOrbit.vs");
 }
@@ -68,11 +73,10 @@ void Geographic::draw()
 	gl::setMatrices(mCam->mCam);
 	
 	const float rotationTime = 1.5f;
-	const float rotationOffset = 0.1f;
+	const float rotationOffset = 0.05f;
 	
 	float currentTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 	
-	list<gl::BatchRef>::iterator shapes = mShapes.begin();
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		
 		Entity* entity = i->second;
@@ -83,14 +87,16 @@ void Geographic::draw()
 		if (currentTime > (startTime + restartTime)) rotation = (currentTime - (startTime + restartTime)) / rotationTime;
 		if (rotation > 1.0) rotation = 1.0;
 
+		int shapeIndex = int((entity->mWeight / maxWeight * rotation) * (RadiusSteps - 1));
+		auto shape = mShapes[shapeIndex];
+
 		float angle = easeOutBack(rotation);
 		gl::ScopedModelMatrix scpModelMatrix;
 		vec3 translation = entity->mSphericalLocation - vec3(p.pos);
 		gl::translate(vec3(p.pos) + translation * angle);
 		gl::color(entity->mColor);
 
-		(*shapes)->draw();
-		++shapes;
+		shape->draw();
 	}
 	
 	//Screen::draw();

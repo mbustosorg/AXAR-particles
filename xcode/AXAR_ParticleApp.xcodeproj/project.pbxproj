@@ -25,6 +25,7 @@
 		222C0DD91E7A10A600AE52B4 /* RCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 222C0DD71E7A10A600AE52B4 /* RCamera.cpp */; };
 		22799F1B1E85CF4D00D0F0D8 /* Dashboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22799F191E85CF4D00D0F0D8 /* Dashboard.cpp */; };
 		22B96E1C1ECBA47600C0EAB7 /* FinancialData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B96E1A1ECBA47600C0EAB7 /* FinancialData.cpp */; };
+		22DB769B1F042F6000F3356E /* spdlog in Resources */ = {isa = PBXBuildFile; fileRef = 22DB769A1F042F6000F3356E /* spdlog */; };
 		22FE386D1EE4A7E90031FCDC /* IndustryOrbit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22FE386B1EE4A7E90031FCDC /* IndustryOrbit.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
@@ -63,6 +64,7 @@
 		22799F1A1E85CF4D00D0F0D8 /* Dashboard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Dashboard.hpp; path = ../src/Dashboard.hpp; sourceTree = "<group>"; };
 		22B96E1A1ECBA47600C0EAB7 /* FinancialData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FinancialData.cpp; path = ../src/FinancialData.cpp; sourceTree = "<group>"; };
 		22B96E1B1ECBA47600C0EAB7 /* FinancialData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FinancialData.hpp; path = ../src/FinancialData.hpp; sourceTree = "<group>"; };
+		22DB769A1F042F6000F3356E /* spdlog */ = {isa = PBXFileReference; lastKnownFileType = folder; name = spdlog; path = ../src/spdlog; sourceTree = "<group>"; };
 		22FE386B1EE4A7E90031FCDC /* IndustryOrbit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndustryOrbit.cpp; path = ../src/IndustryOrbit.cpp; sourceTree = "<group>"; };
 		22FE386C1EE4A7E90031FCDC /* IndustryOrbit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndustryOrbit.hpp; path = ../src/IndustryOrbit.hpp; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -109,6 +111,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				22DB769A1F042F6000F3356E /* spdlog */,
 				FD1B46B0B7044B879621EDC9 /* AXAR_ParticleApp.cpp */,
 				2208D7C31EB4055800D408D8 /* AXAR_ParticleApp.hpp */,
 				22799F191E85CF4D00D0F0D8 /* Dashboard.cpp */,
@@ -268,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2208D7B71EAD837000D408D8 /* CinderApp.icns in Resources */,
+				22DB769B1F042F6000F3356E /* spdlog in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +319,7 @@
 					"\"$(CINDER_PATH)/include\"",
 					/usr/local/include,
 					/usr/local/include/node,
+					/Users/mauricio/Documents/development/git/AXAR_ParticleApp/src,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -357,6 +362,7 @@
 					"\"$(CINDER_PATH)/include\"",
 					/usr/local/include,
 					/usr/local/include/node,
+					/Users/mauricio/Documents/development/git/AXAR_ParticleApp/src,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";

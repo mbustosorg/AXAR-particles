@@ -54,8 +54,8 @@ void IndustryOrbit::restart() {
 		Entity* currentEntity = entity->second;
 		int particleId = currentEntity->mParticleIndex;
 		
-		vec3 center = vec3(0.75 * SPHERE_RADIUS * cos(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0),
-						   0.75 * SPHERE_RADIUS * sin(SectorIndices.at(currentEntity->mSector) * M_PI / (float)SectorIndices.size() * 2.0), 0.0);
+		vec3 center = vec3(0.75 * SPHERE_RADIUS * cos(SectorIndices.at(currentEntity->mSector) * M_PI / (float)(SectorIndices.size() - 1.0) * 2.0),
+						   0.75 * SPHERE_RADIUS * sin(SectorIndices.at(currentEntity->mSector) * M_PI / (float)(SectorIndices.size() - 1.0) * 2.0), 0.0);
 		
 		vec3 sphericalLocation = (currentEntity->mSphericalLocation * (float)mSectorWeights->at(SectorIndices.at(currentEntity->mSector))) * vec3(0.75, 0.75, 0.75);
 		

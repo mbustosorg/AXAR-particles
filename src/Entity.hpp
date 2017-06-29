@@ -57,6 +57,7 @@ public:
 	double mRandLongitude;
 	double mUsdCapitalization;
 	double mShares;
+	double mWeight;
 	vec3 mSphericalLocation;
 	
 private:
