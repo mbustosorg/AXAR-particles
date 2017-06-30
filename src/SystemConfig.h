@@ -48,20 +48,20 @@ static Color Colors[] = {
 };
 
 static std::unordered_map<std::string, int> SectorIndices = {
-	{"FINANCE", 0},
-	{"CONSDIS", 1},
-	{"CONSTAPL", 2},
-	{"ENERGY", 3},
-	{"BASICIND", 4},
-	{"TECH", 5},
-	{"TRANSPRT", 6},
-	{"BUSINSRV", 7},
-	{"INDUSTRY", 8},
-	{"REALEST", 9},
-	{"UTILS", 10},
-	{"TELECOMM", 11},
-	{"HEALTH", 12},
-	{"", 13}
+	{"FINANCE", 1},
+	{"CONSDIS", 2},
+	{"CONSTAPL", 3},
+	{"ENERGY", 4},
+	{"BASICIND", 5},
+	{"TECH", 6},
+	{"TRANSPRT", 7},
+	{"BUSINSRV", 8},
+	{"INDUSTRY", 9},
+	{"REALEST", 10},
+	{"UTILS", 11},
+	{"TELECOMM", 12},
+	{"HEALTH", 13},
+	{"", 14}
 };
 
 #endif

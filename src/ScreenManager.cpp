@@ -24,7 +24,7 @@ using namespace ci::app;
 
 ScreenManager::ScreenManager() {
 	
-	marketData = new FinancialData("sap500", "20161230");
+	marketData = new FinancialData("mscwxl", "20161230");
 
 	industryOrbit.setSectorWeights(&(marketData->mSectorWeights));
 	

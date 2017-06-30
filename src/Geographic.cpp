@@ -72,7 +72,7 @@ void Geographic::draw()
 	
 	gl::setMatrices(mCam->mCam);
 	
-	const float rotationTime = 1.5f;
+	const float rotationTime = 4.5f;
 	const float rotationOffset = 0.05f;
 	
 	float currentTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
