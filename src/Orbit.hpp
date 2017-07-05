@@ -26,7 +26,7 @@
 class Orbit : public Screen {
 	
 public:
-	Orbit();
+	Orbit(unordered_map<string, Entity*> entities);
 	
 	void setup();
 	void restart();
@@ -36,7 +36,7 @@ private:
 	void updateHeadParticle(Entity* entity, int index, Particle* current,
 							vec3 offsetVector, vec3 rotationAxis,
 							float rotZ, float rotSpeed);
-	
+
 };
 
 #endif

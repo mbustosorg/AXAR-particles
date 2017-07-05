@@ -23,20 +23,19 @@
 #include <stdio.h>
 #include "Screen.hpp"
 #include "Entity.hpp"
+#include "Dashboard.hpp"
 #include <list>
-
-const float MinRadius = 10.0f;
-const int RadiusSteps = 50;
 
 class Geographic : public Screen {
 	
 public:
-	Geographic();
+	Geographic(unordered_map<string, Entity*> entities);
 	
 	void setup();
 	void restart();
 	void update();
 	void draw();
+	void displayMessage(Dashboard *dashboard);
 	
 private:
 	
@@ -48,7 +47,6 @@ private:
 	
 	int sphereCount = 1;
 	float restartTime = 0.0f;
-	gl::BatchRef mShapes[RadiusSteps];
 	double maxWeight = 0.0;
 };
 

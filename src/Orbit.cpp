@@ -20,8 +20,10 @@
 #include "Orbit.hpp"
 #include "cinder/Rand.h"
 
-Orbit::Orbit() {
+Orbit::Orbit(unordered_map<string, Entity*> entities) {
 	screenTime = 25.0f;
+	setEntities(entities);
+	setup();
 }
 
 void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
@@ -112,6 +114,7 @@ void Orbit::setup() {
 		}
 		particleId++;
 	}
+	Screen::setup();
 	loadUpdateProgram("orbitUpdate.vs");
 }
 

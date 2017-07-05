@@ -21,10 +21,15 @@
 #include "cinder/gl/gl.h"
 
 Dashboard::Dashboard(RCamera *cam) {
-	mCam = cam;	
+	mCam = cam;
+	
+	for (int i = 1; i < FontSizes; i++) {
+		mFont[i] = Font("Helvetica Neue", (float) i);
+	}
+	
 }
 
-void Dashboard::displayMessage(string message, float x, float y) {
+void Dashboard::displayMessage(string message, float x, float y, float fontSize, Color color) {
 	
 	gl::pushModelMatrix();
 	
@@ -56,8 +61,13 @@ void Dashboard::displayMessage(string message, float x, float y) {
 	}
 
 	TextLayout simple;
-	simple.setFont(mFont);
-	simple.setColor(Color(1, 0, 0.1f));
+	//simple.setColor(color);
+	gl::color(color);
+	
+	//simple.clear(ColorA(0.1f,0.1f,0.1f,0.7f));
+	simple.setColor( Color( 0.9f, 0.9f, 0.9f ) );
+	simple.setFont(Font("Helvetica Neue", 150.0f));
+	//simple.setFont(mFont[(int) fontSize]);
 	simple.addLine(message);
 	//simple.addLine("Rot: " + to_string(eRotation));
 	//simple.addLine("Dot: " + to_string(eDotproduct));

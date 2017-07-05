@@ -20,7 +20,6 @@
 #include "Screen.hpp"
 
 Screen::Screen() {
-	
 }
 
 Screen::~Screen() {
@@ -33,7 +32,13 @@ void Screen::setOrder(Screen* prevScreen, Screen* nextScreen) {
 }
 
 void Screen::setup() {
+	auto lambert = gl::ShaderDef().lambert().color();
+	gl::GlslProgRef	shader = gl::getStockShader(lambert);
 	
+	for (int i = 0; i < RadiusSteps; i++) {
+		auto sphere = geom::Sphere().subdivisions(20).radius(MinRadius + float(i));
+		mShapes[i] = gl::Batch::create(sphere, shader);
+	}
 }
 
 void Screen::setCamera(RCamera *camera) {
@@ -184,7 +189,15 @@ vector<Particle>* Screen::currentPositions() {
 	return tempData;
 }
 
+void Screen::setScreenStartTime(float startTime) {
+	mScreenStarstTime = startTime;
+}
+
 void Screen::restart() {
+	
+}
+
+void Screen::displayMessage(Dashboard *dashboard) {
 	
 }
 

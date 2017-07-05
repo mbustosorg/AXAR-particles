@@ -23,14 +23,13 @@
 
 using namespace ci::app;
 
-Geographic::Geographic() {
+Geographic::Geographic(unordered_map<string, Entity*> entities) {
 	screenTime = 35.0f;
+	setEntities(entities);
+	setup();
 }
 
 void Geographic::setup() {
-	auto lambert = gl::ShaderDef().lambert().color();
-	gl::GlslProgRef	shader = gl::getStockShader(lambert);
-
 	mParticles.assign(Num_Lines * 2, Particle());
 	mParticleHeads.assign(Num_Triangles * 3, Particle());
 	
@@ -42,12 +41,9 @@ void Geographic::setup() {
 		index++;
 	}
 	
-	for (int i = 0; i < RadiusSteps; i++) {
-		auto sphere = geom::Sphere().subdivisions(60).radius(MinRadius + float(i));
-		mShapes[i] = gl::Batch::create(sphere, shader);
-	}
-	
 	restartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
+	
+	Screen::setup();
 	loadUpdateProgram("industryOrbit.vs");
 }
 
@@ -64,6 +60,15 @@ void Geographic::update() {
 	
 }
 
+void Geographic::displayMessage(Dashboard *dashboard) {
+	float deltaTime = (getElapsedSeconds() - mScreenStarstTime) / 5.0;
+	if (deltaTime < 1.0) {
+		dashboard->displayMessage("S&P 500", -2000.0f, 900.0f, 200, Color(deltaTime, deltaTime, deltaTime));
+	} else if (deltaTime < 2.0) {
+		dashboard->displayMessage("S&P 500", -2000.0f, 900.0f, 200, Color(1.0 - deltaTime / 2.0f, 1.0 - deltaTime / 2.0f, 1.0 - deltaTime / 2.0f));
+	}
+}
+
 void Geographic::draw()
 {
 	gl::clear();
@@ -73,31 +78,32 @@ void Geographic::draw()
 	gl::setMatrices(mCam->mCam);
 	
 	const float rotationTime = 4.5f;
-	const float rotationOffset = 0.05f;
+	const float rotationOffset = 0.03f;
 	
 	float currentTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 	
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		
 		Entity* entity = i->second;
-		auto &p = mParticles.at(entity->mParticleIndex * TRAIL_LENGTH * 2);
 		
-		float rotation = 0;
-		float startTime = entity->mParticleIndex * rotationOffset;
-		if (currentTime > (startTime + restartTime)) rotation = (currentTime - (startTime + restartTime)) / rotationTime;
-		if (rotation > 1.0) rotation = 1.0;
-
-		int shapeIndex = int((entity->mWeight / maxWeight * rotation) * (RadiusSteps - 1));
-		auto shape = mShapes[shapeIndex];
-
-		float angle = easeOutBack(rotation);
-		gl::ScopedModelMatrix scpModelMatrix;
-		vec3 translation = entity->mSphericalLocation - vec3(p.pos);
-		gl::translate(vec3(p.pos) + translation * angle);
-		gl::color(entity->mColor);
-
-		shape->draw();
+		if (entity->mWeight > 0.0001) {
+			auto &p = mParticles.at(entity->mParticleIndex * TRAIL_LENGTH * 2);
+			
+			float rotation = 0;
+			float startTime = entity->mParticleIndex * rotationOffset;
+			if (currentTime > (startTime + restartTime)) rotation = (currentTime - (startTime + restartTime)) / rotationTime;
+			if (rotation > 1.0) rotation = 1.0;
+			
+			int shapeIndex = int((entity->mWeight / maxWeight * rotation) * (RadiusSteps - 1));
+			auto shape = mShapes[shapeIndex];
+			
+			float angle = easeOutBack(rotation);
+			gl::ScopedModelMatrix scpModelMatrix;
+			vec3 translation = entity->mSphericalLocation - vec3(p.pos);
+			gl::translate(vec3(p.pos) + translation * angle);
+			gl::color(entity->mColor);
+			
+			shape->draw();
+		}
 	}
-	
-	//Screen::draw();
 }

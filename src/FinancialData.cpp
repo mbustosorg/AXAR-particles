@@ -48,9 +48,10 @@ using Poco::cat;
 FinancialData::FinancialData() {
 }
 
-FinancialData::FinancialData(string benchmark, string date) {
+FinancialData::FinancialData(string benchmark, string descriptiveName, string date) {
 	
 	mBenchmark = benchmark;
+	mDescriptiveName = descriptiveName;
 	mDate = date;
 	
 	Poco::JSON::Parser parser;

@@ -26,6 +26,7 @@
 #include "SystemConfig.h"
 #include "RCamera.hpp"
 #include "Entity.hpp"
+#include "Dashboard.hpp"
 
 using namespace ci;
 using namespace std;
@@ -44,7 +45,10 @@ public:
 	virtual void draw();
 	virtual void setCamera(RCamera* camera);
 	virtual void setEntities(unordered_map<string, Entity*> entities);
-
+	virtual void displayMessage(Dashboard *dashboard);
+	
+	void setScreenStartTime(float startTime);
+	
 	vector<Particle>* currentPositions();
 	Screen* mPrevScreen;
 	Screen* mNextScreen;
@@ -90,6 +94,10 @@ protected:
 	unsigned long Num_Triangles = 0;
 	unsigned long Particle_Vector_Length = 0;
 	unsigned long Particle_Head_Vector_Length = 0;
+
+	gl::BatchRef mShapes[RadiusSteps];
+	
+	float mScreenStarstTime;
 
 private:
 	

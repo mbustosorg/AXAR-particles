@@ -24,19 +24,21 @@
 #include "RCamera.hpp"
 #include "cinder/Font.h"
 
+const int FontSizes = 300;
+
 class Dashboard {
 
 public:
 	
 	Dashboard(RCamera *cam);
 	
-	void displayMessage(string message, float x, float y);
+	void displayMessage(string message, float x, float y, float fontSize, Color color);
 	
 private:
 	
 	RCamera *mCam;
 	
-	Font mFont = Font("Helvetica Neue", 52.0f);
+	Font mFont[FontSizes];
 	
 };
 

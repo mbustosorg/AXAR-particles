@@ -24,32 +24,52 @@ using namespace ci::app;
 
 ScreenManager::ScreenManager() {
 	
-	marketData = new FinancialData("mscwxl", "20161230");
-
-	industryOrbit.setSectorWeights(&(marketData->mSectorWeights));
+	FinancialData *sap500MarketData = new FinancialData("sap500", "S&P 500", "20161230");
+	Geographic *sap500Geo = new Geographic(sap500MarketData->mEntities);
+	Orbit *sap500Orbit = new Orbit(sap500MarketData->mEntities);
+	IndustryOrbit *sap500IndustryOrbit = new IndustryOrbit(sap500MarketData->mEntities);
+	sap500IndustryOrbit->setSectorWeights(&(sap500MarketData->mSectorWeights));
 	
-	mEntities = marketData->mEntities;
+	FinancialData *mscwxlMarketData = new FinancialData("mscwxl", "MSCI World", "20161230");
+	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData->mEntities);
+	Orbit *mscwxlOrbit = new Orbit(mscwxlMarketData->mEntities);
+	IndustryOrbit *mscwxlIndustryOrbit = new IndustryOrbit(mscwxlMarketData->mEntities);
+	mscwxlIndustryOrbit->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
 	
-	geo.setOrder(&industryOrbit, &orbit);
-	orbit.setOrder(&geo, &industryOrbit);
-	industryOrbit.setOrder(&orbit, &geo);
-
-	currentScreen = &geo;
-	currentScreen->setEntities(mEntities);
-	currentScreen->setup();
-	for (Screen* currentIter = currentScreen->mNextScreen; currentIter != currentScreen; currentIter = currentIter->mNextScreen) {
-		currentIter->setEntities(mEntities);
-		currentIter->setup();
-	}
+	FinancialData *msceurMarketData = new FinancialData("mscief", "MSCI Europe", "20161230");
+	Geographic *msceurGeo = new Geographic(msceurMarketData->mEntities);
+	Orbit *msceurOrbit = new Orbit(msceurMarketData->mEntities);
+	IndustryOrbit *msceurIndustryOrbit = new IndustryOrbit(msceurMarketData->mEntities);
+	msceurIndustryOrbit->setSectorWeights(&(msceurMarketData->mSectorWeights));
+	
+	sap500Geo->setOrder(msceurIndustryOrbit, sap500Orbit);
+	sap500Orbit->setOrder(sap500Geo, sap500IndustryOrbit);
+	sap500IndustryOrbit->setOrder(sap500Orbit, mscwxlGeo);
+	
+	mscwxlGeo->setOrder(mscwxlIndustryOrbit, mscwxlOrbit);
+	mscwxlOrbit->setOrder(mscwxlGeo, mscwxlIndustryOrbit);
+	mscwxlIndustryOrbit->setOrder(mscwxlOrbit, msceurGeo);
+	
+	msceurGeo->setOrder(msceurIndustryOrbit, msceurOrbit);
+	msceurOrbit->setOrder(msceurGeo, msceurIndustryOrbit);
+	msceurIndustryOrbit->setOrder(msceurOrbit, sap500Geo);
+	
+	currentScreen = sap500Geo;
+	
 	timeStamp = getElapsedSeconds();
 }
 
 void ScreenManager::setCamera(RCamera *camera) {
 	mCam = camera;
 	currentScreen->setCamera(mCam);
+	//Screen *next = currentScreen->mNextScreen;
 	for (Screen* currentIter = currentScreen->mNextScreen; currentIter != currentScreen; currentIter = currentIter->mNextScreen) {
 		currentIter->setCamera(mCam);
 	}
+}
+
+void ScreenManager::setDashboard(Dashboard *dashboard) {
+	mDashboard = dashboard;
 }
 
 void ScreenManager::update() {
@@ -63,5 +83,7 @@ void ScreenManager::update() {
 }
 
 void ScreenManager::draw() {
+
 	currentScreen->draw();
+	currentScreen->displayMessage(mDashboard);
 }

@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <list>
+#include "Dashboard.hpp"
 #include "FinancialData.hpp"
 #include "Orbit.hpp"
 #include "Geographic.hpp"
@@ -36,20 +37,16 @@ public:
 	void update();
 	void draw();
 	void setCamera(RCamera* camera);
+	void setDashboard(Dashboard* dashboard);
 	
 private:
 	
 	RCamera* mCam;
+	Dashboard* mDashboard;
 	unordered_map<string, Entity*> mEntities;
 	
 	Screen* currentScreen;
 	double timeStamp;
-	
-	FinancialData* marketData;
-	
-	Orbit orbit;
-	Geographic geo;
-	IndustryOrbit industryOrbit;
 	
 };
 

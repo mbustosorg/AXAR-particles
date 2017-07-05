@@ -36,7 +36,7 @@ class FinancialData {
 
 public:
 	FinancialData();
-	FinancialData(string benchmark, string date);
+	FinancialData(string benchmark, string descriptiveName, string date);
 	
 	void updateLatLon(Entity *entity);
 	
@@ -51,6 +51,7 @@ private:
 	string unprocessedFile();
 	string mBenchmark;
 	string mDate;
+	string mDescriptiveName;
 	
 };
 

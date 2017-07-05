@@ -21,8 +21,17 @@
 #include "SystemConfig.h"
 #include "cinder/Rand.h"
 
-IndustryOrbit::IndustryOrbit() {
+IndustryOrbit::IndustryOrbit(unordered_map<string, Entity*> entities) {
 	screenTime = 25.0f;
+	setEntities(entities);
+	setup();
+}
+
+void IndustryOrbit::setup() {
+	mParticles.assign(Num_Lines * 2, Particle());
+	mParticleHeads.assign(Num_Triangles * 3, Particle());
+	Screen::setup();
+	loadUpdateProgram("industryOrbit.vs");
 }
 
 void IndustryOrbit::setSectorWeights(unordered_map<int, double> *sectorWeights) {
@@ -103,10 +112,4 @@ void IndustryOrbit::update() {
 	Screen::update();
 }
 
-void IndustryOrbit::setup() {
-
-	mParticles.assign(Num_Lines * 2, Particle());
-	mParticleHeads.assign(Num_Triangles * 3, Particle());
-	loadUpdateProgram("industryOrbit.vs");
-}
 

@@ -22,13 +22,16 @@
 
 //const int NUM_PARTICLES = 1001;
 const int TRAIL_LENGTH = 20;
-const int SPHERE_RADIUS = 2500;
+const int SPHERE_RADIUS = 2000;
 const float SECTION_ARC_LENGTH = 0.02f;
 
 const float HEAD_DEPTH = 10.0f;
 const float HEAD_ARC_WIDTH = 0.005f;
 
 const float ROTATION_SPEED = 0.002f;
+
+const float MinRadius = 10.0f;
+const int RadiusSteps = 50;
 
 static Color colorFromHex(int r, int g, int b) {
 	return Color(CM_RGB, r / 255.0f, g / 255.0f, b / 255.0f);
