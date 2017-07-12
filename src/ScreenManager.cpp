@@ -19,27 +19,28 @@
 
 #include "ScreenManager.hpp"
 #include "cinder/app/AppBAse.h"
+#include "spdlog/spdlog.h"
 
 using namespace ci::app;
 
 ScreenManager::ScreenManager() {
 	
 	FinancialData *sap500MarketData = new FinancialData("sap500", "S&P 500", "20161230");
-	Geographic *sap500Geo = new Geographic(sap500MarketData->mEntities);
-	Orbit *sap500Orbit = new Orbit(sap500MarketData->mEntities);
-	IndustryOrbit *sap500IndustryOrbit = new IndustryOrbit(sap500MarketData->mEntities);
+	Geographic *sap500Geo = new Geographic(sap500MarketData->mEntities, "S&P 500");
+	Orbit *sap500Orbit = new Orbit(sap500MarketData->mEntities, "S&P 500");
+	IndustryOrbit *sap500IndustryOrbit = new IndustryOrbit(sap500MarketData->mEntities, "S&P 500");
 	sap500IndustryOrbit->setSectorWeights(&(sap500MarketData->mSectorWeights));
 	
 	FinancialData *mscwxlMarketData = new FinancialData("mscwxl", "MSCI World", "20161230");
-	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData->mEntities);
-	Orbit *mscwxlOrbit = new Orbit(mscwxlMarketData->mEntities);
-	IndustryOrbit *mscwxlIndustryOrbit = new IndustryOrbit(mscwxlMarketData->mEntities);
+	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData->mEntities, "MSCI World");
+	Orbit *mscwxlOrbit = new Orbit(mscwxlMarketData->mEntities, "MSCI World");
+	IndustryOrbit *mscwxlIndustryOrbit = new IndustryOrbit(mscwxlMarketData->mEntities, "MSCI World");
 	mscwxlIndustryOrbit->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
 	
 	FinancialData *msceurMarketData = new FinancialData("mscief", "MSCI Europe", "20161230");
-	Geographic *msceurGeo = new Geographic(msceurMarketData->mEntities);
-	Orbit *msceurOrbit = new Orbit(msceurMarketData->mEntities);
-	IndustryOrbit *msceurIndustryOrbit = new IndustryOrbit(msceurMarketData->mEntities);
+	Geographic *msceurGeo = new Geographic(msceurMarketData->mEntities, "MSCI Europe");
+	Orbit *msceurOrbit = new Orbit(msceurMarketData->mEntities, "MSCI Europe");
+	IndustryOrbit *msceurIndustryOrbit = new IndustryOrbit(msceurMarketData->mEntities, "MSCI Europe");
 	msceurIndustryOrbit->setSectorWeights(&(msceurMarketData->mSectorWeights));
 	
 	sap500Geo->setOrder(msceurIndustryOrbit, sap500Orbit);
@@ -76,8 +77,10 @@ void ScreenManager::update() {
 	
 	if (getElapsedSeconds() - timeStamp > currentScreen->screenTime) {
 		currentScreen = currentScreen->mNextScreen;
+		spdlog::get("particleApp")->info("Running screen {} - {}", currentScreen->mName, currentScreen->mUniverse);
 		currentScreen->restart();
 		timeStamp = getElapsedSeconds();
+		currentScreen->setScreenStartTime(timeStamp);
 	}
 	currentScreen->update();
 }

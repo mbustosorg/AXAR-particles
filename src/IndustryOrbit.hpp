@@ -27,7 +27,7 @@
 class IndustryOrbit : public Screen {
 	
 public:
-	IndustryOrbit(unordered_map<string, Entity*> entities);
+	IndustryOrbit(unordered_map<string, Entity*> entities, string universe);
 	
 	void setup();
 	void restart();

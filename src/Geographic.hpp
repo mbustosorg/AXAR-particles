@@ -29,7 +29,7 @@
 class Geographic : public Screen {
 	
 public:
-	Geographic(unordered_map<string, Entity*> entities);
+	Geographic(unordered_map<string, Entity*> entities, string universe);
 	
 	void setup();
 	void restart();

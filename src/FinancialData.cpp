@@ -39,7 +39,6 @@
 #include "Poco/JSON/Parser.h"
 #include "spdlog/spdlog.h"
 
-namespace spd = spdlog;
 using namespace Poco::Net;
 using Poco::StreamCopier;
 using Poco::StringTokenizer;
@@ -50,6 +49,8 @@ FinancialData::FinancialData() {
 
 FinancialData::FinancialData(string benchmark, string descriptiveName, string date) {
 	
+	spdlog::get("particleApp")->info("Reading financial data for {} on {}", descriptiveName, date);
+
 	mBenchmark = benchmark;
 	mDescriptiveName = descriptiveName;
 	mDate = date;
@@ -189,9 +190,9 @@ void FinancialData::updateLatLon(Entity *entity) {
 		if (object->getValue<std::string>("status") == "ZERO_RESULTS") {
 			result = retrieveQuery(entity->mHeadquarterCountry);
 			object = result.extract<Poco::JSON::Object::Ptr>();
-			spd::get("particleApp")->warn("{}\tUsed Country {}", entity->mName.substr(0, 15), entity->mHeadquarterCountry);
+			spdlog::get("particleApp")->warn("{}\tUsed Country {}", entity->mName.substr(0, 15), entity->mHeadquarterCountry);
 		} else {
-			spd::get("particleApp")->info("{}\tFound Headquarters - {}", entity->mName.substr(0, 15), object->getArray("results")->getObject(0)->getValue<std::string>("formatted_address"));
+			spdlog::get("particleApp")->info("{}\tFound Headquarters - {}", entity->mName.substr(0, 15), object->getArray("results")->getObject(0)->getValue<std::string>("formatted_address"));
 		}
 	
 		std::string lat = object->getArray("results")->getObject(0)->getObject("geometry")->getObject("location")->getValue<std::string>("lat");
@@ -200,6 +201,6 @@ void FinancialData::updateLatLon(Entity *entity) {
 		entity->updateLatitudeLongitude(std::stod(lat), std::stod(lon));
 
 	} catch (...) {
-		spd::get("particleApp")->error(" *** {}", entity->mName.substr(0, 15));
+		spdlog::get("particleApp")->error(" *** {}", entity->mName.substr(0, 15));
 	}
 }

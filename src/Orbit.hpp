@@ -26,7 +26,7 @@
 class Orbit : public Screen {
 	
 public:
-	Orbit(unordered_map<string, Entity*> entities);
+	Orbit(unordered_map<string, Entity*> entities, string universe);
 	
 	void setup();
 	void restart();

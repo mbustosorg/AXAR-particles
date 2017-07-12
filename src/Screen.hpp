@@ -53,6 +53,9 @@ public:
 	Screen* mPrevScreen;
 	Screen* mNextScreen;
 
+	string mName = "";
+	string mUniverse = "";
+	
 	float screenTime = 2.0; // Number of seconds to play this screen
 
 protected:
@@ -97,7 +100,7 @@ protected:
 
 	gl::BatchRef mShapes[RadiusSteps];
 	
-	float mScreenStarstTime;
+	float mScreenStartTime;
 
 private:
 	

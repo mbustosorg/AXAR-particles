@@ -23,8 +23,10 @@
 
 using namespace ci::app;
 
-Geographic::Geographic(unordered_map<string, Entity*> entities) {
-	screenTime = 35.0f;
+Geographic::Geographic(unordered_map<string, Entity*> entities, string universe) {
+	screenTime = 20.0f;
+	mName = "Geographic";
+	mUniverse = universe;
 	setEntities(entities);
 	setup();
 }
@@ -48,10 +50,10 @@ void Geographic::setup() {
 }
 
 void Geographic::restart() {
-	vector<Particle> *tempVector = mPrevScreen->currentPositions();
-	mParticles.swap(*tempVector);
-	vector<Particle>().swap(*tempVector);
-	delete(tempVector);
+	//vector<Particle> *tempVector = mPrevScreen->currentPositions();
+	//mParticles.swap(*tempVector);
+	//vector<Particle>().swap(*tempVector);
+	//delete(tempVector);
 	
 	restartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 }
@@ -61,11 +63,11 @@ void Geographic::update() {
 }
 
 void Geographic::displayMessage(Dashboard *dashboard) {
-	float deltaTime = (getElapsedSeconds() - mScreenStarstTime) / 5.0;
+	float deltaTime = (getElapsedSeconds() - mScreenStartTime) / 5.0;
 	if (deltaTime < 1.0) {
-		dashboard->displayMessage("S&P 500", -2000.0f, 900.0f, 200, Color(deltaTime, deltaTime, deltaTime));
+		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(deltaTime, deltaTime, deltaTime));
 	} else if (deltaTime < 2.0) {
-		dashboard->displayMessage("S&P 500", -2000.0f, 900.0f, 200, Color(1.0 - deltaTime / 2.0f, 1.0 - deltaTime / 2.0f, 1.0 - deltaTime / 2.0f));
+		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(1.0 - deltaTime / 2.0f, 1.0 - deltaTime / 2.0f, 1.0 - deltaTime / 2.0f));
 	}
 }
 

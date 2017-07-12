@@ -20,8 +20,10 @@
 #include "Orbit.hpp"
 #include "cinder/Rand.h"
 
-Orbit::Orbit(unordered_map<string, Entity*> entities) {
-	screenTime = 25.0f;
+Orbit::Orbit(unordered_map<string, Entity*> entities, string universe) {
+	screenTime = 5.0f;
+	mName = "Orbit";
+	mUniverse = universe;
 	setEntities(entities);
 	setup();
 }
