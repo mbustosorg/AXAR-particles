@@ -26,34 +26,61 @@ using namespace ci::app;
 ScreenManager::ScreenManager() {
 	
 	FinancialData *sap500MarketData = new FinancialData("sap500", "S&P 500", "20161230");
-	Geographic *sap500Geo = new Geographic(sap500MarketData->mEntities, "S&P 500");
+	Geographic *sap500Geo = new Geographic(sap500MarketData->mEntities, "S&P 500", false);
 	Orbit *sap500Orbit = new Orbit(sap500MarketData->mEntities, "S&P 500");
 	IndustryOrbit *sap500IndustryOrbit = new IndustryOrbit(sap500MarketData->mEntities, "S&P 500");
 	sap500IndustryOrbit->setSectorWeights(&(sap500MarketData->mSectorWeights));
 	
+	Geographic *sap500Geo2 = new Geographic(sap500MarketData->mEntities, "S&P 500", true);
+	Orbit *sap500Orbit2 = new Orbit(sap500MarketData->mEntities, "S&P 500");
+	IndustryOrbit *sap500IndustryOrbit2 = new IndustryOrbit(sap500MarketData->mEntities, "S&P 500");
+	sap500IndustryOrbit2->setSectorWeights(&(sap500MarketData->mSectorWeights));
+	
 	FinancialData *mscwxlMarketData = new FinancialData("mscwxl", "MSCI World", "20161230");
-	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData->mEntities, "MSCI World");
+	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData->mEntities, "MSCI World", false);
 	Orbit *mscwxlOrbit = new Orbit(mscwxlMarketData->mEntities, "MSCI World");
 	IndustryOrbit *mscwxlIndustryOrbit = new IndustryOrbit(mscwxlMarketData->mEntities, "MSCI World");
 	mscwxlIndustryOrbit->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
-	
+
+	Geographic *mscwxlGeo2 = new Geographic(mscwxlMarketData->mEntities, "MSCI World", true);
+	Orbit *mscwxlOrbit2 = new Orbit(mscwxlMarketData->mEntities, "MSCI World");
+	IndustryOrbit *mscwxlIndustryOrbit2 = new IndustryOrbit(mscwxlMarketData->mEntities, "MSCI World");
+	mscwxlIndustryOrbit2->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
+
 	FinancialData *msceurMarketData = new FinancialData("mscief", "MSCI Europe", "20161230");
-	Geographic *msceurGeo = new Geographic(msceurMarketData->mEntities, "MSCI Europe");
+	Geographic *msceurGeo = new Geographic(msceurMarketData->mEntities, "MSCI Europe", false);
 	Orbit *msceurOrbit = new Orbit(msceurMarketData->mEntities, "MSCI Europe");
 	IndustryOrbit *msceurIndustryOrbit = new IndustryOrbit(msceurMarketData->mEntities, "MSCI Europe");
 	msceurIndustryOrbit->setSectorWeights(&(msceurMarketData->mSectorWeights));
-	
+
+	Geographic *msceurGeo2 = new Geographic(msceurMarketData->mEntities, "MSCI Europe", true);
+	Orbit *msceurOrbit2 = new Orbit(msceurMarketData->mEntities, "MSCI Europe");
+	IndustryOrbit *msceurIndustryOrbit2 = new IndustryOrbit(msceurMarketData->mEntities, "MSCI Europe");
+	msceurIndustryOrbit2->setSectorWeights(&(msceurMarketData->mSectorWeights));
+
 	sap500Geo->setOrder(msceurIndustryOrbit, sap500Orbit);
 	sap500Orbit->setOrder(sap500Geo, sap500IndustryOrbit);
-	sap500IndustryOrbit->setOrder(sap500Orbit, mscwxlGeo);
+	sap500IndustryOrbit->setOrder(sap500Orbit, sap500Geo2);
 	
-	mscwxlGeo->setOrder(mscwxlIndustryOrbit, mscwxlOrbit);
+	sap500Geo2->setOrder(sap500IndustryOrbit, sap500Orbit2);
+	sap500Orbit2->setOrder(sap500Geo2, sap500IndustryOrbit2);
+	sap500IndustryOrbit2->setOrder(sap500Orbit2, mscwxlGeo);
+	
+	mscwxlGeo->setOrder(sap500IndustryOrbit2, mscwxlOrbit);
 	mscwxlOrbit->setOrder(mscwxlGeo, mscwxlIndustryOrbit);
-	mscwxlIndustryOrbit->setOrder(mscwxlOrbit, msceurGeo);
+	mscwxlIndustryOrbit->setOrder(mscwxlOrbit, mscwxlGeo2);
+	
+	mscwxlGeo2->setOrder(mscwxlIndustryOrbit, mscwxlOrbit2);
+	mscwxlOrbit2->setOrder(mscwxlGeo2, mscwxlIndustryOrbit2);
+	mscwxlIndustryOrbit2->setOrder(mscwxlOrbit2, msceurGeo);
 	
 	msceurGeo->setOrder(msceurIndustryOrbit, msceurOrbit);
 	msceurOrbit->setOrder(msceurGeo, msceurIndustryOrbit);
-	msceurIndustryOrbit->setOrder(msceurOrbit, sap500Geo);
+	msceurIndustryOrbit->setOrder(msceurOrbit, msceurGeo2);
+	
+	msceurGeo2->setOrder(msceurIndustryOrbit, msceurOrbit2);
+	msceurOrbit2->setOrder(msceurGeo2, msceurIndustryOrbit2);
+	msceurIndustryOrbit2->setOrder(msceurOrbit2, sap500Geo);
 	
 	currentScreen = sap500Geo;
 	

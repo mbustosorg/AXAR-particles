@@ -29,7 +29,7 @@
 class Geographic : public Screen {
 	
 public:
-	Geographic(unordered_map<string, Entity*> entities, string universe);
+	Geographic(unordered_map<string, Entity*> entities, string universe, bool borrowParticles);
 	
 	void setup();
 	void restart();
@@ -48,6 +48,7 @@ private:
 	int sphereCount = 1;
 	float restartTime = 0.0f;
 	double maxWeight = 0.0;
+	bool mBorrowParticles = false;
 };
 
 #endif

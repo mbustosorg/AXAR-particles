@@ -23,10 +23,11 @@
 
 using namespace ci::app;
 
-Geographic::Geographic(unordered_map<string, Entity*> entities, string universe) {
+Geographic::Geographic(unordered_map<string, Entity*> entities, string universe, bool borrowParticles) {
 	screenTime = 20.0f;
 	mName = "Geographic";
 	mUniverse = universe;
+	mBorrowParticles = borrowParticles;
 	setEntities(entities);
 	setup();
 }
@@ -50,10 +51,12 @@ void Geographic::setup() {
 }
 
 void Geographic::restart() {
-	//vector<Particle> *tempVector = mPrevScreen->currentPositions();
-	//mParticles.swap(*tempVector);
-	//vector<Particle>().swap(*tempVector);
-	//delete(tempVector);
+	if (mBorrowParticles) {
+		vector<Particle> *tempVector = mPrevScreen->currentPositions();
+		mParticles.swap(*tempVector);
+		vector<Particle>().swap(*tempVector);
+		delete(tempVector);
+	}
 	
 	restartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 }
