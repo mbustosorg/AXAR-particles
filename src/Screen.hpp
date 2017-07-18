@@ -57,6 +57,7 @@ public:
 	string mUniverse = "";
 	
 	float screenTime = 2.0; // Number of seconds to play this screen
+	vec3 *mTargetLocation; // Target point for camera
 
 protected:
 	

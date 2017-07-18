@@ -90,7 +90,6 @@ ScreenManager::ScreenManager() {
 void ScreenManager::setCamera(RCamera *camera) {
 	mCam = camera;
 	currentScreen->setCamera(mCam);
-	//Screen *next = currentScreen->mNextScreen;
 	for (Screen* currentIter = currentScreen->mNextScreen; currentIter != currentScreen; currentIter = currentIter->mNextScreen) {
 		currentIter->setCamera(mCam);
 	}
@@ -110,6 +109,7 @@ void ScreenManager::update() {
 		currentScreen->setScreenStartTime(timeStamp);
 	}
 	currentScreen->update();
+	mCam->focusOn(currentScreen->mTargetLocation);
 }
 
 void ScreenManager::draw() {

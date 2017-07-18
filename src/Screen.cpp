@@ -20,6 +20,7 @@
 #include "Screen.hpp"
 
 Screen::Screen() {
+	mTargetLocation = new vec3(0.0f);
 }
 
 Screen::~Screen() {

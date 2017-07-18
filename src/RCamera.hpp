@@ -38,6 +38,7 @@ public:
 	RCamera();
 	
 	void trigger();
+	void focusOn(vec3* target);
 	void update();
 	
 	CameraPersp mCam;
@@ -45,6 +46,8 @@ public:
 	vec3 mCenter = vec3 (0.0, 0.0, 0.0);
 	vec3 mUp = vec3( 0.0f, 1.0f, 0.0f);
 	int cameraTick = 0;
+	
+	vec3* mTarget = NULL;
 	
 private:
 	

@@ -24,7 +24,7 @@
 using namespace ci::app;
 
 Geographic::Geographic(unordered_map<string, Entity*> entities, string universe, bool borrowParticles) {
-	screenTime = 20.0f;
+	screenTime = 200.0f;
 	mName = "Geographic";
 	mUniverse = universe;
 	mBorrowParticles = borrowParticles;
@@ -87,6 +87,8 @@ void Geographic::draw()
 	
 	float currentTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 	
+	bool targetSet = false;
+	
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		
 		Entity* entity = i->second;
@@ -94,7 +96,7 @@ void Geographic::draw()
 		if (entity->mWeight > 0.0001) {
 			auto &p = mParticles.at(entity->mParticleIndex * TRAIL_LENGTH * 2);
 			
-			float rotation = 0;
+			float rotation = 0.0f;
 			float startTime = entity->mParticleIndex * rotationOffset;
 			if (currentTime > (startTime + restartTime)) rotation = (currentTime - (startTime + restartTime)) / rotationTime;
 			if (rotation > 1.0) rotation = 1.0;
@@ -105,6 +107,12 @@ void Geographic::draw()
 			float angle = easeOutBack(rotation);
 			gl::ScopedModelMatrix scpModelMatrix;
 			vec3 translation = entity->mSphericalLocation - vec3(p.pos);
+			if (!targetSet) {
+				targetSet = true;
+				mTargetLocation->x = (vec3(p.pos) + translation * angle).x;
+				mTargetLocation->y = (vec3(p.pos) + translation * angle).y;
+				mTargetLocation->z = (vec3(p.pos) + translation * angle).z;
+			}
 			gl::translate(vec3(p.pos) + translation * angle);
 			gl::color(entity->mColor);
 			

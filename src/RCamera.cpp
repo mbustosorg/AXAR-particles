@@ -36,16 +36,31 @@ void RCamera::trigger() {
 void RCamera::update() {
 	cameraTick--;
 	cameraTick = cameraTick % 720;
-	double x = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
-	//float y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
-	double z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
-	mEye.x = x;
-	if ((getElapsedSeconds() - cameraModeBase) / 10.0f < 1.0f) {
-		mEye.y = easeInOutCubic((getElapsedSeconds() - cameraModeBase) / 10.0f) * 2000.0;
+
+	if (mTarget) {
+		double x = mTarget->x * 2.0;
+		double y = mTarget->y * 2.0;
+		double z = mTarget->z * 2.0;
+		mEye.x = x;
+		mEye.y = y;
+		mEye.z = z;
+	} else {
+		double x = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
+		//float y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
+		double z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
+		mEye.x = x;
+		if ((getElapsedSeconds() - cameraModeBase) / 10.0f < 1.0f) {
+			mEye.y = easeInOutCubic((getElapsedSeconds() - cameraModeBase) / 10.0f) * 2000.0;
+		}
+		mEye.z = z;
 	}
-	mEye.z = z;
 	mCam.setPerspective( 60.0f, getWindowAspectRatio(), 5.0f, 20000.0f );
 	mCam.lookAt( mEye, mCenter, mUp );
 }
 
+void RCamera::focusOn(vec3* target) {
+	
+	mTarget = target;
+	
+}
 
