@@ -37,7 +37,7 @@ void Screen::setup() {
 	gl::GlslProgRef	shader = gl::getStockShader(lambert);
 	
 	for (int i = 0; i < RadiusSteps; i++) {
-		auto sphere = geom::Sphere().subdivisions(15).radius(MinRadius + float(i));
+		auto sphere = geom::Sphere().subdivisions(20).radius(MinRadius + float(i));
 		mShapes[i] = gl::Batch::create(sphere, shader);
 	}
 }
