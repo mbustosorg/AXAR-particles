@@ -66,7 +66,7 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 	
 	//simple.clear(ColorA(0.1f,0.1f,0.1f,0.7f));
 	simple.setColor( Color( 0.9f, 0.9f, 0.9f ) );
-	simple.setFont(Font("Helvetica Neue", 150.0f));
+	simple.setFont(Font("Helvetica Neue", fontSize));
 	//simple.setFont(mFont[(int) fontSize]);
 	simple.addLine(message);
 	//simple.addLine("Rot: " + to_string(eRotation));

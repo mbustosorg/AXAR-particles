@@ -22,7 +22,7 @@
 #include "cinder/Rand.h"
 
 IndustryOrbit::IndustryOrbit(unordered_map<string, Entity*> entities, string universe) {
-	screenTime = 5.0f;
+	screenTime = 40.0f;
 	mName = "Industry Orbit";
 	mUniverse = universe;
 	setEntities(entities);

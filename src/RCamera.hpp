@@ -45,7 +45,7 @@ public:
 	vec3 mEye = vec3( 0.0f, 200.0f, 0.0f );
 	vec3 mCenter = vec3 (0.0, 0.0, 0.0);
 	vec3 mUp = vec3( 0.0f, 1.0f, 0.0f);
-	int cameraTick = 0;
+	float cameraTick = 0.0f;
 	
 	vec3* mTarget = NULL;
 	

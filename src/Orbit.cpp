@@ -21,7 +21,7 @@
 #include "cinder/Rand.h"
 
 Orbit::Orbit(unordered_map<string, Entity*> entities, string universe) {
-	screenTime = 5.0f;
+	screenTime = 40.0f;
 	mName = "Orbit";
 	mUniverse = universe;
 	setEntities(entities);
@@ -57,7 +57,7 @@ void Orbit::setup() {
 		
 		for (int i = particleId * (TRAIL_LENGTH * 2); i < (particleId + 1) * (TRAIL_LENGTH * 2); i = i + TRAIL_LENGTH * 2)	{
 			
-			float rotSpeed = -Rand::randFloat(ROTATION_SPEED - 0.008f, ROTATION_SPEED + 0.008f);
+			float rotSpeed = -Rand::randFloat(ROTATION_SPEED - 0.018f, ROTATION_SPEED + 0.018f);
 			float rotZ = Rand::randFloat(-1.5f, 1.5f);
 			vec3 flatSphericalLocation = vec3(sphericalLocation.z, 0.0, -sphericalLocation.x);
 			vec3 rotationAxis = vec3(vec4(flatSphericalLocation, 1.0) * rotate(-rotZ, sphericalLocation));

@@ -157,6 +157,9 @@ void Screen::performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffe
 }
 
 void Screen::update() {
+	
+	//vector<Particle>* positions = currentPositions();
+
 	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
 	performProgramUpdate(mParticleHeadUpdateProg, mParticleHeadBuffer[mDestinationIndex], mAttributesHead[mSourceIndex], GL_TRIANGLES, (int)Num_Triangles * 3);
 	

@@ -24,7 +24,7 @@
 using namespace ci::app;
 
 Geographic::Geographic(unordered_map<string, Entity*> entities, string universe, bool borrowParticles) {
-	screenTime = 200.0f;
+	screenTime = 40.0f;
 	mName = "Geographic";
 	mUniverse = universe;
 	mBorrowParticles = borrowParticles;
@@ -70,7 +70,7 @@ void Geographic::displayMessage(Dashboard *dashboard) {
 	if (deltaTime < 1.0) {
 		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(deltaTime, deltaTime, deltaTime));
 	} else if (deltaTime < 2.0) {
-		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(1.0 - deltaTime / 2.0f, 1.0 - deltaTime / 2.0f, 1.0 - deltaTime / 2.0f));
+		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(2.0 - deltaTime, 2.0 - deltaTime, 2.0 - deltaTime));
 	}
 }
 

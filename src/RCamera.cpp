@@ -34,8 +34,8 @@ void RCamera::trigger() {
 }
 
 void RCamera::update() {
-	cameraTick--;
-	cameraTick = cameraTick % 720;
+	cameraTick -= 0.5f;
+	if (cameraTick > 720.0f) cameraTick = 0.0f;
 
 	if (mTarget) {
 		double x = mTarget->x * 2.0;
