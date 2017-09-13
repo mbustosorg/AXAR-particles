@@ -104,6 +104,6 @@ void AXAR_ParticleApp::draw()
 }
 
 CINDER_APP(AXAR_ParticleApp, RendererGl, [] (App::Settings *settings) {
-	settings->setWindowSize(8000, 4000);
+    settings->setFullScreen();
 	settings->setMultiTouchEnabled(false);
 })
