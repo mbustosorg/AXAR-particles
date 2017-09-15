@@ -70,6 +70,7 @@ void AXAR_ParticleApp::update()
 	if(mMouseDown) {
 		mMouseForce = 150.0f;
 	}
+    hideCursor();
 	
 }
 
