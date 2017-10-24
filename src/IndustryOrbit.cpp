@@ -23,6 +23,8 @@
 
 IndustryOrbit::IndustryOrbit(unordered_map<string, Entity*> entities, string universe) {
 	screenTime = 40.0f;
+	mStartFocus = new vector<float>(4.0f, 20.0f);
+	mEndFocus = new vector<float>(10.0f, 30.0f);
 	mName = "Industry Orbit";
 	mUniverse = universe;
 	setEntities(entities);
@@ -53,7 +55,8 @@ void IndustryOrbit::updateHeadParticle(Entity* entity, int index, Particle* curr
 
 void IndustryOrbit::restart() {
 	
-	vector<Particle> *tempVector = mPrevScreen->currentPositions();
+	mRestartTime = getElapsedSeconds();
+	vector<Particle> *tempVector = mPrevScreen->mCurrentPositions;
 	mParticles.swap(*tempVector);
 	vector<Particle>().swap(*tempVector);
 	delete(tempVector);

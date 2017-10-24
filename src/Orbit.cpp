@@ -22,6 +22,8 @@
 
 Orbit::Orbit(unordered_map<string, Entity*> entities, string universe) {
 	screenTime = 40.0f;
+	mStartFocus = new vector<float>(4.0f, 20.0f);
+	mEndFocus = new vector<float>(10.0f, 30.0f);
 	mName = "Orbit";
 	mUniverse = universe;
 	setEntities(entities);
@@ -40,6 +42,7 @@ void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
 
 void Orbit::restart() {
 	setup();
+	mRestartTime = getElapsedSeconds();
 }
 
 void Orbit::setup() {

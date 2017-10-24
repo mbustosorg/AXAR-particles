@@ -109,7 +109,6 @@ void ScreenManager::update() {
 		currentScreen->setScreenStartTime(timeStamp);
 	}
 	currentScreen->update();
-	//mCam->focusOn(currentScreen->mTargetLocation);
 }
 
 void ScreenManager::draw() {

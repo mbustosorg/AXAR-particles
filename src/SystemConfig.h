@@ -34,7 +34,7 @@ const float MinRadius = 10.0f;
 const int RadiusSteps = 50;
 
 static Color colorFromHex(int r, int g, int b) {
-	return Color(CM_RGB, r / 255.0f, g / 255.0f, b / 255.0f);
+	return Color(CM_RGB, r / 255.0f * 235.0f / 255.0f, g / 255.0f * 235.0f / 255.0f, b / 255.0f * 235.0f / 255.0f);
 }
 
 static Color Colors[] = {

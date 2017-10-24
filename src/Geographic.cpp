@@ -25,6 +25,8 @@ using namespace ci::app;
 
 Geographic::Geographic(unordered_map<string, Entity*> entities, string universe, bool borrowParticles) {
 	screenTime = 40.0f;
+	mStartFocus = new vector<float>{11.0f, 20.0f};
+	mEndFocus = new vector<float>{16.0f, 30.0f};
 	mName = "Geographic";
 	mUniverse = universe;
 	mBorrowParticles = borrowParticles;
@@ -44,7 +46,7 @@ void Geographic::setup() {
 		index++;
 	}
 	
-	restartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
+	mRestartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 	
 	Screen::setup();
 	loadUpdateProgram("industryOrbit.vs");
@@ -52,17 +54,17 @@ void Geographic::setup() {
 
 void Geographic::restart() {
 	if (mBorrowParticles) {
-		vector<Particle> *tempVector = mPrevScreen->currentPositions();
+		vector<Particle> *tempVector = mPrevScreen->mCurrentPositions;
 		mParticles.swap(*tempVector);
 		vector<Particle>().swap(*tempVector);
 		delete(tempVector);
 	}
 	
-	restartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
+	mRestartTime = getElapsedSeconds();
 }
 
 void Geographic::update() {
-	
+	Screen::updateTargetView();
 }
 
 void Geographic::displayMessage(Dashboard *dashboard) {
@@ -87,8 +89,6 @@ void Geographic::draw()
 	
 	float currentTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
 	
-	bool targetSet = false;
-	
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		
 		Entity* entity = i->second;
@@ -98,7 +98,7 @@ void Geographic::draw()
 			
 			float rotation = 0.0f;
 			float startTime = entity->mParticleIndex * rotationOffset;
-			if (currentTime > (startTime + restartTime)) rotation = (currentTime - (startTime + restartTime)) / rotationTime;
+			if (currentTime > (startTime + mRestartTime)) rotation = (currentTime - (startTime + mRestartTime)) / rotationTime;
 			if (rotation > 1.0) rotation = 1.0;
 			
 			int shapeIndex = int((entity->mWeight / maxWeight * rotation) * (RadiusSteps - 1));
@@ -107,8 +107,7 @@ void Geographic::draw()
 			float angle = easeOutBack(rotation);
 			gl::ScopedModelMatrix scpModelMatrix;
 			vec3 translation = entity->mSphericalLocation - vec3(p.pos);
-			if (!targetSet) {
-				targetSet = true;
+			if (entity->mParticleIndex == mFocusIndex) {
 				mTargetLocation->x = (vec3(p.pos) + translation * angle).x;
 				mTargetLocation->y = (vec3(p.pos) + translation * angle).y;
 				mTargetLocation->z = (vec3(p.pos) + translation * angle).z;

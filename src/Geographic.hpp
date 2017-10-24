@@ -46,7 +46,6 @@ private:
 							float rotZ, float rotSpeed);
 	
 	int sphereCount = 1;
-	float restartTime = 0.0f;
 	double maxWeight = 0.0;
 	bool mBorrowParticles = false;
 };

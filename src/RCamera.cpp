@@ -20,11 +20,17 @@
 #include "RCamera.hpp"
 #include "cinder/Easing.h"
 #include "cinder/app/AppBase.h"
+#include "spdlog/spdlog.h"
+
 
 using namespace ci::app;
 
 RCamera::RCamera() {
-	
+	double x = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
+	//double y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
+	double z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
+	mEye = vec3(x, 2000.0f, z);
+	mCurrentEye = vec3(x, 2000.0f, z);
 }
 
 void RCamera::trigger() {
@@ -34,32 +40,41 @@ void RCamera::trigger() {
 }
 
 void RCamera::update() {
-	cameraTick -= 0.5f;
-	if (cameraTick > 720.0f) cameraTick = 0.0f;
+	
+	mCam.setPerspective(60.0f, getWindowAspectRatio(), 5.0f, 20000.0f);
 
+	cameraTick -= 0.5f;
+	if (cameraTick > 720.0f || cameraTick < -720.0f) cameraTick = 0.0f;
+
+	double x = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
+	//double y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
+	double z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
+	mEye = vec3(x, 2000.0f, z);
+
+	double delta = (getElapsedSeconds() - mTargetSetTime);
+	double deltaFactor = 5.0f;
 	if (mTarget) {
-		double x = mTarget->x * 2.0;
-		double y = mTarget->y * 2.0;
-		double z = mTarget->z * 2.0;
-		mEye.x = x;
-		mEye.y = y;
-		mEye.z = z;
-	} else {
-		double x = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
-		//float y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
-		double z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
-		mEye.x = x;
-		if ((getElapsedSeconds() - cameraModeBase) / 10.0f < 1.0f) {
-			mEye.y = easeInOutCubic((getElapsedSeconds() - cameraModeBase) / 10.0f) * 2000.0;
+		if (delta / deltaFactor < 1.0f) {
+			mCurrentEye = mEye + (*mTarget * 2.0f - mEye) * easeInOutCubic(delta / deltaFactor);
+		} else {
+			mCurrentEye = *mTarget * 2.0f;
 		}
-		mEye.z = z;
+	} else {
+		if (delta / deltaFactor < 1.0f) {
+			mCurrentEye = mCurrentEye + (mEye - mCurrentEye) * easeInOutCubic(delta / deltaFactor);
+		} else {
+			mCurrentEye = mEye;
+		}
 	}
-	mCam.setPerspective( 60.0f, getWindowAspectRatio(), 5.0f, 20000.0f );
-	mCam.lookAt( mEye, mCenter, mUp );
+	mCam.lookAt(mCurrentEye, mCenter, mUp);
 }
 
 void RCamera::focusOn(vec3* target) {
 	
+	if (target) spdlog::get("particleApp")->info("focusOn");
+	else spdlog::get("particleApp")->info("focusOf");
+
+	mTargetSetTime = getElapsedSeconds();
 	mTarget = target;
 	
 }

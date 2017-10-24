@@ -41,6 +41,7 @@ public:
 	virtual void setOrder(Screen *prevScreen, Screen *nextScreen);
 	virtual void setup();
 	virtual void update();
+	virtual void updateTargetView();
 	virtual void restart();
 	virtual void draw();
 	virtual void setCamera(RCamera* camera);
@@ -48,16 +49,22 @@ public:
 	virtual void displayMessage(Dashboard *dashboard);
 	
 	void setScreenStartTime(float startTime);
+	void updateCurrentPositions();
 	
-	vector<Particle>* currentPositions();
+	vector<Particle>* mCurrentPositions;
 	Screen* mPrevScreen;
 	Screen* mNextScreen;
 
 	string mName = "";
 	string mUniverse = "";
 	
-	float screenTime = 2.0; // Number of seconds to play this screen
+	float screenTime = 2.0f; // Number of seconds to play this screen
 	vec3 *mTargetLocation; // Target point for camera
+	
+	int mFocusIndex = 0;
+	vector<float>* mStartFocus;
+	vector<float>* mEndFocus;
+	float mRestartTime = 0.0f;
 
 protected:
 	

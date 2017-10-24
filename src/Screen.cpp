@@ -21,6 +21,7 @@
 
 Screen::Screen() {
 	mTargetLocation = new vec3(0.0f);
+	mCurrentPositions = new vector<Particle>();
 }
 
 Screen::~Screen() {
@@ -156,9 +157,26 @@ void Screen::performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffe
 	gl::endTransformFeedback();
 }
 
+void Screen::updateTargetView() {
+	if (mFocusIndex < mEndFocus->size()) {
+		if (getElapsedSeconds() - mRestartTime > mEndFocus->at(mFocusIndex)) {
+			mFocusIndex++;
+			if (mCam->mTarget != NULL) mCam->focusOn(NULL);
+		} else if (getElapsedSeconds() - mRestartTime > mStartFocus->at(mFocusIndex)) {
+			if (mCam->mTarget == NULL) mCam->focusOn(mTargetLocation);
+		}
+	}
+}
+
 void Screen::update() {
 	
-	//vector<Particle>* positions = currentPositions();
+	updateCurrentPositions();
+	
+	mTargetLocation->x = (vec3(mCurrentPositions->at(mFocusIndex).pos)).x;
+	mTargetLocation->y = (vec3(mCurrentPositions->at(mFocusIndex).pos)).y;
+	mTargetLocation->z = (vec3(mCurrentPositions->at(mFocusIndex).pos)).z;
+	
+	updateTargetView();
 
 	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
 	performProgramUpdate(mParticleHeadUpdateProg, mParticleHeadBuffer[mDestinationIndex], mAttributesHead[mSourceIndex], GL_TRIANGLES, (int)Num_Triangles * 3);
@@ -167,18 +185,16 @@ void Screen::update() {
 	std::swap(mSourceIndex, mDestinationIndex);
 }
 
-vector<Particle>* Screen::currentPositions() {
+void Screen::updateCurrentPositions() {
 	
-	vector<Particle> *tempData = new vector<Particle>();
-	tempData->assign(Num_Lines * 2, Particle());
-	
+	mCurrentPositions->assign(Num_Lines * 2, Particle());
 	if (mParticleBuffer[mDestinationIndex]) {
 		mParticleBuffer[mDestinationIndex]->bind();
 		size_t bufferSize = mParticleBuffer[mDestinationIndex]->getSize();
-		mParticleBuffer[mDestinationIndex]->getBufferSubData(0, bufferSize, tempData->data());
+		mParticleBuffer[mDestinationIndex]->getBufferSubData(0, bufferSize, mCurrentPositions->data());
 		for (int i = 0; i < mParticles.size(); i++) {
 			Particle currentParticle = mParticles.at(i);
-			Particle currentTarget = tempData->at(i);
+			Particle currentTarget = mCurrentPositions->at(i);
 			currentTarget.pos = currentParticle.pos;
 			currentTarget.startPosition = currentParticle.startPosition;
 			currentTarget.sphericalPosition = currentParticle.sphericalPosition;
@@ -189,8 +205,6 @@ vector<Particle>* Screen::currentPositions() {
 			currentTarget.rotation = currentParticle.rotation;
 		}
 	}
-	
-	return tempData;
 }
 
 void Screen::setScreenStartTime(float startTime) {
@@ -212,6 +226,5 @@ void Screen::draw() {
 	
 	render(mParticleRenderProg, mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
 	render(mParticleHeadRenderProg, mAttributesHead[mSourceIndex], GL_TRIANGLES, (int)Num_Triangles * 3);
-	
 }
 
