@@ -48,10 +48,9 @@ public:
 	virtual void setEntities(unordered_map<string, Entity*> entities);
 	virtual void displayMessage(Dashboard *dashboard);
 	
-	void setScreenStartTime(float startTime);
+	float timeStamp();
 	void updateCurrentPositions();
 	
-	vector<Particle>* mCurrentPositions;
 	Screen* mPrevScreen;
 	Screen* mNextScreen;
 
@@ -59,12 +58,20 @@ public:
 	string mUniverse = "";
 	
 	float screenTime = 2.0f; // Number of seconds to play this screen
-	vec3 *mTargetLocation; // Target point for camera
+	vec3 mTargetLocation; // Target point for camera
+	Color mTargetColor;
+	vector<Particle>* mCurrentPositions;
 	
 	int mFocusIndex = 0;
+	vector<int>* mFocusIndexes;
 	vector<float>* mStartFocus;
 	vector<float>* mEndFocus;
 	float mRestartTime = 0.0f;
+
+	vector<Particle> mParticles;
+	vector<Particle> mParticleHeads;
+	unordered_map<string, Entity*> mEntities;
+	vector<Entity> mEntitiesInOrder;
 
 protected:
 	
@@ -72,9 +79,6 @@ protected:
 
 	RCamera* mCam;
 	
-	vector<Particle> mParticles;
-	vector<Particle> mParticleHeads;
-	unordered_map<string, Entity*> mEntities;
 	
 	gl::GlslProgRef mParticleRenderProg;
 	gl::GlslProgRef mParticleUpdateProg;
@@ -108,8 +112,6 @@ protected:
 
 	gl::BatchRef mShapes[RadiusSteps];
 	
-	float mScreenStartTime;
-
 private:
 	
 	void performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffer, gl::VaoRef mAttributes, int drawType, int count);

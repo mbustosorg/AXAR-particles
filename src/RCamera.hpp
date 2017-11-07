@@ -38,7 +38,7 @@ public:
 	RCamera();
 	
 	void trigger();
-	void focusOn(vec3* target);
+	void focusOn(vec3* target, Color* color);
 	void update();
 	
 	CameraPersp mCam;
@@ -49,6 +49,7 @@ public:
 	float cameraTick = 0.0f;
 	
 	vec3* mTarget = NULL;
+	Color* mTargetColor = NULL;
 	
 private:
 	

@@ -26,34 +26,34 @@ using namespace ci::app;
 ScreenManager::ScreenManager() {
 	
 	FinancialData *sap500MarketData = new FinancialData("sap500", "S&P 500", "20161230");
-	Geographic *sap500Geo = new Geographic(sap500MarketData->mEntities, "S&P 500", false);
+	Geographic *sap500Geo = new Geographic(sap500MarketData->mEntities, "S&P 500");
 	Orbit *sap500Orbit = new Orbit(sap500MarketData->mEntities, "S&P 500");
 	IndustryOrbit *sap500IndustryOrbit = new IndustryOrbit(sap500MarketData->mEntities, "S&P 500");
 	sap500IndustryOrbit->setSectorWeights(&(sap500MarketData->mSectorWeights));
 	
-	Geographic *sap500Geo2 = new Geographic(sap500MarketData->mEntities, "S&P 500", true);
+	Geographic *sap500Geo2 = new Geographic(sap500MarketData->mEntities, "S&P 500");
 	Orbit *sap500Orbit2 = new Orbit(sap500MarketData->mEntities, "S&P 500");
 	IndustryOrbit *sap500IndustryOrbit2 = new IndustryOrbit(sap500MarketData->mEntities, "S&P 500");
 	sap500IndustryOrbit2->setSectorWeights(&(sap500MarketData->mSectorWeights));
 	
 	FinancialData *mscwxlMarketData = new FinancialData("mscwxl", "MSCI World", "20161230");
-	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData->mEntities, "MSCI World", false);
+	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData->mEntities, "MSCI World");
 	Orbit *mscwxlOrbit = new Orbit(mscwxlMarketData->mEntities, "MSCI World");
 	IndustryOrbit *mscwxlIndustryOrbit = new IndustryOrbit(mscwxlMarketData->mEntities, "MSCI World");
 	mscwxlIndustryOrbit->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
 
-	Geographic *mscwxlGeo2 = new Geographic(mscwxlMarketData->mEntities, "MSCI World", true);
+	Geographic *mscwxlGeo2 = new Geographic(mscwxlMarketData->mEntities, "MSCI World");
 	Orbit *mscwxlOrbit2 = new Orbit(mscwxlMarketData->mEntities, "MSCI World");
 	IndustryOrbit *mscwxlIndustryOrbit2 = new IndustryOrbit(mscwxlMarketData->mEntities, "MSCI World");
 	mscwxlIndustryOrbit2->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
 
 	FinancialData *msceurMarketData = new FinancialData("mscief", "MSCI Europe", "20161230");
-	Geographic *msceurGeo = new Geographic(msceurMarketData->mEntities, "MSCI Europe", false);
+	Geographic *msceurGeo = new Geographic(msceurMarketData->mEntities, "MSCI Europe");
 	Orbit *msceurOrbit = new Orbit(msceurMarketData->mEntities, "MSCI Europe");
 	IndustryOrbit *msceurIndustryOrbit = new IndustryOrbit(msceurMarketData->mEntities, "MSCI Europe");
 	msceurIndustryOrbit->setSectorWeights(&(msceurMarketData->mSectorWeights));
 
-	Geographic *msceurGeo2 = new Geographic(msceurMarketData->mEntities, "MSCI Europe", true);
+	Geographic *msceurGeo2 = new Geographic(msceurMarketData->mEntities, "MSCI Europe");
 	Orbit *msceurOrbit2 = new Orbit(msceurMarketData->mEntities, "MSCI Europe");
 	IndustryOrbit *msceurIndustryOrbit2 = new IndustryOrbit(msceurMarketData->mEntities, "MSCI Europe");
 	msceurIndustryOrbit2->setSectorWeights(&(msceurMarketData->mSectorWeights));
@@ -106,7 +106,6 @@ void ScreenManager::update() {
 		spdlog::get("particleApp")->info("Running screen {} - {}", currentScreen->mName, currentScreen->mUniverse);
 		currentScreen->restart();
 		timeStamp = getElapsedSeconds();
-		currentScreen->setScreenStartTime(timeStamp);
 	}
 	currentScreen->update();
 }

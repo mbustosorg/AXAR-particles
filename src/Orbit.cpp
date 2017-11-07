@@ -22,11 +22,12 @@
 
 Orbit::Orbit(unordered_map<string, Entity*> entities, string universe) {
 	screenTime = 40.0f;
-	mStartFocus = new vector<float>(4.0f, 20.0f);
-	mEndFocus = new vector<float>(10.0f, 30.0f);
 	mName = "Orbit";
 	mUniverse = universe;
 	setEntities(entities);
+	mStartFocus = new vector<float>{4.0f, 20.0f};
+	mEndFocus = new vector<float>{10.0f, 30.0f};
+	mFocusIndexes = new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())};
 	setup();
 }
 
@@ -42,7 +43,10 @@ void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
 
 void Orbit::restart() {
 	setup();
-	mRestartTime = getElapsedSeconds();
+	mRestartTime = timeStamp();
+	mFocusIndex = 0;
+	mFocusIndexes->at(0) = rand() % mEntities.size();
+	mFocusIndexes->at(1) = rand() % mEntities.size();
 }
 
 void Orbit::setup() {

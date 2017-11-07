@@ -52,7 +52,7 @@ void RCamera::update() {
 	mEye = vec3(x, 2000.0f, z);
 
 	double delta = (getElapsedSeconds() - mTargetSetTime);
-	double deltaFactor = 5.0f;
+	double deltaFactor = 7.0f;
 	if (mTarget) {
 		if (delta / deltaFactor < 1.0f) {
 			mCurrentEye = mEye + (*mTarget * 2.0f - mEye) * easeInOutCubic(delta / deltaFactor);
@@ -69,13 +69,14 @@ void RCamera::update() {
 	mCam.lookAt(mCurrentEye, mCenter, mUp);
 }
 
-void RCamera::focusOn(vec3* target) {
+void RCamera::focusOn(vec3* target, Color* color) {
 	
 	if (target) spdlog::get("particleApp")->info("focusOn");
-	else spdlog::get("particleApp")->info("focusOf");
+	else spdlog::get("particleApp")->info("focusOff");
 
 	mTargetSetTime = getElapsedSeconds();
 	mTarget = target;
+	mTargetColor = color;
 	
 }
 

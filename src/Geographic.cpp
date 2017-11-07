@@ -23,14 +23,14 @@
 
 using namespace ci::app;
 
-Geographic::Geographic(unordered_map<string, Entity*> entities, string universe, bool borrowParticles) {
+Geographic::Geographic(unordered_map<string, Entity*> entities, string universe) {
 	screenTime = 40.0f;
-	mStartFocus = new vector<float>{11.0f, 20.0f};
-	mEndFocus = new vector<float>{16.0f, 30.0f};
 	mName = "Geographic";
 	mUniverse = universe;
-	mBorrowParticles = borrowParticles;
 	setEntities(entities);
+	mStartFocus = new vector<float>{11.0f, 20.0f};
+	mEndFocus = new vector<float>{16.0f, 30.0f};
+	mFocusIndexes = new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())};
 	setup();
 }
 
@@ -46,21 +46,21 @@ void Geographic::setup() {
 		index++;
 	}
 	
-	mRestartTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
+	mRestartTime = timeStamp();
 	
 	Screen::setup();
 	loadUpdateProgram("industryOrbit.vs");
 }
 
 void Geographic::restart() {
-	if (mBorrowParticles) {
+	if (mPrevScreen->mCurrentPositions->size() == mParticles.size()) {
 		vector<Particle> *tempVector = mPrevScreen->mCurrentPositions;
 		mParticles.swap(*tempVector);
-		vector<Particle>().swap(*tempVector);
-		delete(tempVector);
 	}
-	
-	mRestartTime = getElapsedSeconds();
+	mRestartTime = timeStamp();
+	mFocusIndex = 0;
+	mFocusIndexes->at(0) = rand() % mEntities.size();
+	mFocusIndexes->at(1) = rand() % mEntities.size();
 }
 
 void Geographic::update() {
@@ -68,7 +68,7 @@ void Geographic::update() {
 }
 
 void Geographic::displayMessage(Dashboard *dashboard) {
-	float deltaTime = (getElapsedSeconds() - mScreenStartTime) / 5.0;
+	float deltaTime = (timeStamp() - mRestartTime) / 5.0;
 	if (deltaTime < 1.0) {
 		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(deltaTime, deltaTime, deltaTime));
 	} else if (deltaTime < 2.0) {
@@ -87,7 +87,7 @@ void Geographic::draw()
 	const float rotationTime = 4.5f;
 	const float rotationOffset = 0.03f;
 	
-	float currentTime = fmod(getElapsedFrames() / 60.0f, 1000.f);
+	float currentTime = timeStamp();
 	
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		
@@ -107,10 +107,11 @@ void Geographic::draw()
 			float angle = easeOutBack(rotation);
 			gl::ScopedModelMatrix scpModelMatrix;
 			vec3 translation = entity->mSphericalLocation - vec3(p.pos);
-			if (entity->mParticleIndex == mFocusIndex) {
-				mTargetLocation->x = (vec3(p.pos) + translation * angle).x;
-				mTargetLocation->y = (vec3(p.pos) + translation * angle).y;
-				mTargetLocation->z = (vec3(p.pos) + translation * angle).z;
+			if (mFocusIndex < mFocusIndexes->size() && entity->mParticleIndex == mFocusIndexes->at(mFocusIndex)) {
+				mTargetLocation.x = (vec3(p.pos) + translation * angle).x;
+				mTargetLocation.y = (vec3(p.pos) + translation * angle).y;
+				mTargetLocation.z = (vec3(p.pos) + translation * angle).z;
+				mTargetColor = entity->mColor;
 			}
 			gl::translate(vec3(p.pos) + translation * angle);
 			gl::color(entity->mColor);

@@ -20,7 +20,6 @@
 #include "Screen.hpp"
 
 Screen::Screen() {
-	mTargetLocation = new vec3(0.0f);
 	mCurrentPositions = new vector<Particle>();
 }
 
@@ -54,6 +53,11 @@ void Screen::setEntities(unordered_map<string, Entity*> entities) {
 	Num_Triangles = mEntities.size() * 4 * 2;
 	Particle_Vector_Length = Num_Lines * 2;
 	Particle_Head_Vector_Length = Num_Triangles * 3 * 2;
+	
+	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+		Entity* entity = i->second;
+		mEntitiesInOrder.push_back(*entity);
+	}
 }
 
 void Screen::render(gl::GlslProgRef mRenderProg, gl::VaoRef mAttributes, int drawType, int count) {
@@ -157,26 +161,16 @@ void Screen::performProgramUpdate(gl::GlslProgRef mUpdateProg, gl::VboRef mBuffe
 	gl::endTransformFeedback();
 }
 
-void Screen::updateTargetView() {
-	if (mFocusIndex < mEndFocus->size()) {
-		if (getElapsedSeconds() - mRestartTime > mEndFocus->at(mFocusIndex)) {
-			mFocusIndex++;
-			if (mCam->mTarget != NULL) mCam->focusOn(NULL);
-		} else if (getElapsedSeconds() - mRestartTime > mStartFocus->at(mFocusIndex)) {
-			if (mCam->mTarget == NULL) mCam->focusOn(mTargetLocation);
-		}
-	}
-}
-
 void Screen::update() {
 	
 	updateCurrentPositions();
 	
-	mTargetLocation->x = (vec3(mCurrentPositions->at(mFocusIndex).pos)).x;
-	mTargetLocation->y = (vec3(mCurrentPositions->at(mFocusIndex).pos)).y;
-	mTargetLocation->z = (vec3(mCurrentPositions->at(mFocusIndex).pos)).z;
-	
-	updateTargetView();
+	if (mFocusIndex < mFocusIndexes->size()) {
+		Entity entity = mEntitiesInOrder.at(mFocusIndexes->at(mFocusIndex));
+		Particle particle = mCurrentPositions->at(entity.mParticleIndex * TRAIL_LENGTH * 2 + 1);
+		mTargetLocation = vec3(particle.pos);
+		mTargetColor = entity.mColor;
+	}
 
 	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
 	performProgramUpdate(mParticleHeadUpdateProg, mParticleHeadBuffer[mDestinationIndex], mAttributesHead[mSourceIndex], GL_TRIANGLES, (int)Num_Triangles * 3);
@@ -207,24 +201,41 @@ void Screen::updateCurrentPositions() {
 	}
 }
 
-void Screen::setScreenStartTime(float startTime) {
-	mScreenStartTime = startTime;
+float Screen::timeStamp() {
+	return fmod(getElapsedFrames() / 60.0f, 1000.f);
 }
 
 void Screen::displayMessage(Dashboard *dashboard) {
 }
 
 void Screen::restart() {
-	
 }
 
 void Screen::draw() {
-	gl::clear(Color(0, 0, 0));
-	
+	gl::clear();
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
 	
 	render(mParticleRenderProg, mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
 	render(mParticleHeadRenderProg, mAttributesHead[mSourceIndex], GL_TRIANGLES, (int)Num_Triangles * 3);
+	
+	updateTargetView();
+}
+
+void Screen::updateTargetView() {
+	if (mFocusIndex < mEndFocus->size()) {
+		if (timeStamp() - mRestartTime > mEndFocus->at(mFocusIndex)) {
+			mFocusIndex++;
+			if (mCam->mTarget != NULL) mCam->focusOn(NULL, NULL);
+		} else if (timeStamp() - mRestartTime > mStartFocus->at(mFocusIndex)) {
+			if (mCam->mTarget == NULL) mCam->focusOn(&mTargetLocation, &mTargetColor);
+			
+			auto shape = mShapes[20];
+			gl::ScopedModelMatrix scpModelMatrix;
+			gl::translate(mTargetLocation);
+			gl::color(Color(CM_RGB, mTargetColor));
+			shape->draw();
+		}
+	}
 }
 

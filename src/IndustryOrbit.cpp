@@ -23,11 +23,12 @@
 
 IndustryOrbit::IndustryOrbit(unordered_map<string, Entity*> entities, string universe) {
 	screenTime = 40.0f;
-	mStartFocus = new vector<float>(4.0f, 20.0f);
-	mEndFocus = new vector<float>(10.0f, 30.0f);
 	mName = "Industry Orbit";
 	mUniverse = universe;
 	setEntities(entities);
+	mStartFocus = new vector<float>{4.0f, 20.0f};
+	mEndFocus = new vector<float>{10.0f, 30.0f};
+	mFocusIndexes = new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())};
 	setup();
 }
 
@@ -55,12 +56,17 @@ void IndustryOrbit::updateHeadParticle(Entity* entity, int index, Particle* curr
 
 void IndustryOrbit::restart() {
 	
-	mRestartTime = getElapsedSeconds();
+	if (mPrevScreen->mCurrentPositions->size() != mCurrentPositions->size()) {
+		mCurrentPositions->assign(Num_Lines * 2, Particle());
+	}
 	vector<Particle> *tempVector = mPrevScreen->mCurrentPositions;
 	mParticles.swap(*tempVector);
-	vector<Particle>().swap(*tempVector);
-	delete(tempVector);
 	
+	mRestartTime = timeStamp();
+	mFocusIndex = 0;
+	mFocusIndexes->at(0) = rand() % mEntities.size();
+	mFocusIndexes->at(1) = rand() % mEntities.size();
+
 	mTransitionFactor = 0.0f;
 	
 	for (unordered_map<string, Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); ++entity) {
