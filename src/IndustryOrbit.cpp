@@ -22,12 +22,18 @@
 #include "cinder/Rand.h"
 
 IndustryOrbit::IndustryOrbit(unordered_map<string, Entity*> entities, string universe) {
-	screenTime = 40.0f;
+	if (universe == "MSCI World") {
+		screenTime = 250.0f;
+		mStartFocus = new vector<float>{35.0f, 90.0f};
+		mEndFocus = new vector<float>{50.0f, 105.0f};
+	} else {
+		screenTime = 80.0f;
+		mStartFocus = new vector<float>{15.0f, 45.0f};
+		mEndFocus = new vector<float>{30.0f, 60.0f};
+	}
 	mName = "Industry Orbit";
 	mUniverse = universe;
 	setEntities(entities);
-	mStartFocus = new vector<float>{4.0f, 20.0f};
-	mEndFocus = new vector<float>{10.0f, 30.0f};
 	mFocusIndexes = new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())};
 	setup();
 }
