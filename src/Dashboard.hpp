@@ -40,6 +40,7 @@ private:
 	
 	Font mFont[FontSizes];
 	
+	gl::Texture2dRef axaLogo;
 };
 
 #endif

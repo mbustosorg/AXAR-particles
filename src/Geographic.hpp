@@ -24,6 +24,8 @@
 #include "Screen.hpp"
 #include "Entity.hpp"
 #include "Dashboard.hpp"
+#include "cinder/ImageIo.h"
+#include "cinder/gl/Texture.h"
 #include <list>
 
 class Geographic : public Screen {
@@ -44,7 +46,6 @@ private:
 							float phi, float phiOffset,
 							float radius, float radiusOffset,
 							float rotZ, float rotSpeed);
-	
 	int sphereCount = 1;
 	double maxWeight = 0.0;
 	bool mBorrowParticles = false;

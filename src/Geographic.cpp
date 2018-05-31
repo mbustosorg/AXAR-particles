@@ -19,7 +19,6 @@
 
 #include "Geographic.hpp"
 #include "cinder/Easing.h"
-#include "cinder/app/AppBAse.h"
 
 using namespace ci::app;
 

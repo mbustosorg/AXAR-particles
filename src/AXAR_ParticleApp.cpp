@@ -30,14 +30,14 @@ using namespace ci;
 using namespace std;
 
 void AXAR_ParticleApp::setup() {
-	
+
 	std::vector<spdlog::sink_ptr> sinks;
 	sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_st>());
 	sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_st>("logfile.txt", 23, 59));
 	auto combined_logger = std::make_shared<spdlog::logger>("particleApp", begin(sinks), end(sinks));
 	//register it if you need to access it globally
 	spdlog::register_logger(combined_logger);
-	
+
 	spd::set_pattern("[%T%z][%L] %v");
 	
 	// Listen to mouse events so we can send data as uniforms.

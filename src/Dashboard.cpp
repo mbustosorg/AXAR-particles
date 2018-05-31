@@ -19,14 +19,14 @@
 
 #include "Dashboard.hpp"
 #include "cinder/gl/gl.h"
+#include "cinder/app/AppBAse.h"
 
 Dashboard::Dashboard(RCamera *cam) {
 	mCam = cam;
-	
 	for (int i = 1; i < FontSizes; i++) {
 		mFont[i] = Font("Helvetica Neue", (float) i);
 	}
-	
+	axaLogo = gl::Texture2d::create(loadImage(loadAsset("smallAXA.png")));
 }
 
 void Dashboard::displayMessage(string message, float x, float y, float fontSize, Color color) {
@@ -81,6 +81,8 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 	gl::draw(mSimpleTexture, vec2(x, y));
 	
 	//gl::drawStrokeCh drawString(message, vec2(0.0f, 0.0f), Color::white(), mFont);
+	
+	gl::draw( axaLogo, vec2(x, y) );
 	
 	gl::popModelMatrix();
 	
