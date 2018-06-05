@@ -111,7 +111,6 @@ void ScreenManager::update() {
 }
 
 void ScreenManager::draw() {
-
 	currentScreen->draw();
 	currentScreen->displayMessage(mDashboard);
 }

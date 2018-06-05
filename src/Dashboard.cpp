@@ -26,7 +26,7 @@ Dashboard::Dashboard(RCamera *cam) {
 	for (int i = 1; i < FontSizes; i++) {
 		mFont[i] = Font("Helvetica Neue", (float) i);
 	}
-	axaLogo = gl::Texture2d::create(loadImage(loadAsset("smallAXA.png")));
+	axaLogo = gl::Texture2d::create(loadImage(loadAsset("smallAXA2.png")));
 }
 
 void Dashboard::displayMessage(string message, float x, float y, float fontSize, Color color) {
@@ -42,9 +42,7 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 
 	// Move to eye
 	gl::translate(vec3(eye.x, eye.y, eye.z) * 0.5f / (float) cos(eRotation));
-	
 	gl::rotate(M_PI, vec3(0.0f, 0.0f, 1.0f));
-
 	gl::rotate(eRotation, vec3(eye.z, 0.0f, eye.x));
 
 	// Compute rotation angle from start point which is Z axis
@@ -82,7 +80,7 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 	
 	//gl::drawStrokeCh drawString(message, vec2(0.0f, 0.0f), Color::white(), mFont);
 	
-	gl::draw( axaLogo, vec2(x, y) );
+	gl::draw(axaLogo, vec2(x + 2900, y));
 	
 	gl::popModelMatrix();
 	
