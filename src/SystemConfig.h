@@ -33,6 +33,10 @@ const float ROTATION_SPEED = 0.002f;
 const float MinRadius = 10.0f;
 const int RadiusSteps = 50;
 
+const float MESSAGE_FADE_SECONDS = 10.0f;
+const float CAMERA_APPROACH_FACTOR = 40.0f;
+const float CAMERA_TARGET_APPROACH_FACTOR = 5.0f;
+
 static Color colorFromHex(int r, int g, int b) {
 	return Color(CM_RGB, r / 255.0f * 235.0f / 255.0f, g / 255.0f * 235.0f / 255.0f, b / 255.0f * 235.0f / 255.0f);
 }

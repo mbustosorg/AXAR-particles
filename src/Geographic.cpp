@@ -18,6 +18,7 @@
 */
 
 #include "Geographic.hpp"
+#include "SystemConfig.h"
 #include "cinder/Easing.h"
 
 using namespace ci::app;
@@ -73,7 +74,7 @@ void Geographic::update() {
 }
 
 void Geographic::displayMessage(Dashboard *dashboard) {
-	float deltaTime = (timeStamp() - mRestartTime) / 5.0;
+	float deltaTime = (timeStamp() - mRestartTime) / MESSAGE_FADE_SECONDS;
 	if (deltaTime < 1.0) {
 		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(deltaTime, deltaTime, deltaTime));
 	} else if (deltaTime < 2.0) {
