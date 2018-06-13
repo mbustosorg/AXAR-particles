@@ -21,19 +21,18 @@
 #include "cinder/Rand.h"
 
 Orbit::Orbit(unordered_map<string, Entity*> entities, string universe) {
+	setEntities(entities);
 	if (universe == "MSCI World") {
 		screenTime = 250.0f;
-		mStartFocus = new vector<float>{35.0f, 90.0f};
-		mEndFocus = new vector<float>{50.0f, 105.0f};
+		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())},
+										  new vector<float>{35.0f, 90.0f}, new vector<float>{50.0f, 105.0f});
 	} else {
 		screenTime = 80.0f;
-		mStartFocus = new vector<float>{15.0f, 45.0f};
-		mEndFocus = new vector<float>{30.0f, 60.0f};
+		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())},
+										  new vector<float>{15.0f, 45.0f}, new vector<float>{30.0f, 60.0f});
 	}
 	mName = "Orbit";
 	mUniverse = universe;
-	setEntities(entities);
-	mFocusIndexes = new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())};
 	setup();
 }
 
@@ -50,9 +49,7 @@ void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
 void Orbit::restart() {
 	setup();
 	mRestartTime = timeStamp();
-	mFocusIndex = 0;
-	mFocusIndexes->at(0) = rand() % mEntities.size();
-	mFocusIndexes->at(1) = rand() % mEntities.size();
+	mFocusTimes->restart((int)mEntities.size());
 }
 
 void Orbit::setup() {

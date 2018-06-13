@@ -165,8 +165,8 @@ void Screen::update() {
 	
 	updateCurrentPositions();
 	
-	if (mFocusIndex < mFocusIndexes->size()) {
-		Entity entity = mEntitiesInOrder.at(mFocusIndexes->at(mFocusIndex));
+	if (mFocusTimes->active()) {
+		Entity entity = mEntitiesInOrder.at(mFocusTimes->focusIndex());
 		Particle particle = mCurrentPositions->at(entity.mParticleIndex * TRAIL_LENGTH * 2 + 1);
 		mTargetLocation = vec3(particle.pos);
 		mTargetColor = entity.mColor;
@@ -223,11 +223,11 @@ void Screen::draw() {
 }
 
 void Screen::updateTargetView() {
-	if (mFocusIndex < mEndFocus->size()) {
-		if (timeStamp() - mRestartTime > mEndFocus->at(mFocusIndex)) {
-			mFocusIndex++;
+	if (mFocusTimes->active()) {
+		if (mFocusTimes->expired(timeStamp() - mRestartTime)) {
+			mFocusTimes->increment();
 			if (mCam->mTarget != NULL) mCam->focusOn(NULL, NULL);
-		} else if (timeStamp() - mRestartTime > mStartFocus->at(mFocusIndex)) {
+		} else if (mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime)) {
 			if (mCam->mTarget == NULL) mCam->focusOn(&mTargetLocation, &mTargetColor);
 			
 			auto shape = mShapes[20];

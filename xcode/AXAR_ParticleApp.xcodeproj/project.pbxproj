@@ -26,6 +26,7 @@
 		22799F1B1E85CF4D00D0F0D8 /* Dashboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22799F191E85CF4D00D0F0D8 /* Dashboard.cpp */; };
 		22B96E1C1ECBA47600C0EAB7 /* FinancialData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B96E1A1ECBA47600C0EAB7 /* FinancialData.cpp */; };
 		22DB769B1F042F6000F3356E /* spdlog in Resources */ = {isa = PBXBuildFile; fileRef = 22DB769A1F042F6000F3356E /* spdlog */; };
+		22FBEB1320D0DC2900E9F653 /* TargetFocusTimes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22FBEB1120D0DC2900E9F653 /* TargetFocusTimes.cpp */; };
 		22FE386D1EE4A7E90031FCDC /* IndustryOrbit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22FE386B1EE4A7E90031FCDC /* IndustryOrbit.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
@@ -65,6 +66,8 @@
 		22B96E1A1ECBA47600C0EAB7 /* FinancialData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FinancialData.cpp; path = ../src/FinancialData.cpp; sourceTree = "<group>"; };
 		22B96E1B1ECBA47600C0EAB7 /* FinancialData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FinancialData.hpp; path = ../src/FinancialData.hpp; sourceTree = "<group>"; };
 		22DB769A1F042F6000F3356E /* spdlog */ = {isa = PBXFileReference; lastKnownFileType = folder; name = spdlog; path = ../src/spdlog; sourceTree = "<group>"; };
+		22FBEB1120D0DC2900E9F653 /* TargetFocusTimes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TargetFocusTimes.cpp; path = ../src/TargetFocusTimes.cpp; sourceTree = "<group>"; };
+		22FBEB1220D0DC2900E9F653 /* TargetFocusTimes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TargetFocusTimes.hpp; path = ../src/TargetFocusTimes.hpp; sourceTree = "<group>"; };
 		22FE386B1EE4A7E90031FCDC /* IndustryOrbit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndustryOrbit.cpp; path = ../src/IndustryOrbit.cpp; sourceTree = "<group>"; };
 		22FE386C1EE4A7E90031FCDC /* IndustryOrbit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndustryOrbit.hpp; path = ../src/IndustryOrbit.hpp; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -134,6 +137,8 @@
 				2208D7C11EB3FCA300D408D8 /* Orbit.hpp */,
 				22FE386B1EE4A7E90031FCDC /* IndustryOrbit.cpp */,
 				22FE386C1EE4A7E90031FCDC /* IndustryOrbit.hpp */,
+				22FBEB1120D0DC2900E9F653 /* TargetFocusTimes.cpp */,
+				22FBEB1220D0DC2900E9F653 /* TargetFocusTimes.hpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -282,6 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22FBEB1320D0DC2900E9F653 /* TargetFocusTimes.cpp in Sources */,
 				2208D7C61EB4072500D408D8 /* Geographic.cpp in Sources */,
 				2208D7BA1EAEC28200D408D8 /* Screen.cpp in Sources */,
 				2208D7C21EB3FCA300D408D8 /* Orbit.cpp in Sources */,

@@ -27,6 +27,7 @@
 #include "RCamera.hpp"
 #include "Entity.hpp"
 #include "Dashboard.hpp"
+#include "TargetFocusTimes.hpp"
 
 using namespace ci;
 using namespace std;
@@ -62,10 +63,7 @@ public:
 	Color mTargetColor;
 	vector<Particle>* mCurrentPositions;
 	
-	int mFocusIndex = 0;
-	vector<int>* mFocusIndexes;
-	vector<float>* mStartFocus;
-	vector<float>* mEndFocus;
+	TargetFocusTimes* mFocusTimes;
 	float mRestartTime = 0.0f;
 
 	vector<Particle> mParticles;

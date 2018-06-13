@@ -24,19 +24,18 @@
 using namespace ci::app;
 
 Geographic::Geographic(unordered_map<string, Entity*> entities, string universe) {
+	setEntities(entities);
 	if (universe == "MSCI World") {
 		screenTime = 250.0f;
-		mStartFocus = new vector<float>{35.0f, 90.0f};
-		mEndFocus = new vector<float>{50.0f, 105.0f};
+		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())},
+										  new vector<float>{35.0f, 90.0f}, new vector<float>{50.0f, 105.0f});
 	} else {
 		screenTime = 80.0f;
-		mStartFocus = new vector<float>{15.0f, 45.0f};
-		mEndFocus = new vector<float>{30.0f, 60.0f};		
+		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())},
+										  new vector<float>{15.0f, 45.0f}, new vector<float>{30.0f, 60.0f});
 	}
 	mName = "Geographic";
 	mUniverse = universe;
-	setEntities(entities);
-	mFocusIndexes = new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())};
 	setup();
 }
 
@@ -64,9 +63,7 @@ void Geographic::restart() {
 		mParticles.swap(*tempVector);
 	}
 	mRestartTime = timeStamp();
-	mFocusIndex = 0;
-	mFocusIndexes->at(0) = rand() % mEntities.size();
-	mFocusIndexes->at(1) = rand() % mEntities.size();
+	mFocusTimes->restart((int)mEntities.size());
 }
 
 void Geographic::update() {
@@ -113,7 +110,7 @@ void Geographic::draw()
 			float angle = easeOutBack(rotation);
 			gl::ScopedModelMatrix scpModelMatrix;
 			vec3 translation = entity->mSphericalLocation - vec3(p.pos);
-			if (mFocusIndex < mFocusIndexes->size() && entity->mParticleIndex == mFocusIndexes->at(mFocusIndex)) {
+			if (mFocusTimes->active() && entity->mParticleIndex == mFocusTimes->focusIndex()) {
 				mTargetLocation.x = (vec3(p.pos) + translation * angle).x;
 				mTargetLocation.y = (vec3(p.pos) + translation * angle).y;
 				mTargetLocation.z = (vec3(p.pos) + translation * angle).z;
