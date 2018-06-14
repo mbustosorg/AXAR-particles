@@ -1,6 +1,6 @@
 /*
  
- Copyright (C) 2017 Mauricio Bustos (m@bustos.org)
+ Copyright (C) 2018 Mauricio Bustos (m@bustos.org)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 
 #include "TargetFocusTimes.hpp"
 
-TargetFocusTimes::TargetFocusTimes(vector<int>* focusIndexes, vector<float>* startTimes, vector<float>* endTimes) {
+TargetFocusTimes::TargetFocusTimes(vector<int>* focusIndexes, const vector<float> startTimes, const vector<float> endTimes) {
 	mFocusIndexes = focusIndexes;
 	mStartTimes = startTimes;
 	mEndTimes = endTimes;
@@ -30,11 +30,11 @@ TargetFocusTimes::~TargetFocusTimes() {
 }
 
 float TargetFocusTimes::startTime() {
-	return mStartTimes->at(mIndex);
+	return mStartTimes.at(mIndex);
 }
 
 float TargetFocusTimes::endTime() {
-	return mEndTimes->at(mIndex);
+	return mEndTimes.at(mIndex);
 }
 
 void TargetFocusTimes::increment() {
@@ -48,15 +48,15 @@ void TargetFocusTimes::restart(int upperEntryIndex) {
 }
 
 bool TargetFocusTimes::newFocusTrigger(unsigned long time) {
-	return time > mStartTimes->at(mIndex);
+	return time > mStartTimes.at(mIndex);
 }
 
 bool TargetFocusTimes::active() {
-	return mIndex < mStartTimes->size();
+	return mIndex < mStartTimes.size();
 }
 
 bool TargetFocusTimes::expired(unsigned long time) {
-	return time > mEndTimes->at(mIndex);
+	return time > mEndTimes.at(mIndex);
 }
 
 int TargetFocusTimes::focusIndex() {

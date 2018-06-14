@@ -24,13 +24,11 @@
 IndustryOrbit::IndustryOrbit(unordered_map<string, Entity*> entities, string universe) {
 	setEntities(entities);
 	if (universe == "MSCI World") {
-		screenTime = 250.0f;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())},
-										   new vector<float>{35.0f, 90.0f}, new vector<float>{50.0f, 105.0f});
+		screenTime = IND_MSCIW_LENGTH;
+		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, IND_MSCIW_START, IND_MSCIW_END);
 	} else {
-		screenTime = 80.0f;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())},
-										  new vector<float>{15.0f, 45.0f}, new vector<float>{30.0f, 60.0f});
+		screenTime = IND_LENGTH;
+		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, IND_START, IND_END);
 	}
 	mName = "Industry Orbit";
 	mUniverse = universe;

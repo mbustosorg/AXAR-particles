@@ -1,6 +1,6 @@
 /*
  
- Copyright (C) 2017 Mauricio Bustos (m@bustos.org)
+ Copyright (C) 2018 Mauricio Bustos (m@bustos.org)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ using namespace std;
 class TargetFocusTimes {
 	
 public:
-	TargetFocusTimes(vector<int>* focusIndexes, vector<float>* startTimes, vector<float>* endTimes);
+	TargetFocusTimes(vector<int>* focusIndexes, const vector<float> startTimes, const vector<float> endTimes);
 	~TargetFocusTimes();
 	
 	float startTime();
@@ -42,8 +42,8 @@ public:
 protected:
 	int mIndex = 0;
 	vector<int>* mFocusIndexes;
-	vector<float>* mStartTimes;
-	vector<float>* mEndTimes;
+	vector<float> mStartTimes;
+	vector<float> mEndTimes;
 };
 
 

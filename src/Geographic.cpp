@@ -26,13 +26,11 @@ using namespace ci::app;
 Geographic::Geographic(unordered_map<string, Entity*> entities, string universe) {
 	setEntities(entities);
 	if (universe == "MSCI World") {
-		screenTime = 250.0f;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())},
-										  new vector<float>{35.0f, 90.0f}, new vector<float>{50.0f, 105.0f});
+		screenTime = GEO_MSCIW_LENGTH;
+		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, GEO_MSCIW_START, GEO_MSCIW_END);
 	} else {
-		screenTime = 80.0f;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())},
-										  new vector<float>{15.0f, 45.0f}, new vector<float>{30.0f, 60.0f});
+		screenTime = GEO_LENGTH;
+		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, GEO_START, GEO_END);
 	}
 	mName = "Geographic";
 	mUniverse = universe;

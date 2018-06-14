@@ -27,6 +27,31 @@
 		22B96E1C1ECBA47600C0EAB7 /* FinancialData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B96E1A1ECBA47600C0EAB7 /* FinancialData.cpp */; };
 		22DB769B1F042F6000F3356E /* spdlog in Resources */ = {isa = PBXBuildFile; fileRef = 22DB769A1F042F6000F3356E /* spdlog */; };
 		22FBEB1320D0DC2900E9F653 /* TargetFocusTimes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22FBEB1120D0DC2900E9F653 /* TargetFocusTimes.cpp */; };
+		22FBEB1620D22DDB00E9F653 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 2208D7B61EAD837000D408D8 /* CinderApp.icns */; };
+		22FBEB1720D22DDB00E9F653 /* spdlog in Resources */ = {isa = PBXBuildFile; fileRef = 22DB769A1F042F6000F3356E /* spdlog */; };
+		22FBEB1920D22DDB00E9F653 /* TargetFocusTimes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22FBEB1120D0DC2900E9F653 /* TargetFocusTimes.cpp */; };
+		22FBEB1A20D22DDB00E9F653 /* Geographic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2208D7C41EB4072500D408D8 /* Geographic.cpp */; };
+		22FBEB1B20D22DDB00E9F653 /* Screen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2208D7B81EAEC28200D408D8 /* Screen.cpp */; };
+		22FBEB1C20D22DDB00E9F653 /* Orbit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2208D7C01EB3FCA300D408D8 /* Orbit.cpp */; };
+		22FBEB1D20D22DDB00E9F653 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 222C0DD41E7A0AC900AE52B4 /* Entity.cpp */; };
+		22FBEB1E20D22DDB00E9F653 /* IndustryOrbit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22FE386B1EE4A7E90031FCDC /* IndustryOrbit.cpp */; };
+		22FBEB1F20D22DDB00E9F653 /* FinancialData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B96E1A1ECBA47600C0EAB7 /* FinancialData.cpp */; };
+		22FBEB2020D22DDB00E9F653 /* RCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 222C0DD71E7A10A600AE52B4 /* RCamera.cpp */; };
+		22FBEB2120D22DDB00E9F653 /* Dashboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22799F191E85CF4D00D0F0D8 /* Dashboard.cpp */; };
+		22FBEB2220D22DDB00E9F653 /* AXAR_ParticleApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD1B46B0B7044B879621EDC9 /* AXAR_ParticleApp.cpp */; };
+		22FBEB2320D22DDB00E9F653 /* ScreenManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2208D7BB1EB3F92000D408D8 /* ScreenManager.cpp */; };
+		22FBEB2520D22DDB00E9F653 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
+		22FBEB2620D22DDB00E9F653 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995581B128DF400A5C623 /* IOKit.framework */; };
+		22FBEB2720D22DDB00E9F653 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006D720219952D00008149E2 /* AVFoundation.framework */; };
+		22FBEB2820D22DDB00E9F653 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006D720319952D00008149E2 /* CoreMedia.framework */; };
+		22FBEB2920D22DDB00E9F653 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		22FBEB2A20D22DDB00E9F653 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0091D8F80E81B9330029341E /* OpenGL.framework */; };
+		22FBEB2B20D22DDB00E9F653 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
+		22FBEB2C20D22DDB00E9F653 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
+		22FBEB2D20D22DDB00E9F653 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784AF0FF439BC000DE1D7 /* Accelerate.framework */; };
+		22FBEB2E20D22DDB00E9F653 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
+		22FBEB2F20D22DDB00E9F653 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
+		22FBEB3020D22DDB00E9F653 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		22FE386D1EE4A7E90031FCDC /* IndustryOrbit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22FE386B1EE4A7E90031FCDC /* IndustryOrbit.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
@@ -68,6 +93,8 @@
 		22DB769A1F042F6000F3356E /* spdlog */ = {isa = PBXFileReference; lastKnownFileType = folder; name = spdlog; path = ../src/spdlog; sourceTree = "<group>"; };
 		22FBEB1120D0DC2900E9F653 /* TargetFocusTimes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TargetFocusTimes.cpp; path = ../src/TargetFocusTimes.cpp; sourceTree = "<group>"; };
 		22FBEB1220D0DC2900E9F653 /* TargetFocusTimes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TargetFocusTimes.hpp; path = ../src/TargetFocusTimes.hpp; sourceTree = "<group>"; };
+		22FBEB3420D22DDB00E9F653 /* DEBUG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DEBUG.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22FBEB3520D22DDB00E9F653 /* AXAR_ParticleApp copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AXAR_ParticleApp copy-Info.plist"; path = "/Users/mauricio/Documents/development/git/AXAR_ParticleApp/xcode/AXAR_ParticleApp copy-Info.plist"; sourceTree = "<absolute>"; };
 		22FE386B1EE4A7E90031FCDC /* IndustryOrbit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndustryOrbit.cpp; path = ../src/IndustryOrbit.cpp; sourceTree = "<group>"; };
 		22FE386C1EE4A7E90031FCDC /* IndustryOrbit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndustryOrbit.hpp; path = ../src/IndustryOrbit.hpp; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -82,6 +109,25 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		22FBEB2420D22DDB00E9F653 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22FBEB2520D22DDB00E9F653 /* IOSurface.framework in Frameworks */,
+				22FBEB2620D22DDB00E9F653 /* IOKit.framework in Frameworks */,
+				22FBEB2720D22DDB00E9F653 /* AVFoundation.framework in Frameworks */,
+				22FBEB2820D22DDB00E9F653 /* CoreMedia.framework in Frameworks */,
+				22FBEB2920D22DDB00E9F653 /* Cocoa.framework in Frameworks */,
+				22FBEB2A20D22DDB00E9F653 /* OpenGL.framework in Frameworks */,
+				22FBEB2B20D22DDB00E9F653 /* CoreVideo.framework in Frameworks */,
+				22FBEB2C20D22DDB00E9F653 /* QTKit.framework in Frameworks */,
+				22FBEB2D20D22DDB00E9F653 /* Accelerate.framework in Frameworks */,
+				22FBEB2E20D22DDB00E9F653 /* AudioToolbox.framework in Frameworks */,
+				22FBEB2F20D22DDB00E9F653 /* AudioUnit.framework in Frameworks */,
+				22FBEB3020D22DDB00E9F653 /* CoreAudio.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D11072E0486CEB800E47090 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -175,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* AXAR_ParticleApp.app */,
+				22FBEB3420D22DDB00E9F653 /* DEBUG.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -188,6 +235,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				22FBEB3520D22DDB00E9F653 /* AXAR_ParticleApp copy-Info.plist */,
 			);
 			indentWidth = 4;
 			name = ParticleSphereGPU;
@@ -225,9 +273,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* AXAR_ParticleApp */ = {
+		22FBEB1420D22DDB00E9F653 /* DEBUG */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "AXAR_ParticleApp" */;
+			buildConfigurationList = 22FBEB3120D22DDB00E9F653 /* Build configuration list for PBXNativeTarget "DEBUG" */;
+			buildPhases = (
+				22FBEB1520D22DDB00E9F653 /* Resources */,
+				22FBEB1820D22DDB00E9F653 /* Sources */,
+				22FBEB2420D22DDB00E9F653 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DEBUG;
+			productInstallPath = "$(HOME)/Applications";
+			productName = ParticleSphereGPU;
+			productReference = 22FBEB3420D22DDB00E9F653 /* DEBUG.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8D1107260486CEB800E47090 /* PROD */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "PROD" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -237,7 +303,7 @@
 			);
 			dependencies = (
 			);
-			name = AXAR_ParticleApp;
+			name = PROD;
 			productInstallPath = "$(HOME)/Applications";
 			productName = ParticleSphereGPU;
 			productReference = 8D1107320486CEB800E47090 /* AXAR_ParticleApp.app */;
@@ -265,12 +331,22 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* AXAR_ParticleApp */,
+				8D1107260486CEB800E47090 /* PROD */,
+				22FBEB1420D22DDB00E9F653 /* DEBUG */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		22FBEB1520D22DDB00E9F653 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22FBEB1620D22DDB00E9F653 /* CinderApp.icns in Resources */,
+				22FBEB1720D22DDB00E9F653 /* spdlog in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D1107290486CEB800E47090 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -283,6 +359,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		22FBEB1820D22DDB00E9F653 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22FBEB1920D22DDB00E9F653 /* TargetFocusTimes.cpp in Sources */,
+				22FBEB1A20D22DDB00E9F653 /* Geographic.cpp in Sources */,
+				22FBEB1B20D22DDB00E9F653 /* Screen.cpp in Sources */,
+				22FBEB1C20D22DDB00E9F653 /* Orbit.cpp in Sources */,
+				22FBEB1D20D22DDB00E9F653 /* Entity.cpp in Sources */,
+				22FBEB1E20D22DDB00E9F653 /* IndustryOrbit.cpp in Sources */,
+				22FBEB1F20D22DDB00E9F653 /* FinancialData.cpp in Sources */,
+				22FBEB2020D22DDB00E9F653 /* RCamera.cpp in Sources */,
+				22FBEB2120D22DDB00E9F653 /* Dashboard.cpp in Sources */,
+				22FBEB2220D22DDB00E9F653 /* AXAR_ParticleApp.cpp in Sources */,
+				22FBEB2320D22DDB00E9F653 /* ScreenManager.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D11072C0486CEB800E47090 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -304,6 +398,99 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		22FBEB3220D22DDB00E9F653 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CINDER_PATH = /Users/mauricio/Documents/development/git/Cinder;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = AXAR_ParticleApp_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/include\"",
+					/usr/local/include,
+					/usr/local/include/node,
+					/Users/mauricio/Documents/development/git/AXAR_ParticleApp/src,
+				);
+				INFOPLIST_FILE = "AXAR_ParticleApp copy-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DAXA_SHORT",
+				);
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/macosx/$(CONFIGURATION)/libcinder.a\"",
+					/usr/local/lib/libPocoFoundation.dylib,
+					/usr/local/lib/libPocoUtil.dylib,
+					/usr/local/lib/libPocoNet.dylib,
+					/usr/local/lib/libPocoNetSSL.dylib,
+					/usr/local/lib/libPocoXML.dylib,
+					/usr/local/lib/libPocoCrypto.dylib,
+					/usr/local/lib/libPocoJSON.dylib,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.libcinder.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = ./build;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		22FBEB3320D22DDB00E9F653 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CINDER_PATH = /Users/mauricio/Documents/development/git/Cinder;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_FAST_MATH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = AXAR_ParticleApp_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NDEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/include\"",
+					/usr/local/include,
+					/usr/local/include/node,
+					/Users/mauricio/Documents/development/git/AXAR_ParticleApp/src,
+				);
+				INFOPLIST_FILE = "AXAR_ParticleApp copy-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DAXA_SHORT",
+				);
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/macosx/$(CONFIGURATION)/libcinder.a\"",
+					/usr/local/lib/libPocoFoundation.dylib,
+					/usr/local/lib/libPocoUtil.dylib,
+					/usr/local/lib/libPocoNet.dylib,
+					/usr/local/lib/libPocoNetSSL.dylib,
+					/usr/local/lib/libPocoXML.dylib,
+					/usr/local/lib/libPocoCrypto.dylib,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.libcinder.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = YES;
+				SYMROOT = ./build;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -458,7 +645,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "AXAR_ParticleApp" */ = {
+		22FBEB3120D22DDB00E9F653 /* Build configuration list for PBXNativeTarget "DEBUG" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22FBEB3220D22DDB00E9F653 /* Debug */,
+				22FBEB3320D22DDB00E9F653 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "PROD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,

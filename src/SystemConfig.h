@@ -37,6 +37,36 @@ const float MESSAGE_FADE_SECONDS = 10.0f;
 const float CAMERA_APPROACH_FACTOR = 40.0f;
 const float CAMERA_TARGET_APPROACH_FACTOR = 5.0f;
 
+#ifdef AXA_SHORT
+const float TIME_FACTOR = 10.0f;
+#else
+const float TIME_FACTOR = 1.0f;
+#endif
+
+const float GEO_MSCIW_LENGTH = 250.0f / TIME_FACTOR;
+const std::vector<float> GEO_MSCIW_START = {35.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
+const std::vector<float> GEO_MSCIW_END = {50.0f / TIME_FACTOR, 105.0f / TIME_FACTOR};
+
+const float GEO_LENGTH = 80.0f / TIME_FACTOR;
+const std::vector<float> GEO_START = {15.0f / TIME_FACTOR, 45.0f / TIME_FACTOR};
+const std::vector<float> GEO_END = {30.0f / TIME_FACTOR, 60.0f / TIME_FACTOR};
+
+const float ORB_MSCIW_LENGTH = 250.0f / TIME_FACTOR;
+const std::vector<float> ORB_MSCIW_START = {35.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
+const std::vector<float> ORB_MSCIW_END = {50.0f / TIME_FACTOR, 105.0f / TIME_FACTOR};
+
+const float ORB_LENGTH = 80.0f / TIME_FACTOR;
+const std::vector<float> ORB_START = {15.0f / TIME_FACTOR, 45.0f / TIME_FACTOR};
+const std::vector<float> ORB_END = {30.0f / TIME_FACTOR, 60.0f / TIME_FACTOR};
+
+const float IND_MSCIW_LENGTH = 250.0f / TIME_FACTOR;
+const std::vector<float> IND_MSCIW_START = {35.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
+const std::vector<float> IND_MSCIW_END = {50.0f / TIME_FACTOR, 105.0f / TIME_FACTOR};
+
+const float IND_LENGTH = 80.0f / TIME_FACTOR;
+const std::vector<float> IND_START = {15.0f / TIME_FACTOR, 45.0f / TIME_FACTOR};
+const std::vector<float> IND_END = {30.0f / TIME_FACTOR, 60.0f / TIME_FACTOR};
+
 static Color colorFromHex(int r, int g, int b) {
 	return Color(CM_RGB, r / 255.0f * 235.0f / 255.0f, g / 255.0f * 235.0f / 255.0f, b / 255.0f * 235.0f / 255.0f);
 }
