@@ -18,14 +18,24 @@
 */
 
 #include "ScreenManager.hpp"
-#include "cinder/app/AppBAse.h"
+#include "cinder/app/AppBase.h"
 #include "spdlog/spdlog.h"
+#include "Poco/DirectoryIterator.h"
 
 using namespace ci::app;
 
 ScreenManager::ScreenManager() {
 	
-	FinancialData *sap500MarketData = new FinancialData("sap500", "S&P 500", "20161230");
+	Poco::DirectoryIterator it(FileRoot);
+	Poco::DirectoryIterator end;
+	string latestDataDirectory = "";
+	while (it != end)
+	{
+		if (it->isDirectory()) latestDataDirectory = it.name();
+		++it;
+	}
+	
+	FinancialData *sap500MarketData = new FinancialData("sap500", "S&P 500", latestDataDirectory);
 	Geographic *sap500Geo = new Geographic(sap500MarketData->mEntities, "S&P 500");
 	Orbit *sap500Orbit = new Orbit(sap500MarketData->mEntities, "S&P 500");
 	IndustryOrbit *sap500IndustryOrbit = new IndustryOrbit(sap500MarketData->mEntities, "S&P 500");
@@ -36,7 +46,7 @@ ScreenManager::ScreenManager() {
 	IndustryOrbit *sap500IndustryOrbit2 = new IndustryOrbit(sap500MarketData->mEntities, "S&P 500");
 	sap500IndustryOrbit2->setSectorWeights(&(sap500MarketData->mSectorWeights));
 	
-	FinancialData *mscwxlMarketData = new FinancialData("mscwxl", "MSCI World", "20161230");
+	FinancialData *mscwxlMarketData = new FinancialData("mscwxl", "MSCI World", latestDataDirectory);
 	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData->mEntities, "MSCI World");
 	Orbit *mscwxlOrbit = new Orbit(mscwxlMarketData->mEntities, "MSCI World");
 	IndustryOrbit *mscwxlIndustryOrbit = new IndustryOrbit(mscwxlMarketData->mEntities, "MSCI World");
@@ -47,7 +57,7 @@ ScreenManager::ScreenManager() {
 	IndustryOrbit *mscwxlIndustryOrbit2 = new IndustryOrbit(mscwxlMarketData->mEntities, "MSCI World");
 	mscwxlIndustryOrbit2->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
 
-	FinancialData *msceurMarketData = new FinancialData("mscief", "MSCI Europe", "20161230");
+	FinancialData *msceurMarketData = new FinancialData("mscief", "MSCI Europe", latestDataDirectory);
 	Geographic *msceurGeo = new Geographic(msceurMarketData->mEntities, "MSCI Europe");
 	Orbit *msceurOrbit = new Orbit(msceurMarketData->mEntities, "MSCI Europe");
 	IndustryOrbit *msceurIndustryOrbit = new IndustryOrbit(msceurMarketData->mEntities, "MSCI Europe");
@@ -97,10 +107,13 @@ void ScreenManager::setCamera(RCamera *camera) {
 
 void ScreenManager::setDashboard(Dashboard *dashboard) {
 	mDashboard = dashboard;
+	currentScreen->setDashboard(mDashboard);
+	for (Screen* currentIter = currentScreen->mNextScreen; currentIter != currentScreen; currentIter = currentIter->mNextScreen) {
+		currentIter->setDashboard(mDashboard);
+	}
 }
 
 void ScreenManager::update() {
-	
 	if (getElapsedSeconds() - timeStamp > currentScreen->screenTime) {
 		currentScreen = currentScreen->mNextScreen;
 		spdlog::get("particleApp")->info("Running screen {} - {}", currentScreen->mName, currentScreen->mUniverse);

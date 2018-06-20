@@ -65,15 +65,39 @@ void Geographic::restart() {
 }
 
 void Geographic::update() {
+	float currentTime = timeStamp();
+	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+		Entity* entity = i->second;
+		if (entity->mWeight > 0.0001) {
+			auto &p = mParticles.at(entity->mParticleIndex * TRAIL_LENGTH * 2);
+			float rotation = 0.0f;
+			float startTime = entity->mParticleIndex * rotationOffset;
+			if (currentTime > (startTime + mRestartTime)) rotation = (currentTime - (startTime + mRestartTime)) / rotationTime;
+			if (rotation > 1.0) rotation = 1.0;
+			float angle = easeOutBack(rotation);
+			vec3 translation = entity->mSphericalLocation - vec3(p.pos);
+			if (mFocusTimes->active() && mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime) && entity->mParticleIndex == mFocusTimes->focusIndex()) {
+				mTargetLocation.x = (vec3(p.pos) + translation * angle).x;
+				mTargetLocation.y = (vec3(p.pos) + translation * angle).y;
+				mTargetLocation.z = (vec3(p.pos) + translation * angle).z;
+				mTarget = entity;
+			} else {
+				mTarget = NULL;
+			}
+		}
+	}
 	Screen::updateTargetView();
 }
 
 void Geographic::displayMessage(Dashboard *dashboard) {
 	float deltaTime = (timeStamp() - mRestartTime) / MESSAGE_FADE_SECONDS;
 	if (deltaTime < 1.0) {
-		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(deltaTime, deltaTime, deltaTime));
+		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(deltaTime, deltaTime, deltaTime), false);
 	} else if (deltaTime < 2.0) {
-		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(2.0 - deltaTime, 2.0 - deltaTime, 2.0 - deltaTime));
+		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(2.0 - deltaTime, 2.0 - deltaTime, 2.0 - deltaTime), false);
+	}
+	if (mTarget) {
+		dashboard->displayMessage(mTarget->mName, -2000.0f, 900.0f, 100, Color(200.0, 200.0, 200.0), true);
 	}
 }
 
@@ -84,9 +108,6 @@ void Geographic::draw()
 	gl::enableDepthWrite();
 	
 	gl::setMatrices(mCam->mCam);
-	
-	const float rotationTime = 4.5f;
-	const float rotationOffset = 0.03f;
 	
 	float currentTime = timeStamp();
 	
@@ -108,11 +129,11 @@ void Geographic::draw()
 			float angle = easeOutBack(rotation);
 			gl::ScopedModelMatrix scpModelMatrix;
 			vec3 translation = entity->mSphericalLocation - vec3(p.pos);
-			if (mFocusTimes->active() && entity->mParticleIndex == mFocusTimes->focusIndex()) {
+			if (mFocusTimes->active() && mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime) && entity->mParticleIndex == mFocusTimes->focusIndex()) {
 				mTargetLocation.x = (vec3(p.pos) + translation * angle).x;
 				mTargetLocation.y = (vec3(p.pos) + translation * angle).y;
 				mTargetLocation.z = (vec3(p.pos) + translation * angle).z;
-				mTargetColor = entity->mColor;
+				mTarget = entity;
 			}
 			gl::translate(vec3(p.pos) + translation * angle);
 			gl::color(entity->mColor);

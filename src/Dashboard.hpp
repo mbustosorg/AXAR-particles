@@ -32,15 +32,17 @@ public:
 	
 	Dashboard(RCamera *cam);
 	
-	void displayMessage(string message, float x, float y, float fontSize, Color color);
+	void displayMessage(string message, float x, float y, float fontSize, Color color, bool inEye);
 	
 private:
 	
+	bool mCursorOn;
+	double mMessageStartTime;
+	string mLastMessage;
 	RCamera *mCam;
-	
 	Font mFont[FontSizes];
-	
 	gl::Texture2dRef axaLogo;
+	
 };
 
 #endif

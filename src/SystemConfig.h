@@ -20,6 +20,8 @@
 #ifndef SystemConfig_h
 #define SystemConfig_h
 
+const std::string FileRoot = "/Users/mauricio/Documents/development/git/AXAR_ParticleApp/data/index/";
+
 //const int NUM_PARTICLES = 1001;
 const int TRAIL_LENGTH = 20;
 const int SPHERE_RADIUS = 2000;
@@ -33,18 +35,21 @@ const float ROTATION_SPEED = 0.002f;
 const float MinRadius = 10.0f;
 const int RadiusSteps = 50;
 
-const float MESSAGE_FADE_SECONDS = 10.0f;
-const float CAMERA_APPROACH_FACTOR = 40.0f;
-const float CAMERA_TARGET_APPROACH_FACTOR = 5.0f;
 
 #ifdef AXA_SHORT
-const float TIME_FACTOR = 10.0f;
+const float TIME_FACTOR = 3.0f;
 #else
 const float TIME_FACTOR = 1.0f;
 #endif
 
+const float MESSAGE_INTRO = 3.0f / TIME_FACTOR;
+const float MESSAGE_TIME_PER_LINE = 1.0f / TIME_FACTOR;
+const float MESSAGE_FADE_SECONDS = 8.0f / TIME_FACTOR;
+const float CAMERA_APPROACH_FACTOR = 40.0f / TIME_FACTOR;
+const float CAMERA_TARGET_APPROACH_FACTOR = 5.0f / TIME_FACTOR;
+
 const float GEO_MSCIW_LENGTH = 250.0f / TIME_FACTOR;
-const std::vector<float> GEO_MSCIW_START = {35.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
+const std::vector<float> GEO_MSCIW_START = {40.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
 const std::vector<float> GEO_MSCIW_END = {50.0f / TIME_FACTOR, 105.0f / TIME_FACTOR};
 
 const float GEO_LENGTH = 80.0f / TIME_FACTOR;
@@ -52,7 +57,7 @@ const std::vector<float> GEO_START = {15.0f / TIME_FACTOR, 45.0f / TIME_FACTOR};
 const std::vector<float> GEO_END = {30.0f / TIME_FACTOR, 60.0f / TIME_FACTOR};
 
 const float ORB_MSCIW_LENGTH = 250.0f / TIME_FACTOR;
-const std::vector<float> ORB_MSCIW_START = {35.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
+const std::vector<float> ORB_MSCIW_START = {40.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
 const std::vector<float> ORB_MSCIW_END = {50.0f / TIME_FACTOR, 105.0f / TIME_FACTOR};
 
 const float ORB_LENGTH = 80.0f / TIME_FACTOR;
@@ -60,7 +65,7 @@ const std::vector<float> ORB_START = {15.0f / TIME_FACTOR, 45.0f / TIME_FACTOR};
 const std::vector<float> ORB_END = {30.0f / TIME_FACTOR, 60.0f / TIME_FACTOR};
 
 const float IND_MSCIW_LENGTH = 250.0f / TIME_FACTOR;
-const std::vector<float> IND_MSCIW_START = {35.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
+const std::vector<float> IND_MSCIW_START = {40.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
 const std::vector<float> IND_MSCIW_END = {50.0f / TIME_FACTOR, 105.0f / TIME_FACTOR};
 
 const float IND_LENGTH = 80.0f / TIME_FACTOR;

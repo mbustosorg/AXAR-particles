@@ -29,7 +29,6 @@
 
 using namespace std;
 
-const string FileRoot = "/Users/mauricio/Documents/development/git/AXAR_ParticleApp/data/index/";
 const string GooglePlacesApiKey = "AIzaSyAQmnVmMmF696OWAjlQwH3yytSbNWhkK4U";
 
 class FinancialData {

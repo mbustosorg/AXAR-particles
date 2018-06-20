@@ -46,6 +46,10 @@ void Screen::setCamera(RCamera *camera) {
 	mCam = camera;
 }
 
+void Screen::setDashboard(Dashboard *dashboard) {
+	mDashboard = dashboard;
+}
+
 void Screen::setEntities(unordered_map<string, Entity*> entities) {
 	mEntities = entities;
 	Num_Particles = mEntities.size();
@@ -166,10 +170,9 @@ void Screen::update() {
 	updateCurrentPositions();
 	
 	if (mFocusTimes->active()) {
-		Entity entity = mEntitiesInOrder.at(mFocusTimes->focusIndex());
-		Particle particle = mCurrentPositions->at(entity.mParticleIndex * TRAIL_LENGTH * 2 + 1);
+		mTarget = &mEntitiesInOrder.at(mFocusTimes->focusIndex());
+		Particle particle = mCurrentPositions->at(mTarget->mParticleIndex * TRAIL_LENGTH * 2 + 1);
 		mTargetLocation = vec3(particle.pos);
-		mTargetColor = entity.mColor;
 	}
 
 	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
@@ -226,14 +229,17 @@ void Screen::updateTargetView() {
 	if (mFocusTimes->active()) {
 		if (mFocusTimes->expired(timeStamp() - mRestartTime)) {
 			mFocusTimes->increment();
-			if (mCam->mTarget != NULL) mCam->focusOn(NULL, NULL);
+			if (mCam->mTarget != NULL) {
+				mCam->focusOn(NULL, NULL);
+				mDashboard->displayMessage("", -2000.0f, 900.0f, 100, Color(200.0, 200.0, 200.0), true);
+			}
 		} else if (mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime)) {
-			if (mCam->mTarget == NULL) mCam->focusOn(&mTargetLocation, &mTargetColor);
-			
+			if (mCam->mTarget == NULL) mCam->focusOn(&mTargetLocation, &mTarget->mColor);
+			mDashboard->displayMessage(mTarget->mName, -2000.0f, 900.0f, 100, Color(200.0, 200.0, 200.0), true);
 			auto shape = mShapes[20];
 			gl::ScopedModelMatrix scpModelMatrix;
 			gl::translate(mTargetLocation);
-			gl::color(Color(CM_RGB, mTargetColor));
+			gl::color(Color(CM_RGB, mTarget->mColor));
 			shape->draw();
 		}
 	}

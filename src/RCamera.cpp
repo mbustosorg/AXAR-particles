@@ -32,6 +32,7 @@ RCamera::RCamera() {
 	double z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
 	mEye = vec3(x, 2000.0f, z);
 	mCurrentEye = vec3(x, 2000.0f, z);
+	mTargetSetTime = getElapsedSeconds();
 }
 
 void RCamera::trigger() {
@@ -56,15 +57,19 @@ void RCamera::update() {
 	if (mTarget) {
 		double deltaFactor = CAMERA_TARGET_APPROACH_FACTOR;
 		if (delta / deltaFactor < 1.0f) {
-			mCurrentEye = mEye + (*mTarget * 2.0f - mEye) * easeInOutCubic(delta / deltaFactor);
+			mEase = easeInOutCubic(delta / deltaFactor);
+			mCurrentEye = mCurrentEye + (*mTarget * 2.0f - mCurrentEye) * mEase;
 		} else {
+			mEase = 0.0;
 			mCurrentEye = *mTarget * 2.0f;
 		}
 	} else {
 		double deltaFactor = CAMERA_APPROACH_FACTOR;
-		if (delta / deltaFactor < 1.0f) {
-			mCurrentEye = mCurrentEye + (mEye - mCurrentEye) * easeInOutCubic(delta / deltaFactor);
+		if (delta / deltaFactor < 1.0f && mTargetSetTime > 1.0f) {
+			mEase = easeInOutCubic(delta / deltaFactor);
+			mCurrentEye = mCurrentEye + (mEye - mCurrentEye) * mEase;
 		} else {
+			mEase = 0.0;
 			mCurrentEye = mEye;
 		}
 	}

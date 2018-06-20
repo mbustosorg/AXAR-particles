@@ -116,11 +116,19 @@ FinancialData::FinancialData(string benchmark, string descriptiveName, string da
 }
 
 string FinancialData::processedFile() {
-	return FileRoot + mBenchmark + "_" + mDate + "_processed.json";
+	Poco::Path p(true);
+	p.pushDirectory(FileRoot);
+	p.pushDirectory(mDate);
+	p.setFileName(mBenchmark + "_" + mDate + "_processed.json");
+	return p.toString();
 }
 
 string FinancialData::unprocessedFile() {
-	return FileRoot + mBenchmark + "_" + mDate + ".json";
+	Poco::Path p(true);
+	p.pushDirectory(FileRoot);
+	p.pushDirectory(mDate);
+	p.setFileName(mBenchmark + "_" + mDate + ".json");
+	return p.toString();
 }
 
 void FinancialData::writeJson() {
@@ -180,6 +188,7 @@ void FinancialData::updateLatLon(Entity *entity) {
 	
 	try {
 		
+		spdlog::get("particleApp")->info("*** {}", entity->mName.substr(0, 15));
 		string query = entity->mName;
 		replace(query.begin(), query.end(), ' ', '+' );
 		query += "+headquarters";

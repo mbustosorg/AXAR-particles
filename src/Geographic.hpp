@@ -49,6 +49,9 @@ private:
 	int sphereCount = 1;
 	double maxWeight = 0.0;
 	bool mBorrowParticles = false;
+	
+	const float rotationTime = 4.5f;
+	const float rotationOffset = 0.03f;
 };
 
 #endif

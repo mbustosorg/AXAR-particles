@@ -17,6 +17,7 @@
  
 */
 
+#include <algorithm>
 #include "Dashboard.hpp"
 #include "cinder/gl/gl.h"
 #include "cinder/app/AppBAse.h"
@@ -24,16 +25,27 @@
 Dashboard::Dashboard(RCamera *cam) {
 	mCam = cam;
 	for (int i = 1; i < FontSizes; i++) {
-		mFont[i] = Font("Helvetica Neue", (float) i);
+		mFont[i] = Font("Courier New Bold", (float) i);
 	}
 	axaLogo = gl::Texture2d::create(loadImage(loadAsset("smallAXA2.png")));
+	
+	mMessageStartTime = 0.0f;
+	mLastMessage = "";
+	mCursorOn = false;
 }
 
-void Dashboard::displayMessage(string message, float x, float y, float fontSize, Color color) {
+void Dashboard::displayMessage(string message, float x, float y, float fontSize, Color color, bool inEye) {
 	
 	gl::pushModelMatrix();
 	
-	vec3 eye = mCam->mEye;
+	gl::color(color);
+
+	vec3 eye = mCam->mCurrentEye;
+	float prop = 1.0f;
+	if (mCam->mTarget) {
+		float dotsign = dot(mCam->mCurrentEye, *(mCam->mTarget));
+		prop = 1.0 - (dotsign / length(mCam->mCurrentEye)) / length(mCam->mCurrentEye);
+	}
 	
 	// Compute elevation angle
 	vec3 hTarget = vec3(eye.x, 0.0f, eye.z);
@@ -44,7 +56,7 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 	gl::translate(vec3(eye.x, eye.y, eye.z) * 0.5f / (float) cos(eRotation));
 	gl::rotate(M_PI, vec3(0.0f, 0.0f, 1.0f));
 	gl::rotate(eRotation, vec3(eye.z, 0.0f, eye.x));
-
+	
 	// Compute rotation angle from start point which is Z axis
 	vec3 start = vec3(0.0f, 0.0f, -1.0f);
 	vec3 target = vec3(eye.x, 0.0f, eye.z);
@@ -57,30 +69,29 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 		if (eye.z > 0.0) gl::rotate(-rotation, mCam->mUp);
 		else gl::rotate(2 * M_PI - rotation, mCam->mUp);
 	}
-
+	if (!inEye) {
+		gl::draw(axaLogo, vec2(x + 2900, y));
+	}
+	
+	if (message != mLastMessage) {
+		mMessageStartTime = getElapsedSeconds();
+		mLastMessage = message;
+	}
+	
+	float time = getElapsedSeconds() - mMessageStartTime;
+	float fraction = time - int(time);
+	bool bottomHalf = fraction < 0.25 || (fraction > 0.5 && fraction < 0.75);
+	string cursor = "_";
+	if (bottomHalf) cursor = "";
+	
+	string portion = message.substr(0, std::min(message.length(), size_t(time * 6.0f))) + cursor;
 	TextLayout simple;
-	//simple.setColor(color);
-	gl::color(color);
-	
-	//simple.clear(ColorA(0.1f,0.1f,0.1f,0.7f));
 	simple.setColor( Color( 0.9f, 0.9f, 0.9f ) );
-	simple.setFont(Font("Helvetica Neue", fontSize));
-	//simple.setFont(mFont[(int) fontSize]);
-	simple.addLine(message);
-	//simple.addLine("Rot: " + to_string(eRotation));
-	//simple.addLine("Dot: " + to_string(eDotproduct));
-	//simple.addLine("EX: " + to_string(mCam->mEye.x));
-	//simple.addLine("EY: " + to_string(mCam->mEye.y));
-	//simple.addLine("EZ: " + to_string(mCam->mEye.z));
+	//simple.setFont(Font("Helvetica Neue", fontSize));
+	simple.setFont(mFont[int(fontSize)]);
+	simple.addLine(portion);
 	gl::Texture2dRef mSimpleTexture = gl::Texture2d::create(simple.render(true, false));
-	
-	//gl::drawSolidRect(Rectf(50.0f, 200.0f, -50.0f, -200.0f));
-	
-	gl::draw(mSimpleTexture, vec2(x, y));
-	
-	//gl::drawStrokeCh drawString(message, vec2(0.0f, 0.0f), Color::white(), mFont);
-	
-	gl::draw(axaLogo, vec2(x + 2900, y));
+	gl::draw(mSimpleTexture, vec2(x * prop, y * prop));
 	
 	gl::popModelMatrix();
 	

@@ -50,6 +50,7 @@ public:
 	
 	vec3* mTarget = NULL;
 	Color* mTargetColor = NULL;
+	float mEase = 0.0f;
 	
 private:
 	

@@ -48,7 +48,7 @@ void TargetFocusTimes::restart(int upperEntryIndex) {
 }
 
 bool TargetFocusTimes::newFocusTrigger(unsigned long time) {
-	return time > mStartTimes.at(mIndex);
+	return time > mStartTimes.at(mIndex) && time < mEndTimes.at(mIndex);
 }
 
 bool TargetFocusTimes::active() {

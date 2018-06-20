@@ -46,6 +46,7 @@ public:
 	virtual void restart();
 	virtual void draw();
 	virtual void setCamera(RCamera* camera);
+	virtual void setDashboard(Dashboard* dashboard);
 	virtual void setEntities(unordered_map<string, Entity*> entities);
 	virtual void displayMessage(Dashboard *dashboard);
 	
@@ -59,8 +60,8 @@ public:
 	string mUniverse = "";
 	
 	float screenTime = 2.0f; // Number of seconds to play this screen
+	Entity *mTarget = NULL;
 	vec3 mTargetLocation; // Target point for camera
-	Color mTargetColor;
 	vector<Particle>* mCurrentPositions;
 	
 	TargetFocusTimes* mFocusTimes;
@@ -76,7 +77,7 @@ protected:
 	void loadUpdateProgram(string programName);
 
 	RCamera* mCam;
-	
+	Dashboard* mDashboard;
 	
 	gl::GlslProgRef mParticleRenderProg;
 	gl::GlslProgRef mParticleUpdateProg;
