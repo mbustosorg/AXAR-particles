@@ -22,14 +22,13 @@
 
 #include <stdio.h>
 #include <string>
+#include "Entity.hpp"
 #include "cinder/app/App.h"
 #include "cinder/Camera.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-
-#define DEFAULT_DISTANCE 4500.0
 
 class RCamera {
 	
@@ -38,7 +37,7 @@ public:
 	RCamera();
 	
 	void trigger();
-	void focusOn(vec3* target, Color* color);
+	void focusOn(Entity* target, Color* color);
 	void update();
 	
 	CameraPersp mCam;
@@ -48,7 +47,7 @@ public:
 	vec3 mUp = vec3(0.0f, 1.0f, 0.0f);
 	float cameraTick = 0.0f;
 	
-	vec3* mTarget = NULL;
+	Entity* mTarget = NULL;
 	Color* mTargetColor = NULL;
 	float mEase = 0.0f;
 	

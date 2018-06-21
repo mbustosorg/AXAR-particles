@@ -21,6 +21,7 @@
 #define Dashboard_hpp
 
 #include <stdio.h>
+#include "SystemConfig.h"
 #include "RCamera.hpp"
 #include "cinder/Font.h"
 
@@ -38,10 +39,13 @@ private:
 	
 	bool mCursorOn;
 	double mMessageStartTime;
+	double mDefaultEyeDistance = length(vec2(DEFAULT_EYE_HEIGHT, DEFAULT_EYE_RADIUS));
 	string mLastMessage;
 	RCamera *mCam;
 	Font mFont[FontSizes];
 	gl::Texture2dRef axaLogo;
+	
+	const string mDelimiter = "\n";
 	
 };
 

@@ -61,7 +61,6 @@ public:
 	
 	float screenTime = 2.0f; // Number of seconds to play this screen
 	Entity *mTarget = NULL;
-	vec3 mTargetLocation; // Target point for camera
 	vector<Particle>* mCurrentPositions;
 	
 	TargetFocusTimes* mFocusTimes;

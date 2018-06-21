@@ -55,3 +55,7 @@ void Entity::updateLatitudeLongitude(double latitude, double longitude) {
 	float z = SPHERE_RADIUS * cos(mRandLatitude) * sin(mRandLongitude);
 	mSphericalLocation = vec3(x, y, z);
 }
+
+void Entity::setPosition(vec3 position) {
+	mPosition = position;
+}

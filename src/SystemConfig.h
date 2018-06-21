@@ -20,6 +20,8 @@
 #ifndef SystemConfig_h
 #define SystemConfig_h
 
+#include "cinder/color.h"
+
 const std::string FileRoot = "/Users/mauricio/Documents/development/git/AXAR_ParticleApp/data/index/";
 
 //const int NUM_PARTICLES = 1001;
@@ -30,7 +32,13 @@ const float SECTION_ARC_LENGTH = 0.02f;
 const float HEAD_DEPTH = 10.0f;
 const float HEAD_ARC_WIDTH = 0.005f;
 
+const float DEFAULT_EYE_RADIUS = 4500.0f;
+const float DEFAULT_EYE_HEIGHT = 2000.0f;
+const float TARGET_DISTANCE_FACTOR = 2.0f;
 const float ROTATION_SPEED = 0.002f;
+
+const float DEFAULT_TEXT_X = -2000.0f;
+const float DEFAULT_TEXT_Y = 900.0f;
 
 const float MinRadius = 10.0f;
 const int RadiusSteps = 50;
@@ -41,6 +49,9 @@ const float TIME_FACTOR = 3.0f;
 #else
 const float TIME_FACTOR = 1.0f;
 #endif
+
+const float UNIVERSE_FONT_SIZE = 100.0f;
+const float ENTITY_FONT_SIZE = 50.0f;
 
 const float MESSAGE_INTRO = 3.0f / TIME_FACTOR;
 const float MESSAGE_TIME_PER_LINE = 1.0f / TIME_FACTOR;
@@ -72,11 +83,11 @@ const float IND_LENGTH = 80.0f / TIME_FACTOR;
 const std::vector<float> IND_START = {15.0f / TIME_FACTOR, 45.0f / TIME_FACTOR};
 const std::vector<float> IND_END = {30.0f / TIME_FACTOR, 60.0f / TIME_FACTOR};
 
-static Color colorFromHex(int r, int g, int b) {
-	return Color(CM_RGB, r / 255.0f * 235.0f / 255.0f, g / 255.0f * 235.0f / 255.0f, b / 255.0f * 235.0f / 255.0f);
+static cinder::Color colorFromHex(int r, int g, int b) {
+	return cinder::Color(cinder::CM_RGB, r / 255.0f * 235.0f / 255.0f, g / 255.0f * 235.0f / 255.0f, b / 255.0f * 235.0f / 255.0f);
 }
 
-static Color Colors[] = {
+static cinder::Color Colors[] = {
 	colorFromHex(0xA6, 0xCE, 0xE3),
 	colorFromHex(0x1F, 0x78, 0xB4),
 	colorFromHex(0xB2, 0xDF, 0x8A),
@@ -109,6 +120,20 @@ static std::unordered_map<std::string, int> SectorIndices = {
 	{"TELECOMM", 12},
 	{"HEALTH", 13},
 	{"", 14}
+};
+
+class underscore_numpunct : public std::numpunct<char>
+{
+protected:
+	virtual char do_thousands_sep() const
+	{
+		return '_';
+	}
+	
+	virtual std::string do_grouping() const
+	{
+		return "\03";
+	}
 };
 
 #endif

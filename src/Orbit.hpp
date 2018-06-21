@@ -22,11 +22,12 @@
 
 #include <stdio.h>
 #include "Screen.hpp"
+#include "FinancialData.hpp"
 
 class Orbit : public Screen {
 	
 public:
-	Orbit(unordered_map<string, Entity*> entities, string universe);
+	Orbit(FinancialData* financialData, string universe);
 	
 	void setup();
 	void restart();

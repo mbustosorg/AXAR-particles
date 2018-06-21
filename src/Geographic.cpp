@@ -23,8 +23,8 @@
 
 using namespace ci::app;
 
-Geographic::Geographic(unordered_map<string, Entity*> entities, string universe) {
-	setEntities(entities);
+Geographic::Geographic(FinancialData* financialData, string universe) {
+	setEntities(financialData->mEntities);
 	if (universe == "MSCI World") {
 		screenTime = GEO_MSCIW_LENGTH;
 		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, GEO_MSCIW_START, GEO_MSCIW_END);
@@ -34,7 +34,15 @@ Geographic::Geographic(unordered_map<string, Entity*> entities, string universe)
 	}
 	mName = "Geographic";
 	mUniverse = universe;
+	mUniverseCap = financialData->mTotalCap;
+	mCountryCount = financialData->mCountryCounts.size();
 	setup();
+	
+	std::locale underscore_locale(std::locale(), new underscore_numpunct());
+	std::stringstream buffer;
+	buffer.imbue(underscore_locale);
+	buffer << std::setprecision(2) << std::fixed << mUniverseCap;
+	mUniverse = mUniverse + "\n" + buffer.str();
 }
 
 void Geographic::setup() {
@@ -66,6 +74,7 @@ void Geographic::restart() {
 
 void Geographic::update() {
 	float currentTime = timeStamp();
+	mTarget = NULL;
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		Entity* entity = i->second;
 		if (entity->mWeight > 0.0001) {
@@ -74,15 +83,8 @@ void Geographic::update() {
 			float startTime = entity->mParticleIndex * rotationOffset;
 			if (currentTime > (startTime + mRestartTime)) rotation = (currentTime - (startTime + mRestartTime)) / rotationTime;
 			if (rotation > 1.0) rotation = 1.0;
-			float angle = easeOutBack(rotation);
-			vec3 translation = entity->mSphericalLocation - vec3(p.pos);
 			if (mFocusTimes->active() && mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime) && entity->mParticleIndex == mFocusTimes->focusIndex()) {
-				mTargetLocation.x = (vec3(p.pos) + translation * angle).x;
-				mTargetLocation.y = (vec3(p.pos) + translation * angle).y;
-				mTargetLocation.z = (vec3(p.pos) + translation * angle).z;
 				mTarget = entity;
-			} else {
-				mTarget = NULL;
 			}
 		}
 	}
@@ -90,14 +92,23 @@ void Geographic::update() {
 }
 
 void Geographic::displayMessage(Dashboard *dashboard) {
+	
 	float deltaTime = (timeStamp() - mRestartTime) / MESSAGE_FADE_SECONDS;
 	if (deltaTime < 1.0) {
-		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(deltaTime, deltaTime, deltaTime), false);
+		dashboard->displayMessage(mUniverse, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, UNIVERSE_FONT_SIZE, Color(deltaTime, deltaTime, deltaTime), false);
 	} else if (deltaTime < 2.0) {
-		dashboard->displayMessage(mUniverse, -2000.0f, 900.0f, 200, Color(2.0 - deltaTime, 2.0 - deltaTime, 2.0 - deltaTime), false);
+		dashboard->displayMessage(mUniverse, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, UNIVERSE_FONT_SIZE, Color(2.0 - deltaTime, 2.0 - deltaTime, 2.0 - deltaTime), false);
 	}
 	if (mTarget) {
-		dashboard->displayMessage(mTarget->mName, -2000.0f, 900.0f, 100, Color(200.0, 200.0, 200.0), true);
+		std::locale underscore_locale(std::locale(), new underscore_numpunct());
+		std::stringstream latitude;
+		latitude.imbue(underscore_locale);
+		latitude << std::setprecision(4) << std::fixed << mTarget->mLatitude;
+		std::stringstream longitude;
+		longitude.imbue(underscore_locale);
+		longitude << std::setprecision(4) << std::fixed << mTarget->mLongitude;
+		string targetName = mTarget->mName + "\n" + latitude.str() + ", " + longitude.str();
+		dashboard->displayMessage(targetName, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, ENTITY_FONT_SIZE, Color(200.0, 200.0, 200.0), true);
 	}
 }
 
@@ -130,11 +141,9 @@ void Geographic::draw()
 			gl::ScopedModelMatrix scpModelMatrix;
 			vec3 translation = entity->mSphericalLocation - vec3(p.pos);
 			if (mFocusTimes->active() && mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime) && entity->mParticleIndex == mFocusTimes->focusIndex()) {
-				mTargetLocation.x = (vec3(p.pos) + translation * angle).x;
-				mTargetLocation.y = (vec3(p.pos) + translation * angle).y;
-				mTargetLocation.z = (vec3(p.pos) + translation * angle).z;
 				mTarget = entity;
 			}
+			entity->setPosition(vec3(p.pos) + translation * angle);
 			gl::translate(vec3(p.pos) + translation * angle);
 			gl::color(entity->mColor);
 			

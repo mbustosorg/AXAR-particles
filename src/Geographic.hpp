@@ -24,6 +24,7 @@
 #include "Screen.hpp"
 #include "Entity.hpp"
 #include "Dashboard.hpp"
+#include "FinancialData.hpp"
 #include "cinder/ImageIo.h"
 #include "cinder/gl/Texture.h"
 #include <list>
@@ -31,7 +32,7 @@
 class Geographic : public Screen {
 	
 public:
-	Geographic(unordered_map<string, Entity*> entities, string universe);
+	Geographic(FinancialData* financialData, string universe);
 	
 	void setup();
 	void restart();
@@ -49,9 +50,12 @@ private:
 	int sphereCount = 1;
 	double maxWeight = 0.0;
 	bool mBorrowParticles = false;
+	double mUniverseCap = 0.0;
+	double mCountryCount = 0.0;
 	
 	const float rotationTime = 4.5f;
 	const float rotationOffset = 0.03f;
+	
 };
 
 #endif

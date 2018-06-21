@@ -172,7 +172,7 @@ void Screen::update() {
 	if (mFocusTimes->active()) {
 		mTarget = &mEntitiesInOrder.at(mFocusTimes->focusIndex());
 		Particle particle = mCurrentPositions->at(mTarget->mParticleIndex * TRAIL_LENGTH * 2 + 1);
-		mTargetLocation = vec3(particle.pos);
+		mTarget->setPosition(vec3(particle.pos));
 	}
 
 	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
@@ -231,14 +231,14 @@ void Screen::updateTargetView() {
 			mFocusTimes->increment();
 			if (mCam->mTarget != NULL) {
 				mCam->focusOn(NULL, NULL);
-				mDashboard->displayMessage("", -2000.0f, 900.0f, 100, Color(200.0, 200.0, 200.0), true);
+				mDashboard->displayMessage("", DEFAULT_TEXT_X, DEFAULT_TEXT_Y, ENTITY_FONT_SIZE, Color(200.0, 200.0, 200.0), true);
 			}
 		} else if (mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime)) {
-			if (mCam->mTarget == NULL) mCam->focusOn(&mTargetLocation, &mTarget->mColor);
-			mDashboard->displayMessage(mTarget->mName, -2000.0f, 900.0f, 100, Color(200.0, 200.0, 200.0), true);
+			if (mCam->mTarget == NULL) mCam->focusOn(mTarget, &mTarget->mColor);
+			//mDashboard->displayMessage(mTarget->mName, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, ENTITY_FONT_SIZE, Color(200.0, 200.0, 200.0), true);
 			auto shape = mShapes[20];
 			gl::ScopedModelMatrix scpModelMatrix;
-			gl::translate(mTargetLocation);
+			gl::translate(mTarget->mPosition);
 			gl::color(Color(CM_RGB, mTarget->mColor));
 			shape->draw();
 		}

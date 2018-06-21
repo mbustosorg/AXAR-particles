@@ -29,7 +29,7 @@
 
 using namespace std;
 
-const string GooglePlacesApiKey = "AIzaSyAQmnVmMmF696OWAjlQwH3yytSbNWhkK4U";
+const string GooglePlacesApiKey = std::getenv("GOOGLE_PLACES_API_KEY"); 
 
 class FinancialData {
 
@@ -41,6 +41,8 @@ public:
 	
 	unordered_map<string, Entity*> mEntities;
 	unordered_map<int, double> mSectorWeights;
+	unordered_map<string, double> mCountryCounts;
+	double mTotalCap = 0.0;
 	
 private:
 	

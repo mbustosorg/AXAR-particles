@@ -21,8 +21,8 @@
 #include "SystemConfig.h"
 #include "cinder/Rand.h"
 
-IndustryOrbit::IndustryOrbit(unordered_map<string, Entity*> entities, string universe) {
-	setEntities(entities);
+IndustryOrbit::IndustryOrbit(FinancialData* financialData, string universe) {
+	setEntities(financialData->mEntities);
 	if (universe == "MSCI World") {
 		screenTime = IND_MSCIW_LENGTH;
 		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, IND_MSCIW_START, IND_MSCIW_END);
@@ -112,10 +112,8 @@ void IndustryOrbit::restart() {
 		}
 		particleId++;
 	}
-	
 	setupBuffers(mAttributes, mParticleBuffer, &mParticles);
 	setupBuffers(mAttributesHead, mParticleHeadBuffer, &mParticleHeads);
-
 }
 
 void IndustryOrbit::update() {

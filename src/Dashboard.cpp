@@ -21,6 +21,7 @@
 #include "Dashboard.hpp"
 #include "cinder/gl/gl.h"
 #include "cinder/app/AppBAse.h"
+#include "SystemConfig.h"
 
 Dashboard::Dashboard(RCamera *cam) {
 	mCam = cam;
@@ -43,8 +44,7 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 	vec3 eye = mCam->mCurrentEye;
 	float prop = 1.0f;
 	if (mCam->mTarget) {
-		float dotsign = dot(mCam->mCurrentEye, *(mCam->mTarget));
-		prop = 1.0 - (dotsign / length(mCam->mCurrentEye)) / length(mCam->mCurrentEye);
+		prop = length(mCam->mCurrentEye) / mDefaultEyeDistance;
 	}
 	
 	// Compute elevation angle
@@ -53,7 +53,7 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 	double eRotation = acos(eDotproduct);
 
 	// Move to eye
-	gl::translate(vec3(eye.x, eye.y, eye.z) * 0.5f / (float) cos(eRotation));
+	gl::translate(vec3(eye.x, eye.y, eye.z) * 0.5f * prop / (float) cos(eRotation));
 	gl::rotate(M_PI, vec3(0.0f, 0.0f, 1.0f));
 	gl::rotate(eRotation, vec3(eye.z, 0.0f, eye.x));
 	
@@ -84,12 +84,17 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 	string cursor = "_";
 	if (bottomHalf) cursor = "";
 	
-	string portion = message.substr(0, std::min(message.length(), size_t(time * 6.0f))) + cursor;
+	string portion = message.substr(0, std::min(message.length(), size_t(time * 8.0f))) + cursor;
 	TextLayout simple;
 	simple.setColor( Color( 0.9f, 0.9f, 0.9f ) );
-	//simple.setFont(Font("Helvetica Neue", fontSize));
 	simple.setFont(mFont[int(fontSize)]);
-	simple.addLine(portion);
+	size_t pos = portion.find(mDelimiter);
+	if (pos != string::npos) {
+		simple.addLine(portion.substr(0, pos));
+		simple.addLine(portion.substr(pos + 1, portion.length() - 1));
+	} else {
+		simple.addLine(portion);
+	}
 	gl::Texture2dRef mSimpleTexture = gl::Texture2d::create(simple.render(true, false));
 	gl::draw(mSimpleTexture, vec2(x * prop, y * prop));
 	

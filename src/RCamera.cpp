@@ -27,11 +27,11 @@
 using namespace ci::app;
 
 RCamera::RCamera() {
-	double x = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
-	//double y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
-	double z = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
-	mEye = vec3(x, 2000.0f, z);
-	mCurrentEye = vec3(x, 2000.0f, z);
+	double x = DEFAULT_EYE_RADIUS * sin(cameraTick / 360.0 * M_PI);
+	//double y = DEFAULT_EYE_RADIUS * cos(cameraTick / 180.0 * M_PI);
+	double z = DEFAULT_EYE_RADIUS * cos(cameraTick / 360.0 * M_PI);
+	mEye = vec3(x, DEFAULT_EYE_HEIGHT, z);
+	mCurrentEye = vec3(x, DEFAULT_EYE_HEIGHT, z);
 	mTargetSetTime = getElapsedSeconds();
 }
 
@@ -48,20 +48,20 @@ void RCamera::update() {
 	cameraTick -= 0.5f;
 	if (cameraTick > 720.0f || cameraTick < -720.0f) cameraTick = 0.0f;
 
-	double x = DEFAULT_DISTANCE * cos(cameraTick / 360.0 * M_PI);
+	double x = DEFAULT_EYE_RADIUS * cos(cameraTick / 360.0 * M_PI);
 	//double y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
-	double z = DEFAULT_DISTANCE * sin(cameraTick / 360.0 * M_PI);
-	mEye = vec3(x, 2000.0f, z);
+	double z = DEFAULT_EYE_RADIUS * sin(cameraTick / 360.0 * M_PI);
+	mEye = vec3(x, DEFAULT_EYE_HEIGHT, z);
 
 	double delta = (getElapsedSeconds() - mTargetSetTime);
 	if (mTarget) {
 		double deltaFactor = CAMERA_TARGET_APPROACH_FACTOR;
 		if (delta / deltaFactor < 1.0f) {
 			mEase = easeInOutCubic(delta / deltaFactor);
-			mCurrentEye = mCurrentEye + (*mTarget * 2.0f - mCurrentEye) * mEase;
+			mCurrentEye = mCurrentEye + (mTarget->mPosition * TARGET_DISTANCE_FACTOR - mCurrentEye) * mEase;
 		} else {
 			mEase = 0.0;
-			mCurrentEye = *mTarget * 2.0f;
+			mCurrentEye = mTarget->mPosition * TARGET_DISTANCE_FACTOR;
 		}
 	} else {
 		double deltaFactor = CAMERA_APPROACH_FACTOR;
@@ -76,7 +76,7 @@ void RCamera::update() {
 	mCam.lookAt(mCurrentEye, mCenter, mUp);
 }
 
-void RCamera::focusOn(vec3* target, Color* color) {
+void RCamera::focusOn(Entity* target, Color* color) {
 	
 	if (target) spdlog::get("particleApp")->info("focusOn");
 	else spdlog::get("particleApp")->info("focusOff");

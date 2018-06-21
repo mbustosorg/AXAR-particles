@@ -68,7 +68,6 @@ FinancialData::FinancialData(string benchmark, string descriptiveName, string da
 		result = parser.parse(x);
 	}
 	
-	double totalCap = 0.0;
 	Poco::JSON::Array::Ptr children = result.extract<Poco::JSON::Array::Ptr>();
 	for (int i = 0; i < children->size(); i++) {
 		Poco::JSON::Object::Ptr object = children->getObject(i);
@@ -94,23 +93,29 @@ FinancialData::FinancialData(string benchmark, string descriptiveName, string da
 		}
 		
 		auto sectorIndex = mSectorWeights.find (SectorIndices.at(sector));
-		totalCap += entity->mUsdCapitalization;
+		mTotalCap += entity->mUsdCapitalization;
 		if (sectorIndex != mSectorWeights.end()) {
 			sectorIndex->second = mSectorWeights.at(SectorIndices.at(sector)) + entity->mUsdCapitalization;
 		} else {
 			mSectorWeights.insert({SectorIndices.at(sector), entity->mUsdCapitalization});
+		}
+		auto countryIndex = mCountryCounts.find(headquarters);
+		if (countryIndex != mCountryCounts.end()) {
+			countryIndex->second = mCountryCounts.at(headquarters) + 1.0f;
+		} else {
+			mCountryCounts.insert({headquarters, 1.0f});
 		}
 		mEntities.insert({name, entity});
 	}
 	
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		auto entity = i->second;
-		entity->mWeight = entity->mUsdCapitalization / totalCap;
+		entity->mWeight = entity->mUsdCapitalization / mTotalCap;
 	}
 
 	
 	for (unordered_map<int,double>::iterator i = mSectorWeights.begin(); i != mSectorWeights.end(); ++i) {
-		i->second = i->second / totalCap;
+		i->second = i->second / mTotalCap;
 	}
 	writeJson();
 }

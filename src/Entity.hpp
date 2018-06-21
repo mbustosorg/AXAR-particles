@@ -35,6 +35,7 @@ public:
 	
 	void updateMarketData(string lastTradeDate, double lastTrade, double divYield, double peRatio, double capitalization);
 	void updateLatitudeLongitude(double latitude, double longitude);
+	void setPosition(vec3 position);
 	
 	int mParticleIndex;
 	string mName;
@@ -59,6 +60,7 @@ public:
 	double mShares;
 	double mWeight;
 	vec3 mSphericalLocation;
+	vec3 mPosition;
 	
 private:
 	

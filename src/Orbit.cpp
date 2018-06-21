@@ -20,8 +20,8 @@
 #include "Orbit.hpp"
 #include "cinder/Rand.h"
 
-Orbit::Orbit(unordered_map<string, Entity*> entities, string universe) {
-	setEntities(entities);
+Orbit::Orbit(FinancialData* financialData, string universe) {
+	setEntities(financialData->mEntities);
 	if (universe == "MSCI World") {
 		screenTime = ORB_MSCIW_LENGTH;
 		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, ORB_MSCIW_START, ORB_MSCIW_END);
