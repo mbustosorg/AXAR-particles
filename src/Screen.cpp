@@ -236,11 +236,13 @@ void Screen::updateTargetView() {
 		} else if (mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime)) {
 			if (mCam->mTarget == NULL) mCam->focusOn(mTarget, &mTarget->mColor);
 			//mDashboard->displayMessage(mTarget->mName, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, ENTITY_FONT_SIZE, Color(200.0, 200.0, 200.0), true);
-			auto shape = mShapes[20];
-			gl::ScopedModelMatrix scpModelMatrix;
-			gl::translate(mTarget->mPosition);
-			gl::color(Color(CM_RGB, mTarget->mColor));
-			shape->draw();
+			if (mTarget != NULL) {
+				auto shape = mShapes[20];
+				gl::ScopedModelMatrix scpModelMatrix;
+				gl::translate(mTarget->mPosition);
+				gl::color(Color(CM_RGB, mTarget->mColor));
+				shape->draw();
+			}
 		}
 	}
 }

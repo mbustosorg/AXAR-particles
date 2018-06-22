@@ -22,7 +22,7 @@
 
 #include "cinder/color.h"
 
-const std::string FileRoot = "/Users/mauricio/Documents/development/git/AXAR_ParticleApp/data/index/";
+const std::string FileRoot = std::getenv("DATA_ROOT"); ///Users/mauricio/Documents/development/git/AXAR_ParticleApp/data/index/";
 
 //const int NUM_PARTICLES = 1001;
 const int TRAIL_LENGTH = 20;
