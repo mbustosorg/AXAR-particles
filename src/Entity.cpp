@@ -50,9 +50,9 @@ void Entity::updateLatitudeLongitude(double latitude, double longitude) {
 	mRandLatitude = Rand::randFloat(mLatitude - 0.5, mLatitude + 0.5) * M_PI / 180.0;
 	mRandLongitude = Rand::randFloat(mLongitude - 0.5, mLongitude + 0.5) * M_PI / 180.0;
 	
-	float x = -SPHERE_RADIUS * cos(mRandLatitude) * cos(mRandLongitude);
-	float y = SPHERE_RADIUS * sin(mRandLatitude);
-	float z = SPHERE_RADIUS * cos(mRandLatitude) * sin(mRandLongitude);
+	double x = -SPHERE_RADIUS * cos(mRandLatitude) * cos(mRandLongitude);
+	double y = SPHERE_RADIUS * sin(mRandLatitude);
+	double z = SPHERE_RADIUS * cos(mRandLatitude) * sin(mRandLongitude);
 	mSphericalLocation = vec3(x, y, z);
 }
 

@@ -47,7 +47,7 @@ void TargetFocusTimes::restart(int upperEntryIndex) {
 	mFocusIndexes = new vector<int>{static_cast<int>(rand() % upperEntryIndex), static_cast<int>(rand() % upperEntryIndex)};
 }
 
-bool TargetFocusTimes::newFocusTrigger(unsigned long time) {
+bool TargetFocusTimes::newFocusTrigger(float time) {
 	return time > mStartTimes.at(mIndex) && time < mEndTimes.at(mIndex);
 }
 
@@ -55,7 +55,7 @@ bool TargetFocusTimes::active() {
 	return mIndex < mStartTimes.size();
 }
 
-bool TargetFocusTimes::expired(unsigned long time) {
+bool TargetFocusTimes::expired(float time) {
 	return time > mEndTimes.at(mIndex);
 }
 

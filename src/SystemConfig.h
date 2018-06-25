@@ -20,6 +20,9 @@
 #ifndef SystemConfig_h
 #define SystemConfig_h
 
+#include <vector>
+#include <unordered_map>
+
 #include "cinder/color.h"
 
 const std::string FileRoot = std::getenv("DATA_ROOT"); ///Users/mauricio/Documents/development/git/AXAR_ParticleApp/data/index/";

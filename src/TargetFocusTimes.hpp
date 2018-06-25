@@ -21,6 +21,7 @@
 #define TargetFocusTimes_hpp
 
 #include <stdio.h>
+#include <vector>
 
 using namespace std;
 
@@ -34,9 +35,9 @@ public:
 	float endTime();
 	void increment();
 	void restart(int upperEntryIndex);
-	bool expired(unsigned long time);
+	bool expired(float time);
 	bool active();
-	bool newFocusTrigger(unsigned long time);
+	bool newFocusTrigger(float time);
 	int focusIndex();
 	
 protected:

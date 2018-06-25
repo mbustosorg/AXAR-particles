@@ -21,6 +21,9 @@
 #define Screen_hpp
 
 #include <stdio.h>
+#include <unordered_map>
+#include <vector>
+
 #include "cinder/gl/gl.h"
 #include "Particle.h"
 #include "SystemConfig.h"
