@@ -38,7 +38,6 @@ public:
 	void draw();
 	void setCamera(RCamera* camera);
 	void setDashboard(Dashboard* dashboard);
-	
 private:
 	
 	RCamera* mCam;
@@ -47,7 +46,8 @@ private:
 	
 	Screen* currentScreen;
 	double timeStamp;
-	
+	char* mFileRoot = std::getenv("DATA_ROOT");
+
 };
 
 #endif

@@ -39,7 +39,7 @@ void AXAR_ParticleApp::setup() {
 	spdlog::register_logger(combined_logger);
 
 	spd::set_pattern("[%T%z][%L] %v");
-	
+
 	// Listen to mouse events so we can send data as uniforms.
 	getWindow()->getSignalMouseDown().connect([this](MouseEvent event)
 											  {

@@ -21,6 +21,7 @@
 #define FinancialData_hpp
 
 #include "Entity.hpp"
+#include "SystemConfig.h"
 
 #include "Poco/Dynamic/Var.h"
 
@@ -28,8 +29,6 @@
 #include <string.h>
 
 using namespace std;
-
-const string GooglePlacesApiKey = std::getenv("GOOGLE_PLACES_API_KEY"); 
 
 class FinancialData {
 
@@ -43,7 +42,7 @@ public:
 	unordered_map<int, double> mSectorWeights;
 	unordered_map<string, double> mCountryCounts;
 	double mTotalCap = 0.0;
-	
+
 private:
 	
 	void writeJson();
@@ -53,7 +52,9 @@ private:
 	string mBenchmark;
 	string mDate;
 	string mDescriptiveName;
-	
+	string mFileRoot = string(std::getenv("DATA_ROOT"));
+	char* mGooglePlacesApiKey = std::getenv("GOOGLE_PLACES_API_KEY");
+
 };
 
 #endif

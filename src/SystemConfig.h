@@ -25,8 +25,6 @@
 
 #include "cinder/color.h"
 
-const std::string FileRoot = std::getenv("DATA_ROOT"); ///Users/mauricio/Documents/development/git/AXAR_ParticleApp/data/index/";
-
 //const int NUM_PARTICLES = 1001;
 const int TRAIL_LENGTH = 20;
 const int SPHERE_RADIUS = 2000;

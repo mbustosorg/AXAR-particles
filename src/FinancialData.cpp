@@ -57,7 +57,8 @@ FinancialData::FinancialData(string benchmark, string descriptiveName, string da
 	
 	Poco::JSON::Parser parser;
 	
-	Poco::File json(processedFile());
+	string filePath = processedFile();
+	Poco::File json(filePath);
 	Poco::Dynamic::Var result;
 	
 	if (json.exists()) {
@@ -122,7 +123,7 @@ FinancialData::FinancialData(string benchmark, string descriptiveName, string da
 
 string FinancialData::processedFile() {
 	Poco::Path p(true);
-	p.pushDirectory(FileRoot);
+	p.assign(mFileRoot.c_str());
 	p.pushDirectory(mDate);
 	p.setFileName(mBenchmark + "_" + mDate + "_processed.json");
 	return p.toString();
@@ -130,7 +131,7 @@ string FinancialData::processedFile() {
 
 string FinancialData::unprocessedFile() {
 	Poco::Path p(true);
-	p.pushDirectory(FileRoot);
+	p.assign(mFileRoot.c_str());
 	p.pushDirectory(mDate);
 	p.setFileName(mBenchmark + "_" + mDate + ".json");
 	return p.toString();
@@ -175,7 +176,7 @@ Poco::Dynamic::Var FinancialData::retrieveQuery(string query) {
 	Context::Ptr pContext = new Context(Context::CLIENT_USE, "", "", "rootcert.pem", Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 	SSLManager::instance().initializeClient(pConsoleHandler, pInvalidCertHandler, pContext);
 	
-	Poco::URI uri("https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + query + "&key=" + GooglePlacesApiKey);
+	Poco::URI uri("https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + query + "&key=" + mGooglePlacesApiKey);
 	
 	Poco::Net::HTTPSClientSession session(uri.getHost(), uri.getPort());
 	Poco::Net::HTTPRequest req(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath() + "?" + uri.getRawQuery(), Poco::Net::HTTPMessage::HTTP_1_1);

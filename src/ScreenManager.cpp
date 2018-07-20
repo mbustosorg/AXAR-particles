@@ -26,7 +26,8 @@ using namespace ci::app;
 
 ScreenManager::ScreenManager() {
 	
-	Poco::DirectoryIterator it(FileRoot);
+	std::string fileRoot = string(mFileRoot);
+	Poco::DirectoryIterator it(fileRoot);
 	Poco::DirectoryIterator end;
 	string latestDataDirectory = "";
 	while (it != end)
