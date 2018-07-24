@@ -19,6 +19,7 @@
 
 #include "AXAR_ParticleApp.hpp"
 #include "FinancialData.hpp"
+#include "SystemConfig.h"
 
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
@@ -29,7 +30,17 @@ namespace spd = spdlog;
 using namespace ci;
 using namespace std;
 
+float DEFAULT_TEXT_X;
+float DEFAULT_TEXT_Y;
+float WINDOW_HEIGHT;
+float WINDOW_WIDTH;
+
 void AXAR_ParticleApp::setup() {
+
+	WINDOW_WIDTH = getWindowWidth();
+	WINDOW_HEIGHT = getWindowHeight();
+	DEFAULT_TEXT_X = WINDOW_WIDTH / 2;
+	DEFAULT_TEXT_Y = WINDOW_HEIGHT / 2;
 
 	std::vector<spdlog::sink_ptr> sinks;
 	sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_st>());

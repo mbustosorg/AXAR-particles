@@ -24,6 +24,7 @@
 #include <unordered_map>
 
 #include "cinder/color.h"
+#include "cinder/app/Window.h"
 
 //const int NUM_PARTICLES = 1001;
 const int TRAIL_LENGTH = 20;
@@ -38,8 +39,10 @@ const float DEFAULT_EYE_HEIGHT = 2000.0f;
 const float TARGET_DISTANCE_FACTOR = 2.0f;
 const float ROTATION_SPEED = 0.002f;
 
-const float DEFAULT_TEXT_X = -2000.0f;
-const float DEFAULT_TEXT_Y = 900.0f;
+extern float DEFAULT_TEXT_X;
+extern float DEFAULT_TEXT_Y;
+extern float WINDOW_WIDTH;
+extern float WINDOW_HEIGHT;
 
 const float MinRadius = 10.0f;
 const int RadiusSteps = 50;

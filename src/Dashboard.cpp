@@ -26,7 +26,7 @@
 Dashboard::Dashboard(RCamera *cam) {
 	mCam = cam;
 	for (int i = 1; i < FontSizes; i++) {
-		mFont[i] = Font("Courier New Bold", (float) i);
+		mFont[i] = Font("Courier New", (float) i);
 	}
 	axaLogo = gl::Texture2d::create(loadImage(loadAsset("smallAXA2.png")));
 	
@@ -70,14 +70,15 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 		else gl::rotate(2 * M_PI - rotation, mCam->mUp);
 	}
 	if (!inEye) {
-		gl::draw(axaLogo, vec2(x + 2900, y));
+		//gl::draw(axaLogo, vec2(0, 0));
+		gl::draw(axaLogo, vec2((WINDOW_WIDTH / 2 - axaLogo.get()->getWidth() / 2) * prop / 0.5f, (WINDOW_HEIGHT / 2 - axaLogo.get()->getHeight() / 2) * prop / 0.5f));
 	}
 	
 	if (message != mLastMessage) {
 		mMessageStartTime = getElapsedSeconds();
 		mLastMessage = message;
 	}
-	
+
 	float time = getElapsedSeconds() - mMessageStartTime;
 	float fraction = time - int(time);
 	bool bottomHalf = fraction < 0.25 || (fraction > 0.5 && fraction < 0.75);
@@ -96,8 +97,8 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 		simple.addLine(portion);
 	}
 	gl::Texture2dRef mSimpleTexture = gl::Texture2d::create(simple.render(true, false));
-	gl::draw(mSimpleTexture, vec2(x * prop, y * prop));
-	
+	gl::draw(mSimpleTexture, vec2(( - WINDOW_WIDTH / 2) * prop / 0.5f, ( WINDOW_HEIGHT / 2) * prop / 0.5f - 140));
+
 	gl::popModelMatrix();
 	
 }
