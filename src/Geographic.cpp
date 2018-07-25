@@ -27,10 +27,10 @@ Geographic::Geographic(FinancialData* financialData, string universe) {
 	setEntities(financialData->mEntities);
 	if (universe == "MSCI World") {
 		screenTime = GEO_MSCIW_LENGTH;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, GEO_MSCIW_START, GEO_MSCIW_END);
+		mFocusTimes = new TargetFocusTimes(new vector<int>{randomEntityIndex(), randomEntityIndex()}, GEO_MSCIW_START, GEO_MSCIW_END);
 	} else {
 		screenTime = GEO_LENGTH;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, GEO_START, GEO_END);
+		mFocusTimes = new TargetFocusTimes(new vector<int>{randomEntityIndex(), randomEntityIndex()}, GEO_START, GEO_END);
 	}
 	mName = "Geographic";
 	mUniverse = universe;
@@ -69,7 +69,7 @@ void Geographic::restart() {
 		mParticles.swap(*tempVector);
 	}
 	mRestartTime = timeStamp();
-	mFocusTimes->restart((int)mEntities.size());
+	mFocusTimes->restart((int)mEntities.size(), new vector<int>{randomEntityIndex(), randomEntityIndex()});
 }
 
 void Geographic::update() {

@@ -53,6 +53,7 @@ public:
 	virtual void setEntities(unordered_map<string, Entity*> entities);
 	virtual void displayMessage(Dashboard *dashboard);
 	
+	int randomEntityIndex();
 	float timeStamp();
 	void updateCurrentPositions();
 	

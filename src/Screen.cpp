@@ -42,6 +42,22 @@ void Screen::setup() {
 	}
 }
 
+int Screen::randomEntityIndex() {
+	int index = -1;
+	while (index < 0) {
+		int initial = static_cast<int>(rand() % mEntities.size());
+		for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
+			Entity* entity = i->second;
+			if (entity->mWeight > 0.0001 && entity->mLongitude != 0.0 && entity->mLatitude != 0.0 && int(entity->mLongitude) != -95 && int(entity->mLatitude) != 37) {
+				if (entity->mParticleIndex == initial) {
+					index = entity->mParticleIndex;
+				}
+			}
+		}
+	}
+	return index;
+}
+
 void Screen::setCamera(RCamera *camera) {
 	mCam = camera;
 }

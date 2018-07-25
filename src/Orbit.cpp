@@ -24,10 +24,10 @@ Orbit::Orbit(FinancialData* financialData, string universe) {
 	setEntities(financialData->mEntities);
 	if (universe == "MSCI World") {
 		screenTime = ORB_MSCIW_LENGTH;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, ORB_MSCIW_START, ORB_MSCIW_END);
+		mFocusTimes = new TargetFocusTimes(new vector<int>{randomEntityIndex(), randomEntityIndex()}, ORB_MSCIW_START, ORB_MSCIW_END);
 	} else {
 		screenTime = ORB_LENGTH;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, ORB_START, ORB_END);
+		mFocusTimes = new TargetFocusTimes(new vector<int>{randomEntityIndex(), randomEntityIndex()}, ORB_START, ORB_END);
 	}
 	mName = "Orbit";
 	mUniverse = universe;
@@ -47,7 +47,7 @@ void Orbit::updateHeadParticle(Entity* entity, int index, Particle* current,
 void Orbit::restart() {
 	setup();
 	mRestartTime = timeStamp();
-	mFocusTimes->restart((int)mEntities.size());
+	mFocusTimes->restart((int)mEntities.size(), new vector<int>{randomEntityIndex(), randomEntityIndex()});
 }
 
 void Orbit::setup() {

@@ -25,10 +25,10 @@ IndustryOrbit::IndustryOrbit(FinancialData* financialData, string universe) {
 	setEntities(financialData->mEntities);
 	if (universe == "MSCI World") {
 		screenTime = IND_MSCIW_LENGTH;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, IND_MSCIW_START, IND_MSCIW_END);
+		mFocusTimes = new TargetFocusTimes(new vector<int>{randomEntityIndex(), randomEntityIndex()}, IND_MSCIW_START, IND_MSCIW_END);
 	} else {
 		screenTime = IND_LENGTH;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{static_cast<int>(rand() % mEntities.size()), static_cast<int>(rand() % mEntities.size())}, IND_START, IND_END);
+		mFocusTimes = new TargetFocusTimes(new vector<int>{randomEntityIndex(), randomEntityIndex()}, IND_START, IND_END);
 	}
 	mName = "Industry Orbit";
 	mUniverse = universe;
@@ -66,7 +66,7 @@ void IndustryOrbit::restart() {
 	mParticles.swap(*tempVector);
 	
 	mRestartTime = timeStamp();
-	mFocusTimes->restart((int)mEntities.size());
+	mFocusTimes->restart((int)mEntities.size(), new vector<int>{randomEntityIndex(), randomEntityIndex()});
 
 	mTransitionFactor = 0.0f;
 	

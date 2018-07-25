@@ -34,7 +34,7 @@ public:
 	float startTime();
 	float endTime();
 	void increment();
-	void restart(int upperEntryIndex);
+	void restart(int upperEntryIndex, vector<int>* focusIndexes);
 	bool expired(float time);
 	bool active();
 	bool newFocusTrigger(float time);

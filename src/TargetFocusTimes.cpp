@@ -41,10 +41,10 @@ void TargetFocusTimes::increment() {
 	mIndex++;
 }
 
-void TargetFocusTimes::restart(int upperEntryIndex) {
+void TargetFocusTimes::restart(int upperEntryIndex, vector<int>* focusIndexes) {
 	mIndex = 0;
 	delete mFocusIndexes;
-	mFocusIndexes = new vector<int>{static_cast<int>(rand() % upperEntryIndex), static_cast<int>(rand() % upperEntryIndex)};
+	mFocusIndexes = focusIndexes; 
 }
 
 bool TargetFocusTimes::newFocusTrigger(float time) {

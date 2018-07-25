@@ -45,7 +45,7 @@ void RCamera::update() {
 	
 	mCam.setPerspective(60.0f, getWindowAspectRatio(), 5.0f, 20000.0f);
 
-	cameraTick -= 0.5f;
+	cameraTick += 0.5f;
 	if (cameraTick > 720.0f || cameraTick < -720.0f) cameraTick = 0.0f;
 
 	double x = DEFAULT_EYE_RADIUS * cos(cameraTick / 360.0 * M_PI);
