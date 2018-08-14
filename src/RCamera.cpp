@@ -33,6 +33,7 @@ RCamera::RCamera() {
 	mEye = vec3(x, DEFAULT_EYE_HEIGHT, z);
 	mCurrentEye = vec3(x, DEFAULT_EYE_HEIGHT, z);
 	mTargetSetTime = getElapsedSeconds();
+	mCam.setPerspective(60.0f, getWindowAspectRatio(), 5.0f, 20000.0f);
 }
 
 void RCamera::trigger() {
@@ -43,13 +44,11 @@ void RCamera::trigger() {
 
 void RCamera::update() {
 	
-	mCam.setPerspective(60.0f, getWindowAspectRatio(), 5.0f, 20000.0f);
-
 	cameraTick += 0.5f;
 	if (cameraTick > 720.0f || cameraTick < -720.0f) cameraTick = 0.0f;
 
 	double x = DEFAULT_EYE_RADIUS * cos(cameraTick / 360.0 * M_PI);
-	//double y = DEFAULT_DISTANCE * cos(cameraTick / 180.0 * M_PI);
+	//double y = DEFAULT_EYE_RADIUS * cos(cameraTick / 180.0 * M_PI);
 	double z = DEFAULT_EYE_RADIUS * sin(cameraTick / 360.0 * M_PI);
 	mEye = vec3(x, DEFAULT_EYE_HEIGHT, z);
 

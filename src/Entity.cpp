@@ -47,6 +47,10 @@ void Entity::updateLatitudeLongitude(double latitude, double longitude) {
 	
 	mLatitude = latitude;
 	mLongitude = longitude;
+	if (abs(latitude) > 180.0f) mLatitude = 0.0f;
+	if (abs(longitude) > 180.0f) mLongitude = 0.0f;
+	if (abs(latitude) < 1.0f) mLatitude = 0.0f;
+	if (abs(longitude) < 1.0f) mLongitude = 0.0f;
 	mRandLatitude = Rand::randFloat(mLatitude - 0.5, mLatitude + 0.5) * M_PI / 180.0;
 	mRandLongitude = Rand::randFloat(mLongitude - 0.5, mLongitude + 0.5) * M_PI / 180.0;
 	

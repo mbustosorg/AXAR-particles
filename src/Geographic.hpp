@@ -55,7 +55,7 @@ private:
 	
 	const float rotationTime = 4.5f;
 	const float rotationOffset = 0.03f;
-	
+
 };
 
 #endif

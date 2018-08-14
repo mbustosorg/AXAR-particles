@@ -25,23 +25,23 @@ using namespace ci::app;
 
 Geographic::Geographic(FinancialData* financialData, string universe) {
 	setEntities(financialData->mEntities);
-	if (universe == "MSCI World") {
-		screenTime = GEO_MSCIW_LENGTH;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{randomEntityIndex(), randomEntityIndex()}, GEO_MSCIW_START, GEO_MSCIW_END);
-	} else {
-		screenTime = GEO_LENGTH;
-		mFocusTimes = new TargetFocusTimes(new vector<int>{randomEntityIndex(), randomEntityIndex()}, GEO_START, GEO_END);
-	}
 	mName = "Geographic";
 	mUniverse = universe;
 	mUniverseCap = financialData->mTotalCap;
 	mCountryCount = financialData->mCountryCounts.size();
+	if (universe == "MSCI World") {
+		screenTime = GEO_MSCIW_LENGTH;
+		mFocusTimes = new TargetFocusTimes(randomEntityIndex(GEO_MSCIW_ENTITY_COUNT), GEO_MSCIW_START, GEO_MSCIW_END);
+	} else {
+		screenTime = GEO_LENGTH;
+		mFocusTimes = new TargetFocusTimes(randomEntityIndex(GEO_ENTITY_COUNT), GEO_START, GEO_END);
+	}
 	setup();
 	
 	std::locale underscore_locale(std::locale(), new underscore_numpunct());
 	std::stringstream buffer;
 	buffer.imbue(underscore_locale);
-	buffer << std::setprecision(2) << std::fixed << mUniverseCap;
+	buffer << std::setprecision(0) << std::fixed << mUniverseCap;
 	mUniverse = mUniverse + "\n" + buffer.str();
 }
 
@@ -49,12 +49,9 @@ void Geographic::setup() {
 	mParticles.assign(Num_Lines * 2, Particle());
 	mParticleHeads.assign(Num_Triangles * 3, Particle());
 	
-	int index = 0;
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		auto entity = i->second;
 		maxWeight = max(maxWeight, entity->mWeight);
-		entity->mParticleIndex = index;
-		index++;
 	}
 	
 	mRestartTime = timeStamp();
@@ -69,7 +66,11 @@ void Geographic::restart() {
 		mParticles.swap(*tempVector);
 	}
 	mRestartTime = timeStamp();
-	mFocusTimes->restart((int)mEntities.size(), new vector<int>{randomEntityIndex(), randomEntityIndex()});
+	if (mUniverse == "MSCI World") {
+		mFocusTimes->restart((int)mEntities.size(), randomEntityIndex(GEO_MSCIW_ENTITY_COUNT));
+	} else {
+		mFocusTimes->restart((int)mEntities.size(), randomEntityIndex(GEO_ENTITY_COUNT));
+	}
 }
 
 void Geographic::update() {
@@ -77,8 +78,7 @@ void Geographic::update() {
 	mTarget = NULL;
 	for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
 		Entity* entity = i->second;
-		if (entity->mWeight > 0.0001) {
-			auto &p = mParticles.at(entity->mParticleIndex * TRAIL_LENGTH * 2);
+		if (entity->mWeight > MINIMUM_WEIGHT) {
 			float rotation = 0.0f;
 			float startTime = entity->mParticleIndex * rotationOffset;
 			if (currentTime > (startTime + mRestartTime)) rotation = (currentTime - (startTime + mRestartTime)) / rotationTime;

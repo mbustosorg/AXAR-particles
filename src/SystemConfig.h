@@ -36,6 +36,7 @@ const float HEAD_ARC_WIDTH = 0.005f;
 
 const float DEFAULT_EYE_RADIUS = 4500.0f;
 const float DEFAULT_EYE_HEIGHT = 2000.0f;
+const float DEFAULT_EYE_DISTANCE = sqrt(pow(DEFAULT_EYE_RADIUS, 2.0f) + pow(DEFAULT_EYE_HEIGHT, 2.0f));
 const float TARGET_DISTANCE_FACTOR = 2.0f;
 const float ROTATION_SPEED = 0.002f;
 
@@ -46,10 +47,10 @@ extern float WINDOW_HEIGHT;
 
 const float MinRadius = 10.0f;
 const int RadiusSteps = 50;
-
+const float MINIMUM_WEIGHT = 0.0001f;
 
 #ifdef AXA_SHORT
-const float TIME_FACTOR = 3.0f;
+const float TIME_FACTOR = 1.0f;
 #else
 const float TIME_FACTOR = 1.0f;
 #endif
@@ -64,26 +65,32 @@ const float CAMERA_APPROACH_FACTOR = 40.0f / TIME_FACTOR;
 const float CAMERA_TARGET_APPROACH_FACTOR = 5.0f / TIME_FACTOR;
 
 const float GEO_MSCIW_LENGTH = 250.0f / TIME_FACTOR;
-const std::vector<float> GEO_MSCIW_START = {40.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
-const std::vector<float> GEO_MSCIW_END = {50.0f / TIME_FACTOR, 105.0f / TIME_FACTOR};
+const int GEO_MSCIW_ENTITY_COUNT = 10;
+const std::vector<float> GEO_MSCIW_START = {10.0f / TIME_FACTOR, 30.0f / TIME_FACTOR, 50.0f / TIME_FACTOR, 70.0f / TIME_FACTOR, 90.0f / TIME_FACTOR, 110.0f / TIME_FACTOR, 130.0f / TIME_FACTOR, 150.0f / TIME_FACTOR, 170.0f / TIME_FACTOR, 190.0f / TIME_FACTOR};
+const std::vector<float> GEO_MSCIW_END = {20.0f / TIME_FACTOR, 40.0f / TIME_FACTOR, 60.0f / TIME_FACTOR, 80.0f / TIME_FACTOR, 100.0f / TIME_FACTOR, 120.0f / TIME_FACTOR, 120.0f / TIME_FACTOR, 160.0f / TIME_FACTOR, 180.0f / TIME_FACTOR, 200.0f / TIME_FACTOR};
 
 const float GEO_LENGTH = 80.0f / TIME_FACTOR;
-const std::vector<float> GEO_START = {15.0f / TIME_FACTOR, 45.0f / TIME_FACTOR};
-const std::vector<float> GEO_END = {30.0f / TIME_FACTOR, 60.0f / TIME_FACTOR};
+const int GEO_ENTITY_COUNT = 3;
+const std::vector<float> GEO_START = {15.0f / TIME_FACTOR, 35.0f / TIME_FACTOR, 55.0f / TIME_FACTOR};
+const std::vector<float> GEO_END = {25.0f / TIME_FACTOR, 45.0f / TIME_FACTOR, 65.0f / TIME_FACTOR};
 
 const float ORB_MSCIW_LENGTH = 250.0f / TIME_FACTOR;
+const int ORB_MSCIW_ENTITY_COUNT = 2;
 const std::vector<float> ORB_MSCIW_START = {40.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
 const std::vector<float> ORB_MSCIW_END = {50.0f / TIME_FACTOR, 105.0f / TIME_FACTOR};
 
 const float ORB_LENGTH = 80.0f / TIME_FACTOR;
+const int ORB_ENTITY_COUNT = 2;
 const std::vector<float> ORB_START = {15.0f / TIME_FACTOR, 45.0f / TIME_FACTOR};
 const std::vector<float> ORB_END = {30.0f / TIME_FACTOR, 60.0f / TIME_FACTOR};
 
 const float IND_MSCIW_LENGTH = 250.0f / TIME_FACTOR;
+const int IND_MSCIW_ENTITY_COUNT = 2;
 const std::vector<float> IND_MSCIW_START = {40.0f / TIME_FACTOR, 90.0f / TIME_FACTOR};
 const std::vector<float> IND_MSCIW_END = {50.0f / TIME_FACTOR, 105.0f / TIME_FACTOR};
 
 const float IND_LENGTH = 80.0f / TIME_FACTOR;
+const int IND_ENTITY_COUNT = 2;
 const std::vector<float> IND_START = {15.0f / TIME_FACTOR, 45.0f / TIME_FACTOR};
 const std::vector<float> IND_END = {30.0f / TIME_FACTOR, 60.0f / TIME_FACTOR};
 

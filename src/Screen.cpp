@@ -42,20 +42,26 @@ void Screen::setup() {
 	}
 }
 
-int Screen::randomEntityIndex() {
-	int index = -1;
-	while (index < 0) {
-		int initial = static_cast<int>(rand() % mEntities.size());
-		for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end(); ++i) {
-			Entity* entity = i->second;
-			if (entity->mWeight > 0.0001 && entity->mLongitude != 0.0 && entity->mLatitude != 0.0 && int(entity->mLongitude) != -95 && int(entity->mLatitude) != 37) {
-				if (entity->mParticleIndex == initial) {
-					index = entity->mParticleIndex;
+vector<int>* Screen::randomEntityIndex(int count) {
+	vector<int> *indexes = new vector<int>;
+	srand(time(NULL));
+	for (unsigned i = 0; i < count; i++) {
+		int index = -1;
+		while (index < 0) {
+			int initial = static_cast<int>(rand() % mEntities.size());
+			for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end() && index < 0; ++i) {
+				Entity* entity = i->second;
+				if (entity->mWeight > 0.0001 && entity->mLongitude != 0.0 && entity->mLatitude != 0.0 && int(entity->mLongitude) != -95 && int(entity->mLatitude) != 37) {
+				//if ((entity->mWeight > MINIMUM_WEIGHT && entity->mLatitude < 0.0) || mUniverse != "MSCI World") {
+					if (entity->mParticleIndex == initial) {
+						index = entity->mParticleIndex;
+						indexes->push_back(index);
+					}
 				}
 			}
 		}
 	}
-	return index;
+	return indexes;
 }
 
 void Screen::setCamera(RCamera *camera) {
@@ -250,7 +256,7 @@ void Screen::updateTargetView() {
 				mDashboard->displayMessage("", DEFAULT_TEXT_X, DEFAULT_TEXT_Y, ENTITY_FONT_SIZE, Color(200.0, 200.0, 200.0), true);
 			}
 		} else if (mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime)) {
-			if (mCam->mTarget == NULL) mCam->focusOn(mTarget, &mTarget->mColor);
+			if (mCam->mTarget == NULL && mTarget != NULL) mCam->focusOn(mTarget, &mTarget->mColor);
 			//mDashboard->displayMessage(mTarget->mName, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, ENTITY_FONT_SIZE, Color(200.0, 200.0, 200.0), true);
 			if (mTarget != NULL) {
 				auto shape = mShapes[20];

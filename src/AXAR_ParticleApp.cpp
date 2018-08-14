@@ -91,7 +91,6 @@ void AXAR_ParticleApp::draw()
 	mScreenManager->draw();
 	gl::setMatricesWindowPersp(getWindowSize(), 60.0f, 1.0f, 100.0f);
 	gl::setMatrices(mCamera.mCam);
-
 	/*
 	gl::color(Color(255, 0, 0));
 	gl::drawLine(vec3(0.0f, 0.0f, 0.0f), vec3(300.0f, 0.0f, 0.0f));
@@ -106,7 +105,6 @@ void AXAR_ParticleApp::draw()
 	gl::drawLine(vec3(-20.0f, 0.0f, 100.0f), vec3(20.0f, 0.0f, 100.0f));
 	gl::drawLine(vec3(-20.0f, 0.0f, 200.0f), vec3(20.0f, 0.0f, 200.0f));
 	*/
-	
 	//mDashboard->displayMessage("Framerate: " + to_string(int(getAverageFps())), 1500.0f, 1100.0f, 50, Color(1.0f, 1.0f, 1.0f));
 	//mDashboard->displayMessage("Upper right", 1500.0f, -1100.0f);
 	//mDashboard->displayMessage("Lower right", 1500.0f, 900.0f);

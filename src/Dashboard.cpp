@@ -42,35 +42,27 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 	gl::color(color);
 
 	vec3 eye = mCam->mCurrentEye;
-	float prop = 1.0f;
-	if (mCam->mTarget) {
-		prop = length(mCam->mCurrentEye) / mDefaultEyeDistance;
-	}
 	
 	// Compute elevation angle
 	vec3 hTarget = vec3(eye.x, 0.0f, eye.z);
-	double eDotproduct = dot(eye, hTarget) / (length(eye) * length(hTarget));
-	double eRotation = acos(eDotproduct);
-
-	// Move to eye
-	gl::translate(vec3(eye.x, eye.y, eye.z) * 0.5f * prop / (float) cos(eRotation));
-	gl::rotate(M_PI, vec3(0.0f, 0.0f, 1.0f));
-	gl::rotate(eRotation, vec3(eye.z, 0.0f, eye.x));
-	
-	// Compute rotation angle from start point which is Z axis
-	vec3 start = vec3(0.0f, 0.0f, -1.0f);
+	double elevation = acos(dot(eye, hTarget) / (length(eye) * length(hTarget)));
+	// Compute eye offset
+	vec3 eyeOffset = eye - ((eye / length(eye)) * 2000.0f);
+	// Compute axis rotation
+	vec3 start = vec3(1.0f, 0.0f, 0.0f);
 	vec3 target = vec3(eye.x, 0.0f, eye.z);
 	double dotproduct = dot(start, target) / (length(start) * length(target));
 	double rotation = acos(dotproduct);
-	if (eye.x > 0.0) {
-		if (eye.z > 0.0) gl::rotate(rotation, mCam->mUp);
-		else gl::rotate(2 * M_PI + rotation, mCam->mUp);
-	} else {
-		if (eye.z > 0.0) gl::rotate(-rotation, mCam->mUp);
-		else gl::rotate(2 * M_PI - rotation, mCam->mUp);
-	}
+	if (eye.y < 0.0) elevation = -elevation;
+	if (eye.z < 0.0) rotation = -rotation;
+
+	gl::translate(eyeOffset);
+	gl::rotate(-M_PI_2 - rotation, vec3(0.0f, 1.0f, 0.0f));
+	gl::rotate(M_PI, vec3(0.0f, 0.0f, 1.0f));
+	gl::rotate(-elevation, vec3(1.0f, 0.0f, 0.0f));
+
 	if (!inEye) {
-		gl::draw(axaLogo, vec2((WINDOW_WIDTH / 2 - axaLogo.get()->getWidth() / 2) * prop / 0.5f, (WINDOW_HEIGHT / 2 - axaLogo.get()->getHeight() / 2) * prop / 0.5f));
+		gl::draw(axaLogo, vec2((WINDOW_WIDTH / 2 - axaLogo.get()->getWidth() / 2) / 0.5f, (WINDOW_HEIGHT / 2 - axaLogo.get()->getHeight() / 2) / 0.5f));
 	}
 	
 	if (message != mLastMessage) {
@@ -96,7 +88,7 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 		simple.addLine(portion);
 	}
 	gl::Texture2dRef mSimpleTexture = gl::Texture2d::create(simple.render(true, false));
-	gl::draw(mSimpleTexture, vec2(( - WINDOW_WIDTH / 2) * prop / 0.5f, ( WINDOW_HEIGHT / 2) * prop / 0.5f - 220));
+	gl::draw(mSimpleTexture, vec2((-WINDOW_WIDTH / 2) / 0.5f, (WINDOW_HEIGHT / 2) / 0.5f - 220));
 
 	gl::popModelMatrix();
 	

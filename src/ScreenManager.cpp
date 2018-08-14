@@ -36,17 +36,6 @@ ScreenManager::ScreenManager() {
 		++it;
 	}
 	
-	FinancialData *sap500MarketData = new FinancialData("sap500", "S&P 500", latestDataDirectory);
-	Geographic *sap500Geo = new Geographic(sap500MarketData, "S&P 500");
-	Orbit *sap500Orbit = new Orbit(sap500MarketData, "S&P 500");
-	IndustryOrbit *sap500IndustryOrbit = new IndustryOrbit(sap500MarketData, "S&P 500");
-	sap500IndustryOrbit->setSectorWeights(&(sap500MarketData->mSectorWeights));
-	
-	Geographic *sap500Geo2 = new Geographic(sap500MarketData, "S&P 500");
-	Orbit *sap500Orbit2 = new Orbit(sap500MarketData, "S&P 500");
-	IndustryOrbit *sap500IndustryOrbit2 = new IndustryOrbit(sap500MarketData, "S&P 500");
-	sap500IndustryOrbit2->setSectorWeights(&(sap500MarketData->mSectorWeights));
-	
 	FinancialData *mscwxlMarketData = new FinancialData("mscwxl", "MSCI World", latestDataDirectory);
 	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData, "MSCI World");
 	Orbit *mscwxlOrbit = new Orbit(mscwxlMarketData, "MSCI World");
@@ -58,6 +47,17 @@ ScreenManager::ScreenManager() {
 	IndustryOrbit *mscwxlIndustryOrbit2 = new IndustryOrbit(mscwxlMarketData, "MSCI World");
 	mscwxlIndustryOrbit2->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
 
+	FinancialData *sap500MarketData = new FinancialData("sap500", "S&P 500", latestDataDirectory);
+	Geographic *sap500Geo = new Geographic(sap500MarketData, "S&P 500");
+	Orbit *sap500Orbit = new Orbit(sap500MarketData, "S&P 500");
+	IndustryOrbit *sap500IndustryOrbit = new IndustryOrbit(sap500MarketData, "S&P 500");
+	sap500IndustryOrbit->setSectorWeights(&(sap500MarketData->mSectorWeights));
+	
+	Geographic *sap500Geo2 = new Geographic(sap500MarketData, "S&P 500");
+	Orbit *sap500Orbit2 = new Orbit(sap500MarketData, "S&P 500");
+	IndustryOrbit *sap500IndustryOrbit2 = new IndustryOrbit(sap500MarketData, "S&P 500");
+	sap500IndustryOrbit2->setSectorWeights(&(sap500MarketData->mSectorWeights));
+	
 	FinancialData *msceurMarketData = new FinancialData("mscief", "MSCI Europe", latestDataDirectory);
 	Geographic *msceurGeo = new Geographic(msceurMarketData, "MSCI Europe");
 	Orbit *msceurOrbit = new Orbit(msceurMarketData, "MSCI Europe");
@@ -93,7 +93,7 @@ ScreenManager::ScreenManager() {
 	msceurOrbit2->setOrder(msceurGeo2, msceurIndustryOrbit2);
 	msceurIndustryOrbit2->setOrder(msceurOrbit2, sap500Geo);
 	
-	currentScreen = sap500Geo;
+	currentScreen = mscwxlGeo;
 	
 	timeStamp = getElapsedSeconds();
 }
