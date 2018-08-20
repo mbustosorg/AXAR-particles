@@ -126,7 +126,7 @@ void Geographic::draw()
 		
 		Entity* entity = i->second;
 		
-		if (entity->mWeight > 0.0001) {
+		if (entity->mWeight > MINIMUM_WEIGHT) {
 			auto &p = mParticles.at(entity->mParticleIndex * TRAIL_LENGTH * 2);
 			
 			float rotation = 0.0f;

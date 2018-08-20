@@ -33,6 +33,7 @@ public:
 	void setup() override;
 	void update() override;
 	void draw() override;
+	void drawAxes();
 	
 	// Mouse state suitable for passing as uniforms to update program
 	bool			mMouseDown = false;

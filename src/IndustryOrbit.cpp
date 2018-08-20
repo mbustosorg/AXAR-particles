@@ -120,6 +120,26 @@ void IndustryOrbit::restart() {
 	setupBuffers(mAttributesHead, mParticleHeadBuffer, &mParticleHeads);
 }
 
+void IndustryOrbit::displayMessage(Dashboard *dashboard) {
+	float deltaTime = (timeStamp() - mRestartTime) / MESSAGE_FADE_SECONDS;
+	if (deltaTime < 1.0) {
+		dashboard->displayMessage(mUniverse, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, UNIVERSE_FONT_SIZE, Color(deltaTime, deltaTime, deltaTime), false);
+	} else if (deltaTime < 2.0) {
+		dashboard->displayMessage(mUniverse, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, UNIVERSE_FONT_SIZE, Color(2.0 - deltaTime, 2.0 - deltaTime, 2.0 - deltaTime), false);
+	}
+	if (mTarget) {
+		std::locale underscore_locale(std::locale(), new underscore_numpunct());
+		std::stringstream latitude;
+		latitude.imbue(underscore_locale);
+		latitude << std::setprecision(4) << std::fixed << mTarget->mLatitude;
+		std::stringstream longitude;
+		longitude.imbue(underscore_locale);
+		longitude << std::setprecision(4) << std::fixed << mTarget->mLongitude;
+		string targetName = mTarget->mName + "\n" + latitude.str() + ", " + longitude.str();
+		dashboard->displayMessage(targetName, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, ENTITY_FONT_SIZE, Color(200.0, 200.0, 200.0), true);
+	}
+}
+
 void IndustryOrbit::update() {
 	mTransitionFactor += 1.0f;
 	mParticleUpdateProg.get()->uniform("transitionFactor", mTransitionFactor);

@@ -51,7 +51,7 @@ vector<int>* Screen::randomEntityIndex(int count) {
 			int initial = static_cast<int>(rand() % mEntities.size());
 			for (unordered_map<string, Entity*>::iterator i = mEntities.begin(); i != mEntities.end() && index < 0; ++i) {
 				Entity* entity = i->second;
-				if (entity->mWeight > 0.0001 && entity->mLongitude != 0.0 && entity->mLatitude != 0.0 && int(entity->mLongitude) != -95 && int(entity->mLatitude) != 37) {
+				if (entity->mWeight > MINIMUM_WEIGHT && entity->mLongitude != 0.0 && entity->mLatitude != 0.0 && int(entity->mLongitude) != -95 && int(entity->mLatitude) != 37) {
 				//if ((entity->mWeight > MINIMUM_WEIGHT && entity->mLatitude < 0.0) || mUniverse != "MSCI World") {
 					if (entity->mParticleIndex == initial) {
 						index = entity->mParticleIndex;
@@ -192,9 +192,9 @@ void Screen::update() {
 	updateCurrentPositions();
 	
 	if (mFocusTimes->active()) {
-		mTarget = &mEntitiesInOrder.at(mFocusTimes->focusIndex());
-		Particle particle = mCurrentPositions->at(mTarget->mParticleIndex * TRAIL_LENGTH * 2 + 1);
-		mTarget->setPosition(vec3(particle.pos));
+		Entity* target = &mEntitiesInOrder.at(mFocusTimes->focusIndex());
+		Particle particle = mCurrentPositions->at(target->mParticleIndex * TRAIL_LENGTH * 2 + 1);
+		target->setPosition(vec3(particle.pos));
 	}
 
 	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
@@ -257,7 +257,6 @@ void Screen::updateTargetView() {
 			}
 		} else if (mFocusTimes->newFocusTrigger(timeStamp() - mRestartTime)) {
 			if (mCam->mTarget == NULL && mTarget != NULL) mCam->focusOn(mTarget, &mTarget->mColor);
-			//mDashboard->displayMessage(mTarget->mName, DEFAULT_TEXT_X, DEFAULT_TEXT_Y, ENTITY_FONT_SIZE, Color(200.0, 200.0, 200.0), true);
 			if (mTarget != NULL) {
 				auto shape = mShapes[20];
 				gl::ScopedModelMatrix scpModelMatrix;

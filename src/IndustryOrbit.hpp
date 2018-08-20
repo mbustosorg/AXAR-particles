@@ -33,6 +33,7 @@ public:
 	void setup();
 	void restart();
 	void update();
+	void displayMessage(Dashboard *dashboard);
 	void setSectorWeights(unordered_map<int, double> *sectorWeights);
 	
 private:

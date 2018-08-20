@@ -54,7 +54,7 @@ private:
 	double mCountryCount = 0.0;
 	
 	const float rotationTime = 4.5f;
-	const float rotationOffset = 0.03f;
+	const float rotationOffset = 0.005f;
 
 };
 

@@ -31,6 +31,7 @@ public:
 	
 	void setup();
 	void restart();
+	void displayMessage(Dashboard *dashboard);
 
 private:
 	
