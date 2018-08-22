@@ -18,6 +18,7 @@
  */
 
 #include "TargetFocusTimes.hpp"
+#include "spdlog/spdlog.h"
 
 TargetFocusTimes::TargetFocusTimes(vector<int>* focusIndexes, const vector<float> startTimes, const vector<float> endTimes) {
 	mFocusIndexes = focusIndexes;
@@ -60,6 +61,10 @@ bool TargetFocusTimes::expired(float time) {
 }
 
 int TargetFocusTimes::focusIndex() {
+	if (mIndex >= mFocusIndexes->size()) {
+		spdlog::get("particleApp")->info("{}", mFocusIndexes->size());
+		(void) 0;
+	}
 	return mFocusIndexes->at(mIndex);
 }
 

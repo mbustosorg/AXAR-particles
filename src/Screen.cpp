@@ -191,17 +191,19 @@ void Screen::update() {
 	
 	updateCurrentPositions();
 	
-	if (mFocusTimes->active()) {
-		Entity* target = &mEntitiesInOrder.at(mFocusTimes->focusIndex());
-		Particle particle = mCurrentPositions->at(target->mParticleIndex * TRAIL_LENGTH * 2 + 1);
-		target->setPosition(vec3(particle.pos));
-	}
-
 	performProgramUpdate(mParticleUpdateProg, mParticleBuffer[mDestinationIndex], mAttributes[mSourceIndex], GL_LINES, (int)Num_Lines * 2);
 	performProgramUpdate(mParticleHeadUpdateProg, mParticleHeadBuffer[mDestinationIndex], mAttributesHead[mSourceIndex], GL_TRIANGLES, (int)Num_Triangles * 3);
 	
 	// Swap source and destination for next loop
 	std::swap(mSourceIndex, mDestinationIndex);
+	
+	mTarget = NULL;
+	if (mFocusTimes->active()) {
+		mTarget = &mEntitiesInOrder.at(mFocusTimes->focusIndex());
+		Particle particle = mCurrentPositions->at(mTarget->mParticleIndex * TRAIL_LENGTH * 2 + 1);
+		mTarget->setPosition(vec3(particle.pos));
+	}
+	updateTargetView();
 }
 
 void Screen::updateCurrentPositions() {

@@ -66,7 +66,7 @@ void Geographic::restart() {
 		mParticles.swap(*tempVector);
 	}
 	mRestartTime = timeStamp();
-	if (mUniverse == "MSCI World") {
+	if (mUniverse.find("MSCI World") != string::npos) {
 		mFocusTimes->restart((int)mEntities.size(), randomEntityIndex(GEO_MSCIW_ENTITY_COUNT));
 	} else {
 		mFocusTimes->restart((int)mEntities.size(), randomEntityIndex(GEO_ENTITY_COUNT));
