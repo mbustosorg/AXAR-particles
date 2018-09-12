@@ -57,12 +57,12 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 	if (eye.z < 0.0) rotation = -rotation;
 
 	gl::translate(eyeOffset);
-	gl::rotate(-M_PI_2 - rotation, vec3(0.0f, 1.0f, 0.0f));
+	gl::rotate(-M_PI / 2.0 - rotation, vec3(0.0f, 1.0f, 0.0f));
 	gl::rotate(M_PI, vec3(0.0f, 0.0f, 1.0f));
 	gl::rotate(-elevation, vec3(1.0f, 0.0f, 0.0f));
 
 	if (!inEye) {
-		gl::draw(axaLogo, vec2((WINDOW_WIDTH / 2 - axaLogo.get()->getWidth() / 2) / 0.5f, (WINDOW_HEIGHT / 2 - axaLogo.get()->getHeight() / 2) / 0.5f));
+		gl::draw(axaLogo, vec2((WINDOW_WIDTH / 4 - axaLogo.get()->getWidth() / 2) / 0.5f, (WINDOW_HEIGHT / 4 - axaLogo.get()->getHeight() / 2) / 0.5f));
 	}
 	
 	if (message != mLastMessage) {
@@ -88,7 +88,7 @@ void Dashboard::displayMessage(string message, float x, float y, float fontSize,
 		simple.addLine(portion);
 	}
 	gl::Texture2dRef mSimpleTexture = gl::Texture2d::create(simple.render(true, false));
-	gl::draw(mSimpleTexture, vec2((-WINDOW_WIDTH / 2) / 0.5f, (WINDOW_HEIGHT / 2) / 0.5f - 220));
+	gl::draw(mSimpleTexture, vec2((-WINDOW_WIDTH / 4) / 0.5f, (WINDOW_HEIGHT / 4) / 0.5f - 220));
 
 	gl::popModelMatrix();
 	
