@@ -21,12 +21,12 @@
 #include "SystemConfig.h"
 #include "cinder/Rand.h"
 
-Entity::Entity(string symbol, string name, string sector, string similarsGroup, string headquarterCountry, int index) {
+Entity::Entity(string symbol, string name, string sector, string similarsGroup, string headquarterCountryISO, int index) {
 	mSymbol = symbol;
 	mName = name;
 	mSector = sector;
 	mSimilarsGroup = similarsGroup;
-	mHeadquarterCountry = headquarterCountry;
+	mHeadquarterCountryISO = headquarterCountryISO;
 	mParticleIndex = index;
 	mColor = Colors[SectorIndices[mSector]];
 }

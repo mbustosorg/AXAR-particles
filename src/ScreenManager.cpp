@@ -20,15 +20,17 @@
 #include "ScreenManager.hpp"
 #include "cinder/app/AppBase.h"
 #include "spdlog/spdlog.h"
-#include "Poco/DirectoryIterator.h"
+#include "Poco/SortedDirectoryIterator.h"
+#include "Poco/JSON/Parser.h"
+#include "Poco/FileStream.h"
 
 using namespace ci::app;
 
 ScreenManager::ScreenManager() {
 	
 	std::string fileRoot = string(mFileRoot);
-	Poco::DirectoryIterator it(fileRoot);
-	Poco::DirectoryIterator end;
+	Poco::SortedDirectoryIterator it(fileRoot);
+	Poco::SortedDirectoryIterator end;
 	string latestDataDirectory = "";
 	while (it != end)
 	{
@@ -36,68 +38,67 @@ ScreenManager::ScreenManager() {
 		++it;
 	}
 	
-	FinancialData *mscwxlMarketData = new FinancialData("mscwxl", "MSCI World", latestDataDirectory);
-	
-	Geographic *mscwxlGeo = new Geographic(mscwxlMarketData, "MSCI World");
-	Orbit *mscwxlOrbit = new Orbit(mscwxlMarketData, "MSCI World");
-	IndustryOrbit *mscwxlIndustryOrbit = new IndustryOrbit(mscwxlMarketData, "MSCI World");
-	mscwxlIndustryOrbit->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
+	Poco::Path p(true);
+	p.assign(mFileRoot);
+	p.pushDirectory(latestDataDirectory);
+	p.setFileName("metadata.json");
+	Poco::File json(p.toString());
+	Poco::Dynamic::Var result;
+	Poco::JSON::Parser parser;
+	Poco::FileInputStream x(p.toString());
+	result = parser.parse(x);
 
-	Geographic *mscwxlGeo2 = new Geographic(mscwxlMarketData, "MSCI World");
-	Orbit *mscwxlOrbit2 = new Orbit(mscwxlMarketData, "MSCI World");
-	IndustryOrbit *mscwxlIndustryOrbit2 = new IndustryOrbit(mscwxlMarketData, "MSCI World");
-	mscwxlIndustryOrbit2->setSectorWeights(&(mscwxlMarketData->mSectorWeights));
+	p.setFileName("");
+	Poco::DirectoryIterator files(p);
+	
+	// For each benchmark, create two loops from GEO->ORBIT->INDUSTRY_ORBIT that feeds into the next benchmark.
+	// Sew the last INDUSTRY_ORBIT into the first GEO
+	
+	Orbit *firstOrbit = NULL;
+	Orbit *lastOrbit = NULL;
+	IndustryOrbit *lastIndustryOrbit = NULL;
 
-	FinancialData *sap500MarketData = new FinancialData("sap500", "S&P 500", latestDataDirectory);
-	
-	Geographic *sap500Geo = new Geographic(sap500MarketData, "S&P 500");
-	Orbit *sap500Orbit = new Orbit(sap500MarketData, "S&P 500");
-	IndustryOrbit *sap500IndustryOrbit = new IndustryOrbit(sap500MarketData, "S&P 500");
-	sap500IndustryOrbit->setSectorWeights(&(sap500MarketData->mSectorWeights));
-	
-	Geographic *sap500Geo2 = new Geographic(sap500MarketData, "S&P 500");
-	Orbit *sap500Orbit2 = new Orbit(sap500MarketData, "S&P 500");
-	IndustryOrbit *sap500IndustryOrbit2 = new IndustryOrbit(sap500MarketData, "S&P 500");
-	sap500IndustryOrbit2->setSectorWeights(&(sap500MarketData->mSectorWeights));
-	
-	FinancialData *msceurMarketData = new FinancialData("mscief", "MSCI Europe", latestDataDirectory);
-	
-	Geographic *msceurGeo = new Geographic(msceurMarketData, "MSCI Europe");
-	Orbit *msceurOrbit = new Orbit(msceurMarketData, "MSCI Europe");
-	IndustryOrbit *msceurIndustryOrbit = new IndustryOrbit(msceurMarketData, "MSCI Europe");
-	msceurIndustryOrbit->setSectorWeights(&(msceurMarketData->mSectorWeights));
+	while (files != end)
+	{
+		if (files.name().find("json")) {
 
-	Geographic *msceurGeo2 = new Geographic(msceurMarketData, "MSCI Europe");
-	Orbit *msceurOrbit2 = new Orbit(msceurMarketData, "MSCI Europe");
-	IndustryOrbit *msceurIndustryOrbit2 = new IndustryOrbit(msceurMarketData, "MSCI Europe");
-	msceurIndustryOrbit2->setSectorWeights(&(msceurMarketData->mSectorWeights));
+			Poco::JSON::Array::Ptr children = result.extract<Poco::JSON::Array::Ptr>();
+			for (int i = 0; i < children->size(); i++) {
+				Poco::JSON::Object::Ptr object = children->getObject(i);
+				string code = object->getValue<string>("BENCHMARK_CODE");
+				string name = object->getValue<string>("BENCHMARK_NAME");
+				
+				FinancialData *marketData = new FinancialData(code, name, latestDataDirectory);
 
-	sap500Geo->setOrder(msceurIndustryOrbit, sap500Orbit);
-	sap500Orbit->setOrder(sap500Geo, sap500IndustryOrbit);
-	sap500IndustryOrbit->setOrder(sap500Orbit, sap500Geo2);
-	
-	sap500Geo2->setOrder(sap500IndustryOrbit, sap500Orbit2);
-	sap500Orbit2->setOrder(sap500Geo2, sap500IndustryOrbit2);
-	sap500IndustryOrbit2->setOrder(sap500Orbit2, mscwxlGeo);
-	
-	mscwxlGeo->setOrder(sap500IndustryOrbit2, mscwxlOrbit);
-	mscwxlOrbit->setOrder(mscwxlGeo, mscwxlIndustryOrbit);
-	mscwxlIndustryOrbit->setOrder(mscwxlOrbit, mscwxlGeo2);
-	
-	mscwxlGeo2->setOrder(mscwxlIndustryOrbit, mscwxlOrbit2);
-	mscwxlOrbit2->setOrder(mscwxlGeo2, mscwxlIndustryOrbit2);
-	mscwxlIndustryOrbit2->setOrder(mscwxlOrbit2, msceurGeo);
-	
-	msceurGeo->setOrder(msceurIndustryOrbit, msceurOrbit);
-	msceurOrbit->setOrder(msceurGeo, msceurIndustryOrbit);
-	msceurIndustryOrbit->setOrder(msceurOrbit, msceurGeo2);
-	
-	msceurGeo2->setOrder(msceurIndustryOrbit, msceurOrbit2);
-	msceurOrbit2->setOrder(msceurGeo2, msceurIndustryOrbit2);
-	msceurIndustryOrbit2->setOrder(msceurOrbit2, sap500Geo);
-	
-	currentScreen = mscwxlGeo;
-	
+				Geographic *geo = new Geographic(marketData, name);
+				Orbit *orbit = new Orbit(marketData, name);
+				IndustryOrbit *industryOrbit = new IndustryOrbit(marketData, name);
+				industryOrbit->setSectorWeights(&(marketData->mSectorWeights));
+				
+				if (lastIndustryOrbit != NULL) {
+					lastIndustryOrbit->setOrder(lastOrbit, geo);
+					geo->setOrder(lastIndustryOrbit, orbit);
+				}
+
+				Geographic *geo2 = new Geographic(marketData, name);
+				lastOrbit = new Orbit(marketData, name);
+				lastIndustryOrbit = new IndustryOrbit(marketData, name);
+				lastIndustryOrbit->setSectorWeights(&(marketData->mSectorWeights));
+				
+				if (currentScreen == NULL) currentScreen = geo;
+				if (firstOrbit == NULL) firstOrbit = orbit;
+				
+				orbit->setOrder(geo, industryOrbit);
+				industryOrbit->setOrder(orbit, geo2);
+				geo2->setOrder(industryOrbit, lastOrbit);
+				lastOrbit->setOrder(geo2, lastIndustryOrbit);
+			}
+		}
+		++files;
+	}
+	lastIndustryOrbit->setOrder(lastOrbit, currentScreen);
+	currentScreen->setOrder(lastIndustryOrbit, firstOrbit);
+
 	timeStamp = getElapsedSeconds();
 }
 

@@ -73,7 +73,7 @@ FinancialData::FinancialData(string benchmark, string descriptiveName, string da
 	for (int i = 0; i < children->size(); i++) {
 		Poco::JSON::Object::Ptr object = children->getObject(i);
 		string name = object->getValue<string>("NAME");
-		string headquarters = object->getValue<string>("HQ_COUNTRY");
+		string headquarters = object->getValue<string>("HQ_COUNTRY_ISO");
 		string sector = object->getValue<string>("SECTOR");
 		string similarsGroup = object->getValue<string>("SIMILARS_GROUP");
 		
@@ -83,6 +83,11 @@ FinancialData::FinancialData(string benchmark, string descriptiveName, string da
 		entity->mCompanyZone = object->getValue<string>("COMPANY_ZONE");
 		entity->mListingXrf = object->getValue<string>("LISTING_XRF");
 		entity->mListingZone = object->getValue<string>("LISTING_ZONE");
+		
+		entity->mHeadquarterCountryName = object->getValue<string>("HQ_COUNTRY");
+		entity->mAddress = object->getValue<string>("ADDRESS");
+		entity->mCity = object->getValue<string>("CITY");
+		entity->mPostalCode = object->getValue<string>("POSTAL_CODE");
 		
 		entity->mUsdCapitalization = object->getValue<double>("USD_CAP");
 		entity->mShares = object->getValue<double>("SHARES");
@@ -155,10 +160,14 @@ void FinancialData::writeJson() {
 		entityObject->set("LISTING_ZONE", entity->second->mListingZone);
 		entityObject->set("USD_CAP", entity->second->mUsdCapitalization);
 		entityObject->set("SHARES", entity->second->mShares);
-		entityObject->set("HQ_COUNTRY", entity->second->mHeadquarterCountry);
+		entityObject->set("HQ_COUNTRY_ISO", entity->second->mHeadquarterCountryISO);
 		entityObject->set("LATITUDE", entity->second->mLatitude);
 		entityObject->set("LONGITUDE", entity->second->mLongitude);
-		
+		entityObject->set("HQ_COUNTRY", entity->second->mHeadquarterCountryName);
+		entityObject->set("ADDRESS", entity->second->mAddress);
+		entityObject->set("CITY", entity->second->mCity);
+		entityObject->set("POSTAL_CODE", entity->second->mPostalCode);
+
 		entityArray->set(index, entityObject);
 		
 		index++;
@@ -191,21 +200,26 @@ Poco::Dynamic::Var FinancialData::retrieveQuery(string query) {
 
 void FinancialData::updateLatLon(Entity *entity) {
 	
-	
 	try {
-		
 		spdlog::get("particleApp")->info("*** {}", entity->mName.substr(0, 15));
 		string query = entity->mName;
+		query += " ";
+		query += entity->mAddress;
+		query += " ";
+		query += entity->mCity;
+		query += " ";
+		query += entity->mPostalCode;
+		query += " ";
+		query += entity->mHeadquarterCountryName;
 		replace(query.begin(), query.end(), ' ', '+' );
-		query += "+headquarters";
-		
+
 		Poco::Dynamic::Var result = retrieveQuery(query);
 		Poco::JSON::Object::Ptr object = result.extract<Poco::JSON::Object::Ptr>();
 		
 		if (object->getValue<std::string>("status") == "ZERO_RESULTS") {
-			result = retrieveQuery(entity->mHeadquarterCountry);
+			result = retrieveQuery(entity->mHeadquarterCountryName);
 			object = result.extract<Poco::JSON::Object::Ptr>();
-			spdlog::get("particleApp")->warn("{}\tUsed Country {}", entity->mName.substr(0, 15), entity->mHeadquarterCountry);
+			spdlog::get("particleApp")->warn("{}\tUsed Country {}", entity->mName.substr(0, 15), entity->mHeadquarterCountryName);
 		} else {
 			spdlog::get("particleApp")->info("{}\tFound Headquarters - {}", entity->mName.substr(0, 15), object->getArray("results")->getObject(0)->getValue<std::string>("formatted_address"));
 		}

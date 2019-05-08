@@ -1,0 +1,18 @@
+[
+    {
+        "BENCHMARK_CODE": "sap500",
+        "BENCHMARK_NAME": "S&P 500"
+    },
+    {
+        "BENCHMARK_CODE": "mscwxl",
+        "BENCHMARK_NAME": "MSCI World"
+    },
+    {
+        "BENCHMARK_CODE": "mscief",
+        "BENCHMARK_NAME": "MSCI Europe"
+    },
+    {
+        "BENCHMARK_CODE": "msemla",
+        "BENCHMARK_NAME": "MSCI Latin America"
+    }
+]

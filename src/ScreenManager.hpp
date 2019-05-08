@@ -44,7 +44,7 @@ private:
 	Dashboard* mDashboard;
 	unordered_map<string, Entity*> mEntities;
 	
-	Screen* currentScreen;
+	Screen* currentScreen = NULL;
 	double timeStamp;
 	char* mFileRoot = std::getenv("DATA_ROOT");
 

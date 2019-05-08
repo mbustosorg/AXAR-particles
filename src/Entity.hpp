@@ -42,7 +42,11 @@ public:
 	string mSimilarsGroup;
 	string mSymbol;
 	string mSector;
-	string mHeadquarterCountry;
+	string mHeadquarterCountryISO;
+	string mHeadquarterCountryName;
+	string mAddress;
+	string mCity;
+	string mPostalCode;
 	string mCompanyXrf;
 	string mCompanyZone;
 	string mListingXrf;
